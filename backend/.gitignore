@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.local
+.env.test
+.env.production
+.DS_Store
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vscode/
+.idea/
+*.iml
+coverage/
+.github/
