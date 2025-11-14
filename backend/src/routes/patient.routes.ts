@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { PatientController } from '../controllers/patient.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { validationMiddleware } from '../middleware/validation.middleware';
-import { CreatePatientDto, UpdatePatientDto } from '../types';
 import { validationSchemas } from '../middleware/validation.middleware';
 
 const router = Router();
