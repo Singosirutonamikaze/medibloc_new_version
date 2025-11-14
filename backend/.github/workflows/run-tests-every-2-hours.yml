@@ -1,0 +1,30 @@
+name: Run unit tests every 2 hours
+
+on:
+  schedule:
+    - cron: '0 */2 * * *' # every 2 hours at minute 0
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Run unit tests
+        run: |
+          cd backend
+          npm run test
