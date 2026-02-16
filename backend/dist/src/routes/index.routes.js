@@ -32,6 +32,17 @@ router.use('/prescriptions', prescription_routes_1.default);
 router.use('/medical-records', medicalRecord_routes_1.default);
 router.use('/stats', stats_routes_1.default);
 // Route de santé de l'API
+/**
+ * @openapi
+ * /health:
+ *   get:
+ *     summary: Health check
+ *     tags:
+ *       - Health
+ *     responses:
+ *       200:
+ *         description: API is running
+ */
 router.get('/health', (req, res) => {
     res.status(200).json({
         success: true,

@@ -4,6 +4,222 @@ const express_1 = require("express");
 const pharmacy_controller_1 = require("../controllers/pharmacy.controller");
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const validation_middleware_1 = require("../middleware/validation.middleware");
+/**
+ * @openapi
+ * /pharmacies:
+ *   get:
+ *     summary: Récupérer toutes les pharmacies
+ *     tags:
+ *       - Pharmacies
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Liste des pharmacies
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Pharmacy'
+ *   post:
+ *     summary: Créer une nouvelle pharmacie
+ *     tags:
+ *       - Pharmacies
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               licenseNumber:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *             required: [name, licenseNumber, phone, address]
+ *     responses:
+ *       201:
+ *         description: Pharmacie créée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Pharmacy'
+ *       400:
+ *         description: Données invalides
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *
+ * /pharmacies/{id}:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: integer
+ *   get:
+ *     summary: Récupérer une pharmacie par son ID
+ *     tags:
+ *       - Pharmacies
+ *     responses:
+ *       200:
+ *         description: Pharmacie trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Pharmacy'
+ *       404:
+ *         description: Pharmacie non trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   put:
+ *     summary: Mettre à jour une pharmacie
+ *     tags:
+ *       - Pharmacies
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               licenseNumber:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Pharmacie mise à jour
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Pharmacy'
+ *       404:
+ *         description: Pharmacie non trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     summary: Supprimer une pharmacie
+ *     tags:
+ *       - Pharmacies
+ *     responses:
+ *       200:
+ *         description: Pharmacie supprimée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Pharmacie non trouvée
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *
+ * /pharmacies/country/{countryId}:
+ *   parameters:
+ *     - in: path
+ *       name: countryId
+ *       required: true
+ *       schema:
+ *         type: integer
+ *   get:
+ *     summary: Récupérer les pharmacies d'un pays
+ *     tags:
+ *       - Pharmacies
+ *     responses:
+ *       200:
+ *         description: Pharmacies du pays
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Pharmacy'
+ *
+ * /pharmacies/{id}/medicines:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: integer
+ *   get:
+ *     summary: Récupérer les médicaments d'une pharmacie
+ *     tags:
+ *       - Pharmacies
+ *     responses:
+ *       200:
+ *         description: Médicaments de la pharmacie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Medicine'
+ */
 const router = (0, express_1.Router)();
 const pharmacyController = new pharmacy_controller_1.PharmacyController();
 // Toutes les routes nécessitent une authentification

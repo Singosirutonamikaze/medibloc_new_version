@@ -34,8 +34,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkResourceOwnership = exports.requireRole = exports.authMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config/config");
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+const database_1 = __importDefault(require("../config/database"));
 /**
  * Middleware d'authentification JWT
  */
@@ -72,7 +71,7 @@ const authMiddleware = async (req, res, next) => {
             res.status(401).json(errorResponse);
             return;
         }
-        const user = await prisma.user.findUnique({
+        const user = await database_1.default.user.findUnique({
             where: { id: decoded.id },
             select: {
                 id: true,
@@ -156,7 +155,7 @@ exports.requireRole = requireRole;
  */
 const checkResourceOwnership = (resourceType) => {
     const verifyPatientOwnership = async (resourceId, userId, userRole) => {
-        const patient = await prisma.patient.findUnique({
+        const patient = await database_1.default.patient.findUnique({
             where: { id: resourceId },
             select: { userId: true },
         });
@@ -168,7 +167,7 @@ const checkResourceOwnership = (resourceType) => {
         return isOwner || isAdminOrDoctor;
     };
     const verifyDoctorOwnership = async (resourceId, userId, userRole) => {
-        const doctor = await prisma.doctor.findUnique({
+        const doctor = await database_1.default.doctor.findUnique({
             where: { id: resourceId },
             select: { userId: true },
         });
@@ -180,18 +179,18 @@ const checkResourceOwnership = (resourceType) => {
         return isOwner || isAdmin;
     };
     const verifyAppointmentOwnership = async (resourceId, userId, userRole) => {
-        const appointment = await prisma.appointment.findUnique({
+        const appointment = await database_1.default.appointment.findUnique({
             where: { id: resourceId },
             select: { patientId: true, doctorId: true },
         });
         if (!appointment) {
             return false;
         }
-        const patientProfile = await prisma.patient.findUnique({
+        const patientProfile = await database_1.default.patient.findUnique({
             where: { userId },
             select: { id: true },
         });
-        const doctorProfile = await prisma.doctor.findUnique({
+        const doctorProfile = await database_1.default.doctor.findUnique({
             where: { userId },
             select: { id: true },
         });

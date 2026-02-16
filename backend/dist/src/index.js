@@ -12,6 +12,8 @@ const config_1 = require("./config/config");
 const index_routes_1 = __importDefault(require("./routes/index.routes"));
 const error_middleware_1 = require("./middleware/error.middleware");
 const database_lifecycle_1 = require("./config/database-lifecycle");
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = require("./config/swagger");
 // Créer le dossier logs s'il n'existe pas
 const logsDir = node_path_1.default.join(process.cwd(), 'logs');
 if (!node_fs_1.default.existsSync(logsDir)) {
@@ -57,6 +59,8 @@ app.use((0, cors_1.default)(buildCorsOptions()));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, morgan_1.default)("dev"));
+// Swagger UI
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
 // API Routes
 app.use("/api/v1", index_routes_1.default);
 // Error handling

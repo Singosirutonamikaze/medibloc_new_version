@@ -4,6 +4,248 @@ const express_1 = require("express");
 const doctor_controller_1 = require("../controllers/doctor.controller");
 const auth_middleware_1 = require("../middleware/auth.middleware");
 const validation_middleware_1 = require("../middleware/validation.middleware");
+/**
+ * @openapi
+ * /doctors:
+ *   get:
+ *     summary: Récupérer tous les médecins
+ *     tags:
+ *       - Doctors
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: specialization
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Liste des médecins
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Doctor'
+ *       401:
+ *         description: Non authentifié
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   post:
+ *     summary: Créer un nouveau médecin
+ *     tags:
+ *       - Doctors
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               specialization:
+ *                 type: string
+ *               licenseNumber:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *             required: [specialization, licenseNumber, phone, address]
+ *     responses:
+ *       201:
+ *         description: Médecin créé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Doctor'
+ *       400:
+ *         description: Données invalides
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *
+ * /doctors/{id}:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: integer
+ *   get:
+ *     summary: Récupérer un médecin par son ID
+ *     tags:
+ *       - Doctors
+ *     responses:
+ *       200:
+ *         description: Médecin trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Doctor'
+ *       404:
+ *         description: Médecin non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   put:
+ *     summary: Mettre à jour un médecin
+ *     tags:
+ *       - Doctors
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               specialization:
+ *                 type: string
+ *               licenseNumber:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Médecin mis à jour
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Doctor'
+ *       404:
+ *         description: Médecin non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     summary: Supprimer un médecin
+ *     tags:
+ *       - Doctors
+ *     responses:
+ *       200:
+ *         description: Médecin supprimé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Médecin non trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *
+ * /doctors/{id}/appointments:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: integer
+ *   get:
+ *     summary: Récupérer les rendez-vous d'un médecin
+ *     tags:
+ *       - Doctors
+ *     responses:
+ *       200:
+ *         description: Rendez-vous du médecin
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Appointment'
+ *
+ * /doctors/{id}/prescriptions:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: integer
+ *   get:
+ *     summary: Récupérer les ordonnances d'un médecin
+ *     tags:
+ *       - Doctors
+ *     responses:
+ *       200:
+ *         description: Ordonnances du médecin
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Prescription'
+ *
+ * /doctors/specialties/list:
+ *   get:
+ *     summary: Récupérer la liste des spécialités disponibles
+ *     tags:
+ *       - Doctors
+ *     responses:
+ *       200:
+ *         description: Liste des spécialités
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ */
 const router = (0, express_1.Router)();
 const doctorController = new doctor_controller_1.DoctorController();
 // Toutes les routes nécessitent une authentification
