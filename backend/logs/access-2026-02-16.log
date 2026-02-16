@@ -20,3 +20,4 @@
 ::ffff:127.0.0.1 - - [16/Feb/2026:18:05:58 +0000] "GET /api-docs/swagger-ui-init.js HTTP/1.1" 200 121692 "http://localhost:3000/api-docs/" "Mozilla/5.0 (X11; Linux x86_64; rv:147.0) Gecko/20100101 Firefox/147.0" - 3.805 ms
 ::ffff:127.0.0.1 - - [16/Feb/2026:18:05:58 +0000] "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (X11; Linux x86_64; rv:147.0) Gecko/20100101 Firefox/147.0" - 1.431 ms
 ::ffff:127.0.0.1 - - [16/Feb/2026:18:24:10 +0000] "POST /api/v1/auth/register HTTP/1.1" 500 878 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:147.0) Gecko/20100101 Firefox/147.0" - 1810.632 ms
+::ffff:127.0.0.1 - - [16/Feb/2026:18:37:22 +0000] "POST /api/v1/auth/register HTTP/1.1" 201 538 "-" "Mozilla/5.0 (X11; Linux x86_64; rv:147.0) Gecko/20100101 Firefox/147.0" - 720.315 ms
