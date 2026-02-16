@@ -2,19 +2,31 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Construct DATABASE_URL with PASSWORD from environment
+const getDatabaseUrl = (): string => {
+  const dbUrl = process.env.DATABASE_URL || '';
+  const password = process.env.PASSWORD || '';
+
+  if (password && dbUrl.includes('PASSWORD')) {
+    return dbUrl.replace('PASSWORD', password);
+  }
+
+  return dbUrl;
+};
+
 export const config = {
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
-  
+
   jwt: {
     secret: process.env.JWT_SECRET || 'ERFSFGSdskfdgfgyerbfsuerezZTFrszhjczeghdkgzegdzalkarznsdgrazadhzdvzagf&',
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
-  
+
   database: {
-    url: process.env.DATABASE_URL || '',
+    url: getDatabaseUrl(),
   },
-  
+
   cors: {
     // CORS_ORIGIN can be:
     // - '*' to allow all origins (credentials will be disabled in that case)

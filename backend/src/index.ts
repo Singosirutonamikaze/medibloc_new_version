@@ -9,7 +9,7 @@ import {
   errorMiddleware as errorHandler,
   notFoundMiddleware as notFound,
 } from "./middleware/error.middleware";
-import prisma from "./config/database";
+import { initializeDatabase, disconnectDatabase } from "./config/database-lifecycle";
 
 // Créer le dossier logs s'il n'existe pas
 const logsDir = path.join(process.cwd(), 'logs');
@@ -84,14 +84,11 @@ const PORT = config.port;
 
 const startServer = async () => {
   try {
-    await prisma.$connect();
-
-    console.log(
-      "\n$$$$$$$$$$$$$$$$$$$$$ Database connected successfully $$$$$$$$$$$$$$$$$$$$$"
-    );
+    // Initialize database connection
+    await initializeDatabase();
 
     // Start server
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(
         "---------------------------------------------------------------\n"
       );
@@ -114,31 +111,42 @@ const startServer = async () => {
         "\n---------------------------------------------------------------\n"
       );
     });
+
+    // Store server reference for graceful shutdown
+    return server;
   } catch (error) {
-    console.error("********Failed to start server:", error);
+    console.error(" Failed to start server:", error);
+    await disconnectDatabase();
     process.exit(1);
   }
 };
 
 // Graceful shutdown
-process.on("SIGINT", async () => {
-  console.log(
-    "\n-----------------------hutting down gracefully...--------------------------"
-  );
-  await prisma.$disconnect();
-  console.log("*************  Database disconnected ******************");
-  process.exit(0);
-});
+const setupGracefulShutdown = () => {
+  const shutdown = async (signal: string) => {
+    console.log(
+      `\n-----------------------${signal}: Shutting down gracefully...--------------------------`
+    );
+    await disconnectDatabase();
+    console.log("*************  Server stopped ******************");
+    process.exit(0);
+  };
 
-process.on("SIGTERM", async () => {
-  console.log(
-    "\n-----------------------hutting down gracefully...--------------------------"
-  );
-  await prisma.$disconnect();
-  console.log("*************  Database disconnected ******************");
-  process.exit(0);
-});
+  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+};
 
-startServer();
+// Start application
+const start = async (): Promise<void> => {
+  try {
+    await startServer();
+    setupGracefulShutdown();
+  } catch (error) {
+    console.error('Failed to bootstrap server:', error);
+    process.exit(1);
+  }
+};
+
+start();
 
 export default app;
