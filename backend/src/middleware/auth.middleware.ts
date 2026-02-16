@@ -78,12 +78,11 @@
  */
 
 import { Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import { config } from "../config/config";
 import {
   AuthRequest,
   AuthenticatedUser,
-  JwtPayload,
   ApiResponse,
 } from "../types";
 import { PrismaClient } from "@prisma/client";
@@ -111,7 +110,6 @@ export const authMiddleware = async (
         error: "Token d'authentification manquant ou invalide",
       };
       res.status(401).json(errorResponse);
-      responseSent = true;
       return;
     }
 
@@ -127,9 +125,19 @@ export const authMiddleware = async (
       return;
     }
 
-    const decoded = jwt.verify(token, config.jwt.secret!) as JwtPayload;
+    const decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
+
+    if (!decoded || typeof decoded === 'string') {
+      const errorResponse: ApiResponse = {
+        success: false,
+        error: "Token invalide",
+      };
+      res.status(401).json(errorResponse);
+      return;
+    }
+
     const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
+      where: { id: decoded.id as number },
       select: {
         id: true,
         email: true,
@@ -192,16 +200,12 @@ export const requireRole = (allowedRoles: string[]) => {
     res: Response,
     next: NextFunction
   ): void => {
-    let hasAccess = false;
-    let responseSent = false;
-
     if (!req.user) {
       const errorResponse: ApiResponse = {
         success: false,
         error: "Authentification requise",
       };
       res.status(401).json(errorResponse);
-      responseSent = true;
       return;
     }
 
@@ -217,11 +221,7 @@ export const requireRole = (allowedRoles: string[]) => {
       return;
     }
 
-    hasAccess = true;
-
-    if (hasAccess && !responseSent) {
-      next();
-    }
+    next();
   };
 
   return roleMiddleware;
@@ -231,144 +231,154 @@ export const requireRole = (allowedRoles: string[]) => {
  * Vérification de propriété des ressources
  */
 export const checkResourceOwnership = (resourceType: string) => {
+  const verifyPatientOwnership = async (
+    resourceId: number,
+    userId: number,
+    userRole: string
+  ): Promise<boolean> => {
+    const patient = await prisma.patient.findUnique({
+      where: { id: resourceId },
+      select: { userId: true },
+    });
+
+    if (!patient) {
+      return false;
+    }
+
+    const isOwner = patient.userId === userId;
+    const isAdminOrDoctor = userRole === "ADMIN" || userRole === "DOCTOR";
+    return isOwner || isAdminOrDoctor;
+  };
+
+  const verifyDoctorOwnership = async (
+    resourceId: number,
+    userId: number,
+    userRole: string
+  ): Promise<boolean> => {
+    const doctor = await prisma.doctor.findUnique({
+      where: { id: resourceId },
+      select: { userId: true },
+    });
+
+    if (!doctor) {
+      return false;
+    }
+
+    const isOwner = doctor.userId === userId;
+    const isAdmin = userRole === "ADMIN";
+    return isOwner || isAdmin;
+  };
+
+  const verifyAppointmentOwnership = async (
+    resourceId: number,
+    userId: number,
+    userRole: string
+  ): Promise<boolean> => {
+    const appointment = await prisma.appointment.findUnique({
+      where: { id: resourceId },
+      select: { patientId: true, doctorId: true },
+    });
+
+    if (!appointment) {
+      return false;
+    }
+
+    const patientProfile = await prisma.patient.findUnique({
+      where: { userId },
+      select: { id: true },
+    });
+
+    const doctorProfile = await prisma.doctor.findUnique({
+      where: { userId },
+      select: { id: true },
+    });
+
+    const isPatientOwner = patientProfile?.id === appointment.patientId;
+    const isDoctorOwner = doctorProfile?.id === appointment.doctorId;
+    const isAdmin = userRole === "ADMIN";
+
+    return isPatientOwner || isDoctorOwner || isAdmin;
+  };
+
+  const sendError = (res: Response, statusCode: number, error: string): void => {
+    const errorResponse: ApiResponse = {
+      success: false,
+      error,
+    };
+    res.status(statusCode).json(errorResponse);
+  };
+
   const ownershipMiddleware = async (
     req: AuthRequest,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    let hasOwnership = false;
-    let responseSent = false;
-
     try {
       if (!req.user) {
-        const errorResponse: ApiResponse = {
-          success: false,
-          error: "Authentification requise",
-        };
-        res.status(401).json(errorResponse);
-        responseSent = true;
+        sendError(res, 401, "Authentification requise");
         return;
       }
 
       const resourceId = Number.parseInt(req.params.id, 10);
 
       if (Number.isNaN(resourceId)) {
-        const errorResponse: ApiResponse = {
-          success: false,
-          error: "ID de ressource invalide",
-        };
-        res.status(400).json(errorResponse);
-        responseSent = true;
+        sendError(res, 400, "ID de ressource invalide");
         return;
       }
 
       let ownershipVerified = false;
 
-      if (resourceType === "patient") {
-        const patient = await prisma.patient.findUnique({
-          where: { id: resourceId },
-          select: { userId: true },
-        });
+      switch (resourceType) {
+        case "patient":
+          ownershipVerified = await verifyPatientOwnership(
+            resourceId,
+            req.user.id,
+            req.user.role
+          );
+          if (!ownershipVerified) {
+            sendError(res, 404, "Patient non trouvé");
+            return;
+          }
+          break;
 
-        if (patient) {
-          const isOwner = patient.userId === req.user.id;
-          const isAdminOrDoctor =
-            req.user.role === "ADMIN" || req.user.role === "DOCTOR";
-          ownershipVerified = isOwner || isAdminOrDoctor;
-        } else {
-          const errorResponse: ApiResponse = {
-            success: false,
-            error: "Patient non trouvé",
-          };
-          res.status(404).json(errorResponse);
-          responseSent = true;
+        case "doctor":
+          ownershipVerified = await verifyDoctorOwnership(
+            resourceId,
+            req.user.id,
+            req.user.role
+          );
+          if (!ownershipVerified) {
+            sendError(res, 404, "Médecin non trouvé");
+            return;
+          }
+          break;
+
+        case "appointment":
+          ownershipVerified = await verifyAppointmentOwnership(
+            resourceId,
+            req.user.id,
+            req.user.role
+          );
+          if (!ownershipVerified) {
+            sendError(res, 404, "Rendez-vous non trouvé");
+            return;
+          }
+          break;
+
+        default:
+          sendError(res, 400, "Type de ressource non supporté");
           return;
-        }
-      } else if (resourceType === "doctor") {
-        const doctor = await prisma.doctor.findUnique({
-          where: { id: resourceId },
-          select: { userId: true },
-        });
+      }
 
-        if (doctor) {
-          const isOwner = doctor.userId === req.user.id;
-          const isAdmin = req.user.role === "ADMIN";
-          ownershipVerified = isOwner || isAdmin;
-        } else {
-          const errorResponse: ApiResponse = {
-            success: false,
-            error: "Médecin non trouvé",
-          };
-          res.status(404).json(errorResponse);
-          responseSent = true;
-          return;
-        }
-      } else if (resourceType === "appointment") {
-        const appointment = await prisma.appointment.findUnique({
-          where: { id: resourceId },
-          select: { patientId: true, doctorId: true },
-        });
-
-        if (appointment) {
-          const patientProfile = await prisma.patient.findUnique({
-            where: { userId: req.user.id },
-            select: { id: true },
-          });
-
-          const doctorProfile = await prisma.doctor.findUnique({
-            where: { userId: req.user.id },
-            select: { id: true },
-          });
-
-          const isPatientOwner = patientProfile?.id === appointment.patientId;
-          const isDoctorOwner = doctorProfile?.id === appointment.doctorId;
-          const isAdmin = req.user.role === "ADMIN";
-
-          ownershipVerified = isPatientOwner || isDoctorOwner || isAdmin;
-        } else {
-          const errorResponse: ApiResponse = {
-            success: false,
-            error: "Rendez-vous non trouvé",
-          };
-          res.status(404).json(errorResponse);
-          responseSent = true;
-          return;
-        }
-      } else {
-        const errorResponse: ApiResponse = {
-          success: false,
-          error: "Type de ressource non supporté",
-        };
-        res.status(400).json(errorResponse);
-        responseSent = true;
+      if (!ownershipVerified) {
+        sendError(res, 403, "Accès non autorisé à cette ressource");
         return;
       }
 
-      if (!ownershipVerified && !responseSent) {
-        const errorResponse: ApiResponse = {
-          success: false,
-          error: "Accès non autorisé à cette ressource",
-        };
-        res.status(403).json(errorResponse);
-        responseSent = true;
-        return;
-      }
-
-      hasOwnership = ownershipVerified;
-    } catch (error) {
-      if (!responseSent) {
-        console.error("Erreur de vérification de propriété:", error);
-        const errorResponse: ApiResponse = {
-          success: false,
-          error: "Erreur de vérification des permissions",
-        };
-        res.status(500).json(errorResponse);
-        responseSent = true;
-      }
-    }
-
-    if (hasOwnership && !responseSent) {
       next();
+    } catch (error) {
+      console.error("Erreur de vérification de propriété:", error);
+      sendError(res, 500, "Erreur de vérification des permissions");
     }
   };
 

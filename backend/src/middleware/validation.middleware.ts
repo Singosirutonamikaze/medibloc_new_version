@@ -195,117 +195,140 @@ const validateField = (field: string, value: unknown, rules: ValidationSchema[st
     return null;
   }
 
-  if (rules.type) {
-    const typeValidationError = validateFieldType(field, value, rules);
-    if (typeValidationError) {
-      return typeValidationError;
+  const validators: Array<(f: string, v: unknown, r: ValidationSchema[string]) => ValidationError | null> = [
+    validateFieldType,
+    (f, v, r) => r.type === 'string' && typeof v === 'string' ? validateFieldLength(f, v, r) : null,
+    (f, v, r) => r.type === 'number' ? validateFieldNumber(f, v, r) : null,
+    validatePattern,
+    validateEnum,
+    validateCustom,
+  ];
+
+  for (const validator of validators) {
+    const error = validator(field, value, rules);
+    if (error) {
+      return error;
     }
   }
 
-  if (rules.type === 'string' && typeof value === 'string') {
-    const lengthValidationError = validateFieldLength(field, value, rules);
-    if (lengthValidationError) {
-      return lengthValidationError;
-    }
-  }
+  return null;
+};
 
-  if (rules.type === 'number') {
-    const numberValidationError = validateFieldNumber(field, value, rules);
-    if (numberValidationError) {
-      return numberValidationError;
-    }
-  }
-
+const validatePattern = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
   if (rules.pattern && typeof value === 'string' && !rules.pattern.test(value)) {
     return {
       field,
       message: rules.message || `Le champ ${field} a un format invalide`,
     };
   }
+  return null;
+};
 
+const validateEnum = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
   if (rules.enum && !rules.enum.includes(value)) {
     return {
       field,
       message: rules.message || `Le champ ${field} doit être l'une des valeurs suivantes: ${rules.enum.join(', ')}`,
     };
   }
+  return null;
+};
 
+const validateCustom = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
   if (rules.custom && !rules.custom(value)) {
     return {
       field,
       message: rules.message || `Le champ ${field} n'est pas valide`,
     };
   }
-
   return null;
 };
 
 const validateFieldType = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
   switch (rules.type) {
     case 'string':
-      if (typeof value !== 'string') {
-        return {
-          field,
-          message: rules.message || `Le champ ${field} doit être une chaîne de caractères`,
-        };
-      }
-      break;
-
+      return validateStringType(field, value, rules);
     case 'number':
-      const numValue = (() => { const n = Number(value); return n; })();
-      if (Number.isNaN(numValue)) {
-        return {
-          field,
-          message: rules.message || `Le champ ${field} doit être un nombre valide`,
-        };
-      }
-      break;
-
+      return validateNumberType(field, value, rules);
     case 'boolean':
-      if (typeof value !== 'boolean' && value !== 'true' && value !== 'false') {
-        return {
-          field,
-          message: rules.message || `Le champ ${field} doit être un booléen`,
-        };
-      }
-      break;
-
+      return validateBooleanType(field, value, rules);
     case 'email':
-      if (typeof value !== 'string' || !isValidEmail(value)) {
-        return {
-          field,
-          message: rules.message || `Le champ ${field} doit être un email valide`,
-        };
-      }
-      break;
-
+      return validateEmailType(field, value, rules);
     case 'date':
-      if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
-        const dateValue = new Date(value as any);
-        if (Number.isNaN(dateValue.getTime())) {
-          return {
-            field,
-            message: rules.message || `Le champ ${field} doit être une date valide`,
-          };
-        }
-      } else {
-        return {
-          field,
-          message: rules.message || `Le champ ${field} doit être une date valide`,
-        };
-      }
-      break;
-
+      return validateDateType(field, value, rules);
     case 'array':
-      if (!Array.isArray(value)) {
-        return {
-          field,
-          message: rules.message || `Le champ ${field} doit être un tableau`,
-        };
-      }
-      break;
+      return validateArrayType(field, value, rules);
+    default:
+      return null;
+  }
+};
+
+const validateStringType = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
+  if (typeof value !== 'string') {
+    return {
+      field,
+      message: rules.message || `Le champ ${field} doit être une chaîne de caractères`,
+    };
+  }
+  return null;
+};
+
+const validateNumberType = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
+  const numValue = Number(value);
+  if (Number.isNaN(numValue)) {
+    return {
+      field,
+      message: rules.message || `Le champ ${field} doit être un nombre valide`,
+    };
+  }
+  return null;
+};
+
+const validateBooleanType = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
+  if (typeof value !== 'boolean' && value !== 'true' && value !== 'false') {
+    return {
+      field,
+      message: rules.message || `Le champ ${field} doit être un booléen`,
+    };
+  }
+  return null;
+};
+
+const validateEmailType = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
+  if (typeof value !== 'string' || !isValidEmail(value)) {
+    return {
+      field,
+      message: rules.message || `Le champ ${field} doit être un email valide`,
+    };
+  }
+  return null;
+};
+
+const validateDateType = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
+  if (typeof value !== 'string' && typeof value !== 'number' && !(value instanceof Date)) {
+    return {
+      field,
+      message: rules.message || `Le champ ${field} doit être une date valide`,
+    };
   }
 
+  const dateValue = new Date(value as any);
+  if (Number.isNaN(dateValue.getTime())) {
+    return {
+      field,
+      message: rules.message || `Le champ ${field} doit être une date valide`,
+    };
+  }
+  return null;
+};
+
+const validateArrayType = (field: string, value: unknown, rules: ValidationSchema[string]): ValidationError | null => {
+  if (!Array.isArray(value)) {
+    return {
+      field,
+      message: rules.message || `Le champ ${field} doit être un tableau`,
+    };
+  }
   return null;
 };
 

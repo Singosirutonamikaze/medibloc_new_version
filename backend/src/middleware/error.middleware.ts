@@ -19,38 +19,24 @@ interface ErrorHandlingResult {
  * Gestion des erreurs Prisma
  */
 const handlePrismaError = (error: Prisma.PrismaClientKnownRequestError): ErrorHandlingResult => {
-  let statusCode = 500;
-  let message = 'Erreur de base de données';
-
   switch (error.code) {
     case 'P2002': {
-      statusCode = 409;
+      const statusCode = 409;
       const fields = error.meta?.target as string[];
-      message = `Une ressource avec ${fields?.join(', ')} existe déjà`;
-      break;
+      const message = `Une ressource avec ${fields?.join(', ')} existe déjà`;
+      return { statusCode, message, details: error.meta };
     }
     case 'P2003':
-      statusCode = 400;
-      message = 'Référence à une ressource inexistante';
-      break;
+      return { statusCode: 400, message: 'Référence à une ressource inexistante', details: error.meta };
     case 'P2025':
-      statusCode = 404;
-      message = 'Ressource non trouvée';
-      break;
+      return { statusCode: 404, message: 'Ressource non trouvée', details: error.meta };
     case 'P2014':
-      statusCode = 400;
-      message = 'Violation de contrainte d\'identité';
-      break;
+      return { statusCode: 400, message: 'Violation de contrainte d\'identité', details: error.meta };
     case 'P2016':
-      statusCode = 400;
-      message = 'Erreur dans la requête de base de données';
-      break;
+      return { statusCode: 400, message: 'Erreur dans la requête de base de données', details: error.meta };
     default:
-      statusCode = 500;
-      message = 'Erreur de base de données';
+      return { statusCode: 500, message: 'Erreur de base de données', details: error.meta };
   }
-
-  return { statusCode, message, details: error.meta };
 };
 
 /**
@@ -126,9 +112,9 @@ export const errorMiddleware = (
         if (Array.isArray(errorResult.details)) {
           (errorResponseBase.details as unknown) = errorResult.details;
         } else if (typeof errorResult.details === 'object') {
-          (errorResponseBase.details as unknown) = errorResult.details;
+          (errorResponseBase.details as unknown) = JSON.stringify(errorResult.details);
         } else {
-          (errorResponseBase.details as unknown) = String(errorResult.details);
+          (errorResponseBase.details as unknown) = JSON.stringify(errorResult.details);
         }
       }
     }

@@ -1,4 +1,4 @@
-import { vi, beforeEach } from 'vitest';
+import { vi } from 'vitest';
 
 // Mock le module database AVANT que les contrôleurs ne soient importés
 vi.mock('../../src/config/database', () => ({

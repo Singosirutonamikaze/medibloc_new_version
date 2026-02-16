@@ -12,7 +12,6 @@ export type RegisterPayload = {
   password: string;
 };
 export type LoginPayload = { email: string; password: string };
-export type PatientPayload = RegisterPayload;
 export type AppointmentPayload = {
   patientId: number;
   doctorId: number;
@@ -77,7 +76,7 @@ const makeControllerMock = (resourceName: string) => ({
         success: true,
         data: [{ id: 1, firstName: "koffi", lastName: "komla" }],
       });
-    createPatient = (req: Request<{}, {}, PatientPayload>, res: Response) =>
+    createPatient = (req: Request<{}, {}, RegisterPayload>, res: Response) =>
       res.status(201).json({
         success: true,
         data: { id: 2, firstName: req.body.firstName, lastName: req.body.lastName },

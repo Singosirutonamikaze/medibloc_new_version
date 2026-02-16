@@ -1,4 +1,4 @@
-import { vi, type Mock } from "vitest";
+import { type Mock } from "vitest";
 import type { PrismaClient } from "@prisma/client";
 import prisma from "../../src/config/database";
 
