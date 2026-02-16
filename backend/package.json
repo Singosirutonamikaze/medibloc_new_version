@@ -5,8 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node dist/index.js",
+    "postinstall": "prisma generate",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:run": "vitest run",
