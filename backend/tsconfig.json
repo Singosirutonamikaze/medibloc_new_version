@@ -3,14 +3,15 @@
     "target": "es2020",
     "module": "node16",
     "lib": ["ES2020", "ES2021"],
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node16",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   },
-  "include": ["src"]
+  "include": ["src", "prisma"]
 }

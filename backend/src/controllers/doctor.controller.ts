@@ -86,7 +86,7 @@ export class DoctorController {
     let response: ApiResponse<string[]> = { success: true, data: [] };
     try {
       const doctors = await prisma.doctor.findMany({ select: { specialty: true } });
-      const specialties = Array.from(new Set(doctors.map((d) => d.specialty).filter(Boolean))) as string[];
+      const specialties = Array.from(new Set(doctors.map((d: { specialty: string | null }) => d.specialty).filter(Boolean))) as string[];
       response = { success: true, data: specialties };
     } catch (err: unknown) {
       status = 500;

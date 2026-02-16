@@ -1,0 +1,60 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserController = void 0;
+const database_1 = __importDefault(require("../config/database"));
+const generic_controller_1 = __importDefault(require("../gen/generic.controller"));
+class UserController {
+    constructor() {
+        this.getUserProfile = async (req, res) => {
+            let status = 200;
+            let response = { success: true, data: null };
+            try {
+                const userId = req.user?.id;
+                if (userId) {
+                    const user = await database_1.default.user.findUnique({
+                        where: { id: userId },
+                        include: {
+                            patientProfile: true,
+                            doctorProfile: true,
+                            adminProfile: true
+                        }
+                    });
+                    if (user) {
+                        response = { success: true, data: user };
+                    }
+                    else {
+                        status = 404;
+                        response = { success: false, error: "Utilisateur non trouvé" };
+                    }
+                }
+                else {
+                    status = 401;
+                    response = { success: false, error: 'Non authentifié' };
+                }
+            }
+            catch (err) {
+                status = 500;
+                response = { success: false, error: err instanceof Error ? err.message : 'Erreur interne' };
+            }
+            return res.status(status).json(response);
+        };
+        const repo = {
+            findMany: (params) => database_1.default.user.findMany(params),
+            findUnique: (params) => database_1.default.user.findUnique(params),
+            create: (params) => database_1.default.user.create({ data: params.data }),
+            update: (params) => database_1.default.user.update({ where: params.where, data: params.data }),
+            delete: (params) => database_1.default.user.delete({ where: params.where }),
+            count: (params) => database_1.default.user.count(params),
+        };
+        this.generic = new generic_controller_1.default(repo);
+        // bind route methods
+        this.getAllUsers = this.generic.getAll;
+        this.getUserById = this.generic.getOne;
+        this.updateUser = this.generic.update;
+        this.deleteUser = this.generic.delete;
+    }
+}
+exports.UserController = UserController;
