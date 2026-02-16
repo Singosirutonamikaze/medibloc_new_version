@@ -85,9 +85,7 @@ import {
   AuthenticatedUser,
   ApiResponse,
 } from "../types";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../config/database";
 
 /**
  * Middleware d'authentification JWT
