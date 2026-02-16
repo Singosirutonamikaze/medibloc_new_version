@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { Appointment, AppointmentStatus, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse, CreateAppointmentDto, UpdateAppointmentDto } from '../types';
+import { ApiResponse } from '../types';
 
 type AppointmentCreateInput = Prisma.AppointmentCreateInput;
 type AppointmentUpdateInput = Prisma.AppointmentUpdateInput;
 
 export class AppointmentController {
-  private generic: GenericController<Appointment, AppointmentCreateInput, AppointmentUpdateInput>;
+  private readonly generic: GenericController<Appointment, AppointmentCreateInput, AppointmentUpdateInput>;
 
   public getAllAppointments: (req: Request, res: Response) => Promise<Response>;
   public createAppointment: (req: Request, res: Response) => Promise<Response>;

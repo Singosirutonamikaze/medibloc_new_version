@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { Symptom, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse, CreateSymptomDto, UpdateSymptomDto } from '../types';
+import { ApiResponse } from '../types';
 
 type SymptomCreateInput = Prisma.SymptomCreateInput;
 type SymptomUpdateInput = Prisma.SymptomUpdateInput;
 
 export class SymptomController {
-  private generic: GenericController<Symptom, SymptomCreateInput, SymptomUpdateInput>;
+  private readonly generic: GenericController<Symptom, SymptomCreateInput, SymptomUpdateInput>;
 
   public getAllSymptoms: (req: Request, res: Response) => Promise<Response>;
   public createSymptom: (req: Request, res: Response) => Promise<Response>;

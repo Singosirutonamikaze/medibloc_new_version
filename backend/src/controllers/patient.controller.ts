@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { Patient, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse, CreatePatientDto, UpdatePatientDto, PatientResponse } from '../types';
+import { ApiResponse } from '../types';
 
 type PatientCreateInput = Prisma.PatientCreateInput;
 type PatientUpdateInput = Prisma.PatientUpdateInput;
 
 export class PatientController {
-  private generic: GenericController<Patient, PatientCreateInput, PatientUpdateInput>;
+  private readonly generic: GenericController<Patient, PatientCreateInput, PatientUpdateInput>;
 
   public getAllPatients: (req: Request, res: Response) => Promise<Response>;
   public createPatient: (req: Request, res: Response) => Promise<Response>;
@@ -54,11 +54,11 @@ export class PatientController {
           where: { id },
           include: { diseases: { include: { disease: true } } }
         });
-        if (!patient) {
+        if (patient) {
+          response = { success: true, data: patient.diseases };
+        } else {
           status = 404;
           response = { success: false, error: 'Patient non trouvé' };
-        } else {
-          response = { success: true, data: patient.diseases };
         }
       }
     } catch (err: unknown) {

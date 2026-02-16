@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { Medicine, MedicineType, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse, CreateMedicineDto, UpdateMedicineDto } from '../types';
+import { ApiResponse } from '../types';
 
 type MedicineCreateInput = Prisma.MedicineCreateInput;
 type MedicineUpdateInput = Prisma.MedicineUpdateInput;
 
 export class MedicineController {
-  private generic: GenericController<Medicine, MedicineCreateInput, MedicineUpdateInput>;
+  private readonly generic: GenericController<Medicine, MedicineCreateInput, MedicineUpdateInput>;
 
   public getAllMedicines: (req: Request, res: Response) => Promise<Response>;
   public createMedicine: (req: Request, res: Response) => Promise<Response>;

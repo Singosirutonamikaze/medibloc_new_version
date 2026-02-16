@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { Disease, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse, CreateDiseaseDto, UpdateDiseaseDto } from '../types';
+import { ApiResponse } from '../types';
 
 type DiseaseCreateInput = Prisma.DiseaseCreateInput;
 type DiseaseUpdateInput = Prisma.DiseaseUpdateInput;
 
 export class DiseaseController {
-  private generic: GenericController<Disease, DiseaseCreateInput, DiseaseUpdateInput>;
+  private readonly generic: GenericController<Disease, DiseaseCreateInput, DiseaseUpdateInput>;
 
   public getAllDiseases: (req: Request, res: Response) => Promise<Response>;
   public createDisease: (req: Request, res: Response) => Promise<Response>;
@@ -51,11 +51,11 @@ export class DiseaseController {
         response = { success: false, error: 'Identifiant invalide' };
       } else {
         const disease = await prisma.disease.findUnique({ where: { id }, include: { symptoms: { include: { symptom: true } } } });
-        if (!disease) {
+        if (disease) {
+          response = { success: true, data: disease.symptoms };
+        } else {
           status = 404;
           response = { success: false, error: 'Maladie non trouvée' };
-        } else {
-          response = { success: true, data: disease.symptoms };
         }
       }
     } catch (err: unknown) {

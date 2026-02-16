@@ -1,6 +1,8 @@
 import express, { Application } from "express";
 import cors from "cors";
 import morgan from "morgan";
+import fs from "node:fs";
+import path from "node:path";
 import { config } from "./config/config";
 import routes from "./routes/index.routes";
 import {
@@ -9,9 +11,26 @@ import {
 } from "./middleware/error.middleware";
 import prisma from "./config/database";
 
+// Créer le dossier logs s'il n'existe pas
+const logsDir = path.join(process.cwd(), 'logs');
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir, { recursive: true });
+}
+
+// Configurer Morgan pour écrire dans les logs
+const morganFormat = ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms';
+const accessLogStream = fs.createWriteStream(
+  path.join(logsDir, `access-${new Date().toISOString().split('T')[0]}.log`),
+  { flags: 'a' }
+);
+
 const app: Application = express();
 
 // Middleware
+// Morgan - Logs toutes les requêtes HTTP
+app.use(morgan(morganFormat, { stream: accessLogStream }));
+app.use(morgan('dev')); // Aussi afficher dans la console
+
 // Build safe CORS options from configuration
 const buildCorsOptions = () => {
   const { origin, parsedOrigins, credentials } = config.cors as any;
@@ -39,7 +58,7 @@ const buildCorsOptions = () => {
     ) => {
       // Allow requests with no origin (like curl or server-to-server requests)
       if (!reqOrigin) return callback(null, true);
-      if (whitelist.indexOf(reqOrigin) !== -1) {
+      if (whitelist.includes(reqOrigin as string)) {
         return callback(null, true);
       }
       return callback(new Error("Not allowed by CORS"));

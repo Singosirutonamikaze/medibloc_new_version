@@ -8,7 +8,7 @@ type UserCreateInput = Prisma.UserCreateInput;
 type UserUpdateInput = Prisma.UserUpdateInput;
 
 export class UserController {
-	private generic: GenericController<User, UserCreateInput, UserUpdateInput>;
+	private readonly generic: GenericController<User, UserCreateInput, UserUpdateInput>;
 
 	public getAllUsers: (req: Request, res: Response) => Promise<Response>;
 	public getUserById: (req: Request, res: Response) => Promise<Response>;
@@ -46,10 +46,7 @@ export class UserController {
 
 		try {
 			const userId = req.user?.id;
-			if (!userId) {
-				status = 401;
-				response = { success: false, error: 'Non authentifié' };
-			} else {
+			if (userId) {
 				const user = await prisma.user.findUnique({
 					where: { id: userId },
 					include: {
@@ -58,12 +55,15 @@ export class UserController {
 						adminProfile: true
 					}
 				});
-				if (!user) {
+				if (user) {
+					response = { success: true, data: user };
+				} else {
 					status = 404;
 					response = { success: false, error: "Utilisateur non trouvé" };
-				} else {
-					response = { success: true, data: user };
 				}
+			} else {
+				status = 401;
+				response = { success: false, error: 'Non authentifié' };
 			}
 		} catch (err: unknown) {
 			status = 500;

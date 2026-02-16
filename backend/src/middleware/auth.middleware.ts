@@ -115,7 +115,7 @@ export const authMiddleware = async (
       return;
     }
 
-  const token = authHeader!.substring(7);
+    const token = authHeader!.substring(7);
 
     if (!token.trim()) {
       const errorResponse: ApiResponse = {
@@ -214,7 +214,6 @@ export const requireRole = (allowedRoles: string[]) => {
         error: "Accès non autorisé. Rôle insuffisant.",
       };
       res.status(403).json(errorResponse);
-      responseSent = true;
       return;
     }
 
@@ -251,9 +250,9 @@ export const checkResourceOwnership = (resourceType: string) => {
         return;
       }
 
-      const resourceId = parseInt(req.params.id, 10);
+      const resourceId = Number.parseInt(req.params.id, 10);
 
-      if (isNaN(resourceId)) {
+      if (Number.isNaN(resourceId)) {
         const errorResponse: ApiResponse = {
           success: false,
           error: "ID de ressource invalide",

@@ -6,7 +6,7 @@ import { ApiResponse, RegisterUserDto } from '../types';
 export class AuthController {
   public register = async (req: Request, res: Response): Promise<Response> => {
     let status = 201;
-    let response: ApiResponse<unknown | null> = { success: true, data: null };
+    let response: ApiResponse<any> = { success: true, data: null };
 
     try {
       const body = req.body as RegisterUserDto;
@@ -30,26 +30,26 @@ export class AuthController {
 
   public login = async (req: Request, res: Response): Promise<Response> => {
     let status = 200;
-    let response: ApiResponse<unknown | null> = { success: true, data: null };
+    let response: ApiResponse<any> = { success: true, data: null };
 
     try {
       const { email, password } = req.body as { email: string; password: string };
       const user = await prisma.user.findUnique({ where: { email } });
-      if (!user) {
-        status = 401;
-        response = { success: false, error: 'Identifiants invalides' };
-      } else {
+      if (user) {
         const ok = await comparePassword(password, user.password);
-        if (!ok) {
-          status = 401;
-          response = { success: false, error: 'Identifiants invalides' };
-        } else {
+        if (ok) {
           const token = generateToken({ id: user.id, email: user.email, role: user.role } as any);
           // hide password
           // @ts-ignore
           const { password: _pwd, ...safeUser } = user;
           response = { success: true, data: { user: safeUser, token } };
+        } else {
+          status = 401;
+          response = { success: false, error: 'Identifiants invalides' };
         }
+      } else {
+        status = 401;
+        response = { success: false, error: 'Identifiants invalides' };
       }
     } catch (err: unknown) {
       status = 500;
@@ -61,15 +61,12 @@ export class AuthController {
 
   public getCurrentUser = async (req: Request & { user?: { id: number } }, res: Response): Promise<Response> => {
     let status = 200;
-    let response: ApiResponse<unknown | null> = { success: true, data: null };
+    let response: ApiResponse<any> = { success: true, data: null };
     try {
       const userId = req.user?.id;
-      if (!userId) {
-        status = 401;
-        response = { success: false, error: 'Non authentifié' };
-      } else {
+      if (userId) {
         const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (!user) {
+        if (user) {
           status = 404;
           response = { success: false, error: 'Utilisateur non trouvé' };
         } else {

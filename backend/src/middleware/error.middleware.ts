@@ -23,11 +23,12 @@ const handlePrismaError = (error: Prisma.PrismaClientKnownRequestError): ErrorHa
   let message = 'Erreur de base de données';
 
   switch (error.code) {
-    case 'P2002':
+    case 'P2002': {
       statusCode = 409;
       const fields = error.meta?.target as string[];
       message = `Une ressource avec ${fields?.join(', ')} existe déjà`;
       break;
+    }
     case 'P2003':
       statusCode = 400;
       message = 'Référence à une ressource inexistante';
@@ -121,7 +122,7 @@ export const errorMiddleware = (
 
     if (config.nodeEnv === 'development') {
       if (errorResult.details) {
-        
+
         if (Array.isArray(errorResult.details)) {
           (errorResponseBase.details as unknown) = errorResult.details;
         } else if (typeof errorResult.details === 'object') {
@@ -140,7 +141,7 @@ export const errorMiddleware = (
   } catch (handlerError) {
     if (!responseSent) {
       console.error('Erreur dans le middleware de gestion d\'erreurs:', handlerError);
-      
+
       const fallbackResponse: ApiResponse = {
         success: false,
         error: 'Erreur interne critique du serveur',
@@ -169,7 +170,7 @@ export const rateLimitMiddleware = (windowMs: number = 15 * 60 * 1000, maxReques
   const requests = new Map<string, { count: number; resetTime: number }>();
 
   const middleware = (req: Request, res: Response, next: NextFunction): void => {
-    const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
+    const clientIp = req.ip || req.socket?.remoteAddress || 'unknown';
     const now = Date.now();
     const windowStart = now - windowMs;
 
@@ -180,7 +181,7 @@ export const rateLimitMiddleware = (windowMs: number = 15 * 60 * 1000, maxReques
         ipsToDelete.push(ip);
       }
     });
-    
+
     ipsToDelete.forEach(ip => {
       requests.delete(ip);
     });

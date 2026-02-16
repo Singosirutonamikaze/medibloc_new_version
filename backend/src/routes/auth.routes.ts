@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers/auth.controller';
 import { validationMiddleware, validationSchemas } from '../middleware/validation.middleware';
-import { LoginDto, RegisterUserDto } from '../types';
+// Types are only used for types, no unused imports
 import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();

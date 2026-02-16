@@ -1,9 +1,7 @@
 import { Router } from 'express';
 import { AppointmentController } from '../controllers/appointment.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
-import { validationMiddleware } from '../middleware/validation.middleware';
-import { CreateAppointmentDto, UpdateAppointmentDto } from '../types';
-import { validationSchemas } from '../middleware/validation.middleware';
+import { validationMiddleware, validationSchemas } from '../middleware/validation.middleware';
 
 const router = Router();
 const appointmentController = new AppointmentController();

@@ -252,8 +252,8 @@ const validateFieldType = (field: string, value: unknown, rules: ValidationSchem
       break;
 
     case 'number':
-      const numValue = Number(value);
-      if (isNaN(numValue)) {
+      const numValue = (() => { const n = Number(value); return n; })();
+      if (Number.isNaN(numValue)) {
         return {
           field,
           message: rules.message || `Le champ ${field} doit être un nombre valide`,
@@ -281,8 +281,8 @@ const validateFieldType = (field: string, value: unknown, rules: ValidationSchem
 
     case 'date':
       if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
-        const dateValue = new Date(value as string | number | Date);
-        if (isNaN(dateValue.getTime())) {
+        const dateValue = new Date(value as any);
+        if (Number.isNaN(dateValue.getTime())) {
           return {
             field,
             message: rules.message || `Le champ ${field} doit être une date valide`,
@@ -356,7 +356,7 @@ const validateData = (data: unknown, schema: ValidationSchema): ValidationResult
   Object.entries(schema).forEach(([field, rules]) => {
     const value = (data as Record<string, unknown>)[field];
     const error = validateField(field, value, rules);
-    
+
     if (error) {
       errors.push(error);
     }

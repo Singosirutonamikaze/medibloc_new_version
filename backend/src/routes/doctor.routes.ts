@@ -1,9 +1,7 @@
 import { Router } from 'express';
 import { DoctorController } from '../controllers/doctor.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
-import { validationMiddleware } from '../middleware/validation.middleware';
-import { CreateDoctorDto, UpdateDoctorDto } from '../types';
-import { validationSchemas } from '../middleware/validation.middleware';
+import { validationMiddleware, validationSchemas } from '../middleware/validation.middleware';
 
 const router = Router();
 const doctorController = new DoctorController();

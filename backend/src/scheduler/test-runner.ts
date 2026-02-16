@@ -11,15 +11,15 @@
  */
 
 import cron from 'node-cron';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import * as fs from 'fs';
-import * as path from 'path';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 const execAsync = promisify(exec);
 
 class TestScheduler {
-  private logDir: string;
+  private readonly logDir: string;
 
   constructor() {
     this.logDir = path.join(process.cwd(), 'logs');
@@ -33,7 +33,7 @@ class TestScheduler {
   }
 
   private async runTests(): Promise<void> {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const timestamp = new Date().toISOString().replaceAll(/[:.]/g, '-');
     const logFile = path.join(this.logDir, `test-${timestamp}.log`);
 
     console.log(`[${new Date().toISOString()}] Démarrage des tests...`);

@@ -1,9 +1,7 @@
 import { Router } from 'express';
 import { MedicalRecordController } from '../controllers/medicalRecord.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
-import { validationMiddleware } from '../middleware/validation.middleware';
-import { CreateMedicalRecordDto, UpdateMedicalRecordDto } from '../types';
-import { validationSchemas } from '../middleware/validation.middleware';
+import { validationMiddleware, validationSchemas } from '../middleware/validation.middleware';
 
 const router = Router();
 const medicalRecordController = new MedicalRecordController();

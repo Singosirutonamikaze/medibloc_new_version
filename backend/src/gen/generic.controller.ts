@@ -16,7 +16,7 @@
  *   total counts from non-paginated findMany results. If provided, it should
  *   return the total number of records matching the provided `where`.
  */
- 
+
 /**
  * GenericController<T, CreateDto, UpdateDto>
  *
@@ -176,7 +176,7 @@ export default class GenericController<
   CreateDto = Partial<T>,
   UpdateDto = Partial<T>
 > {
-  private repo: Repository<T, CreateDto, UpdateDto>;
+  private readonly repo: Repository<T, CreateDto, UpdateDto>;
 
   constructor(repository: Repository<T, CreateDto, UpdateDto>) {
     this.repo = repository;
@@ -236,17 +236,17 @@ export default class GenericController<
     let response: ApiResponse<T | null> = { success: true, data: null };
 
     try {
-      const id = parseNumber(req.params.id, NaN);
+      const id = parseNumber(req.params.id, Number.NaN);
       if (Number.isNaN(id) || id <= 0) {
         status = 400;
         response = { success: false, error: "Identifiant invalide" };
       } else {
         const item = await this.repo.findUnique({ where: { id } });
-        if (!item) {
+        if (item) {
+          response = { success: true, data: item };
+        } else {
           status = 404;
           response = { success: false, error: "Ressource non trouvée" };
-        } else {
-          response = { success: true, data: item };
         }
       }
     } catch (err: unknown) {
@@ -286,7 +286,7 @@ export default class GenericController<
     let response: ApiResponse<T | null> = { success: true, data: null };
 
     try {
-      const id = parseNumber(req.params.id, NaN);
+      const id = parseNumber(req.params.id, Number.NaN);
       if (Number.isNaN(id) || id <= 0) {
         status = 400;
         response = { success: false, error: "Identifiant invalide" };
@@ -296,11 +296,11 @@ export default class GenericController<
           where: { id },
           data: payload,
         });
-        if (!updated) {
+        if (updated) {
+          response = { success: true, data: updated, message: "Mis à jour" };
+        } else {
           status = 404;
           response = { success: false, error: "Ressource non trouvée" };
-        } else {
-          response = { success: true, data: updated, message: "Mis à jour" };
         }
       }
     } catch (err: unknown) {
@@ -320,17 +320,17 @@ export default class GenericController<
     let response: ApiResponse<null> = { success: true, data: null };
 
     try {
-      const id = parseNumber(req.params.id, NaN);
+      const id = parseNumber(req.params.id, Number.NaN);
       if (Number.isNaN(id) || id <= 0) {
         status = 400;
         response = { success: false, error: "Identifiant invalide" };
       } else {
         const deleted = await this.repo.delete({ where: { id } });
-        if (!deleted) {
+        if (deleted) {
+          response = { success: true, message: "Supprimé" };
+        } else {
           status = 404;
           response = { success: false, error: "Ressource non trouvée" };
-        } else {
-          response = { success: true, message: "Supprimé" };
         }
       }
     } catch (err: unknown) {
