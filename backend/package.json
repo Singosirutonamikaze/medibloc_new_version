@@ -41,7 +41,9 @@
     "morgan": "^1.10.0",
     "node-cron": "^4.2.1",
     "path": "^0.12.7",
-    "pg": "^8.18.0"
+    "pg": "^8.18.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -51,6 +53,8 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.10.5",
     "@types/pg": "^8.11.10",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
     "@types/supertest": "^6.0.3",
     "@vitest/ui": "^4.0.9",
     "i": "^0.3.7",

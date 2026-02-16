@@ -10,6 +10,8 @@ import {
   notFoundMiddleware as notFound,
 } from "./middleware/error.middleware";
 import { initializeDatabase, disconnectDatabase } from "./config/database-lifecycle";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger";
 
 // Créer le dossier logs s'il n'existe pas
 const logsDir = path.join(process.cwd(), 'logs');
@@ -71,6 +73,9 @@ app.use(cors(buildCorsOptions()));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+
+// Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // API Routes
 app.use("/api/v1", routes);

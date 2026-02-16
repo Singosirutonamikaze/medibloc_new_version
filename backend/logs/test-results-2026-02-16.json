@@ -1,1 +1,2459 @@
-{"numTotalTestSuites":0,"numPassedTestSuites":0,"numFailedTestSuites":0,"numPendingTestSuites":0,"numTotalTests":0,"numPassedTests":0,"numFailedTests":0,"numPendingTests":0,"numTodoTests":0,"snapshot":{"added":0,"failure":false,"filesAdded":0,"filesRemoved":0,"filesRemovedList":[],"filesUnmatched":0,"filesUpdated":0,"matched":0,"total":0,"unchecked":0,"uncheckedKeysByFile":[],"unmatched":0,"updated":0,"didUpdate":false},"startTime":1771254428372,"success":false,"testResults":[]}
+{
+  "numTotalTestSuites": 174,
+  "numPassedTestSuites": 174,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 139,
+  "numPassedTests": 139,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1771263845931,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "fullName": "isServiceHealthy returns true",
+          "status": "passed",
+          "title": "isServiceHealthy returns true",
+          "duration": 2.77531799999997,
+          "failureMessages": [],
+          "location": {
+            "line": 4,
+            "column": 1
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263851229,
+      "endTime": 1771263851231.7754,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/health.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "AppointmentController",
+            "getAllAppointments"
+          ],
+          "fullName": "AppointmentController getAllAppointments should return all appointments with pagination",
+          "status": "passed",
+          "title": "should return all appointments with pagination",
+          "duration": 13.580475999999976,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "AppointmentController",
+            "getAppointmentById"
+          ],
+          "fullName": "AppointmentController getAppointmentById should return an appointment by ID",
+          "status": "passed",
+          "title": "should return an appointment by ID",
+          "duration": 3.993174999999951,
+          "failureMessages": [],
+          "location": {
+            "line": 73,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "AppointmentController",
+            "createAppointment"
+          ],
+          "fullName": "AppointmentController createAppointment should create a new appointment",
+          "status": "passed",
+          "title": "should create a new appointment",
+          "duration": 2.501666,
+          "failureMessages": [],
+          "location": {
+            "line": 103,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "AppointmentController",
+            "updateAppointmentStatus"
+          ],
+          "fullName": "AppointmentController updateAppointmentStatus should update appointment status",
+          "status": "passed",
+          "title": "should update appointment status",
+          "duration": 2.8593099999999367,
+          "failureMessages": [],
+          "location": {
+            "line": 135,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "AppointmentController",
+            "deleteAppointment"
+          ],
+          "fullName": "AppointmentController deleteAppointment should delete an appointment",
+          "status": "passed",
+          "title": "should delete an appointment",
+          "duration": 2.1164019999999937,
+          "failureMessages": [],
+          "location": {
+            "line": 167,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850858,
+      "endTime": 1771263850884.1165,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/appointment.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "DiseaseController",
+            "getAllDiseases"
+          ],
+          "fullName": "DiseaseController getAllDiseases should return all diseases with pagination",
+          "status": "passed",
+          "title": "should return all diseases with pagination",
+          "duration": 13.550178999999957,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DiseaseController",
+            "getDiseaseById"
+          ],
+          "fullName": "DiseaseController getDiseaseById should return a disease by ID",
+          "status": "passed",
+          "title": "should return a disease by ID",
+          "duration": 3.2900280000000066,
+          "failureMessages": [],
+          "location": {
+            "line": 61,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DiseaseController",
+            "getDiseaseById"
+          ],
+          "fullName": "DiseaseController getDiseaseById should return 404 when disease not found",
+          "status": "passed",
+          "title": "should return 404 when disease not found",
+          "duration": 1.5324940000000424,
+          "failureMessages": [],
+          "location": {
+            "line": 87,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DiseaseController",
+            "createDisease"
+          ],
+          "fullName": "DiseaseController createDisease should create a new disease",
+          "status": "passed",
+          "title": "should create a new disease",
+          "duration": 2.494087000000036,
+          "failureMessages": [],
+          "location": {
+            "line": 106,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DiseaseController",
+            "updateDisease"
+          ],
+          "fullName": "DiseaseController updateDisease should update a disease",
+          "status": "passed",
+          "title": "should update a disease",
+          "duration": 2.1127309999999397,
+          "failureMessages": [],
+          "location": {
+            "line": 136,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DiseaseController",
+            "deleteDisease"
+          ],
+          "fullName": "DiseaseController deleteDisease should delete a disease",
+          "status": "passed",
+          "title": "should delete a disease",
+          "duration": 6.051776000000018,
+          "failureMessages": [],
+          "location": {
+            "line": 167,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850817,
+      "endTime": 1771263850848.0518,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/disease.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "DoctorController",
+            "getAllDoctors"
+          ],
+          "fullName": "DoctorController getAllDoctors should return all doctors with pagination",
+          "status": "passed",
+          "title": "should return all doctors with pagination",
+          "duration": 18.255890000000022,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DoctorController",
+            "getDoctorById"
+          ],
+          "fullName": "DoctorController getDoctorById should return a doctor by ID",
+          "status": "passed",
+          "title": "should return a doctor by ID",
+          "duration": 4.11253099999999,
+          "failureMessages": [],
+          "location": {
+            "line": 73,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DoctorController",
+            "getDoctorById"
+          ],
+          "fullName": "DoctorController getDoctorById should return 404 when doctor not found",
+          "status": "passed",
+          "title": "should return 404 when doctor not found",
+          "duration": 2.14908099999991,
+          "failureMessages": [],
+          "location": {
+            "line": 101,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DoctorController",
+            "createDoctor"
+          ],
+          "fullName": "DoctorController createDoctor should create a new doctor",
+          "status": "passed",
+          "title": "should create a new doctor",
+          "duration": 3.3738169999999172,
+          "failureMessages": [],
+          "location": {
+            "line": 120,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DoctorController",
+            "updateDoctor"
+          ],
+          "fullName": "DoctorController updateDoctor should update a doctor",
+          "status": "passed",
+          "title": "should update a doctor",
+          "duration": 2.737171999999987,
+          "failureMessages": [],
+          "location": {
+            "line": 153,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DoctorController",
+            "deleteDoctor"
+          ],
+          "fullName": "DoctorController deleteDoctor should delete a doctor",
+          "status": "passed",
+          "title": "should delete a doctor",
+          "duration": 2.207408999999984,
+          "failureMessages": [],
+          "location": {
+            "line": 186,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "DoctorController",
+            "getSpecialties"
+          ],
+          "fullName": "DoctorController getSpecialties should return list of specialties",
+          "status": "passed",
+          "title": "should return list of specialties",
+          "duration": 3.4551340000000437,
+          "failureMessages": [],
+          "location": {
+            "line": 215,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850251,
+      "endTime": 1771263850289.455,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/doctor.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "MedicalRecordController",
+            "getAllMedicalRecords"
+          ],
+          "fullName": "MedicalRecordController getAllMedicalRecords should return all medical records with pagination",
+          "status": "passed",
+          "title": "should return all medical records with pagination",
+          "duration": 14.37830699999995,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicalRecordController",
+            "getMedicalRecordById"
+          ],
+          "fullName": "MedicalRecordController getMedicalRecordById should return a medical record by ID",
+          "status": "passed",
+          "title": "should return a medical record by ID",
+          "duration": 3.5639289999999164,
+          "failureMessages": [],
+          "location": {
+            "line": 61,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicalRecordController",
+            "getMedicalRecordById"
+          ],
+          "fullName": "MedicalRecordController getMedicalRecordById should return 404 when medical record not found",
+          "status": "passed",
+          "title": "should return 404 when medical record not found",
+          "duration": 1.7237559999999803,
+          "failureMessages": [],
+          "location": {
+            "line": 89,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicalRecordController",
+            "createMedicalRecord"
+          ],
+          "fullName": "MedicalRecordController createMedicalRecord should create a new medical record",
+          "status": "passed",
+          "title": "should create a new medical record",
+          "duration": 2.7874400000000605,
+          "failureMessages": [],
+          "location": {
+            "line": 108,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicalRecordController",
+            "updateMedicalRecord"
+          ],
+          "fullName": "MedicalRecordController updateMedicalRecord should update a medical record",
+          "status": "passed",
+          "title": "should update a medical record",
+          "duration": 7.249239999999986,
+          "failureMessages": [],
+          "location": {
+            "line": 140,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicalRecordController",
+            "deleteMedicalRecord"
+          ],
+          "fullName": "MedicalRecordController deleteMedicalRecord should delete a medical record",
+          "status": "passed",
+          "title": "should delete a medical record",
+          "duration": 1.9866149999999152,
+          "failureMessages": [],
+          "location": {
+            "line": 173,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850695,
+      "endTime": 1771263850727.9866,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/medicalRecord.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "MedicineController",
+            "getAllMedicines"
+          ],
+          "fullName": "MedicineController getAllMedicines should return all medicines with pagination",
+          "status": "passed",
+          "title": "should return all medicines with pagination",
+          "duration": 20.101582000000008,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicineController",
+            "getMedicineById"
+          ],
+          "fullName": "MedicineController getMedicineById should return a medicine by ID",
+          "status": "passed",
+          "title": "should return a medicine by ID",
+          "duration": 4.04191400000002,
+          "failureMessages": [],
+          "location": {
+            "line": 61,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicineController",
+            "getMedicineById"
+          ],
+          "fullName": "MedicineController getMedicineById should return 404 when medicine not found",
+          "status": "passed",
+          "title": "should return 404 when medicine not found",
+          "duration": 2.67966100000001,
+          "failureMessages": [],
+          "location": {
+            "line": 88,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicineController",
+            "createMedicine"
+          ],
+          "fullName": "MedicineController createMedicine should create a new medicine",
+          "status": "passed",
+          "title": "should create a new medicine",
+          "duration": 3.5094950000000154,
+          "failureMessages": [],
+          "location": {
+            "line": 107,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicineController",
+            "updateMedicine"
+          ],
+          "fullName": "MedicineController updateMedicine should update a medicine",
+          "status": "passed",
+          "title": "should update a medicine",
+          "duration": 2.683443000000011,
+          "failureMessages": [],
+          "location": {
+            "line": 138,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "MedicineController",
+            "deleteMedicine"
+          ],
+          "fullName": "MedicineController deleteMedicine should delete a medicine",
+          "status": "passed",
+          "title": "should delete a medicine",
+          "duration": 2.266789000000017,
+          "failureMessages": [],
+          "location": {
+            "line": 170,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850102,
+      "endTime": 1771263850139.2668,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/medicine.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "PatientController",
+            "getAllPatients"
+          ],
+          "fullName": "PatientController getAllPatients should return all patients with pagination",
+          "status": "passed",
+          "title": "should return all patients with pagination",
+          "duration": 21.426394000000073,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PatientController",
+            "getAllPatients"
+          ],
+          "fullName": "PatientController getAllPatients should handle errors gracefully",
+          "status": "passed",
+          "title": "should handle errors gracefully",
+          "duration": 2.9053179999999657,
+          "failureMessages": [],
+          "location": {
+            "line": 59,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PatientController",
+            "getPatientById"
+          ],
+          "fullName": "PatientController getPatientById should return a patient by ID",
+          "status": "passed",
+          "title": "should return a patient by ID",
+          "duration": 4.651792999999998,
+          "failureMessages": [],
+          "location": {
+            "line": 81,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PatientController",
+            "getPatientById"
+          ],
+          "fullName": "PatientController getPatientById should return 404 when patient not found",
+          "status": "passed",
+          "title": "should return 404 when patient not found",
+          "duration": 1.5811119999999619,
+          "failureMessages": [],
+          "location": {
+            "line": 108,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PatientController",
+            "createPatient"
+          ],
+          "fullName": "PatientController createPatient should create a new patient",
+          "status": "passed",
+          "title": "should create a new patient",
+          "duration": 11.20751800000005,
+          "failureMessages": [],
+          "location": {
+            "line": 127,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PatientController",
+            "updatePatient"
+          ],
+          "fullName": "PatientController updatePatient should update a patient",
+          "status": "passed",
+          "title": "should update a patient",
+          "duration": 2.436539000000039,
+          "failureMessages": [],
+          "location": {
+            "line": 159,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PatientController",
+            "deletePatient"
+          ],
+          "fullName": "PatientController deletePatient should delete a patient",
+          "status": "passed",
+          "title": "should delete a patient",
+          "duration": 3.2974679999999807,
+          "failureMessages": [],
+          "location": {
+            "line": 191,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850088,
+      "endTime": 1771263850137.2974,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/patient.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "PharmacyController",
+            "getAllPharmacies"
+          ],
+          "fullName": "PharmacyController getAllPharmacies should return all pharmacies with pagination",
+          "status": "passed",
+          "title": "should return all pharmacies with pagination",
+          "duration": 22.10374200000001,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PharmacyController",
+            "getPharmacyById"
+          ],
+          "fullName": "PharmacyController getPharmacyById should return a pharmacy by ID",
+          "status": "passed",
+          "title": "should return a pharmacy by ID",
+          "duration": 4.256396999999993,
+          "failureMessages": [],
+          "location": {
+            "line": 61,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PharmacyController",
+            "getPharmacyById"
+          ],
+          "fullName": "PharmacyController getPharmacyById should return 404 when pharmacy not found",
+          "status": "passed",
+          "title": "should return 404 when pharmacy not found",
+          "duration": 2.3267419999999674,
+          "failureMessages": [],
+          "location": {
+            "line": 89,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PharmacyController",
+            "createPharmacy"
+          ],
+          "fullName": "PharmacyController createPharmacy should create a new pharmacy",
+          "status": "passed",
+          "title": "should create a new pharmacy",
+          "duration": 3.19809900000007,
+          "failureMessages": [],
+          "location": {
+            "line": 108,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PharmacyController",
+            "updatePharmacy"
+          ],
+          "fullName": "PharmacyController updatePharmacy should update a pharmacy",
+          "status": "passed",
+          "title": "should update a pharmacy",
+          "duration": 2.8458460000000514,
+          "failureMessages": [],
+          "location": {
+            "line": 140,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PharmacyController",
+            "deletePharmacy"
+          ],
+          "fullName": "PharmacyController deletePharmacy should delete a pharmacy",
+          "status": "passed",
+          "title": "should delete a pharmacy",
+          "duration": 2.16092900000001,
+          "failureMessages": [],
+          "location": {
+            "line": 173,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850259,
+      "endTime": 1771263850298.161,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/pharmacy.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "PrescriptionController",
+            "getAllPrescriptions"
+          ],
+          "fullName": "PrescriptionController getAllPrescriptions should return all prescriptions with pagination",
+          "status": "passed",
+          "title": "should return all prescriptions with pagination",
+          "duration": 28.435293,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PrescriptionController",
+            "getPrescriptionById"
+          ],
+          "fullName": "PrescriptionController getPrescriptionById should return a prescription by ID",
+          "status": "passed",
+          "title": "should return a prescription by ID",
+          "duration": 4.131993999999963,
+          "failureMessages": [],
+          "location": {
+            "line": 61,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PrescriptionController",
+            "getPrescriptionById"
+          ],
+          "fullName": "PrescriptionController getPrescriptionById should return 404 when prescription not found",
+          "status": "passed",
+          "title": "should return 404 when prescription not found",
+          "duration": 2.67823599999997,
+          "failureMessages": [],
+          "location": {
+            "line": 89,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PrescriptionController",
+            "createPrescription"
+          ],
+          "fullName": "PrescriptionController createPrescription should create a new prescription",
+          "status": "passed",
+          "title": "should create a new prescription",
+          "duration": 3.012493999999947,
+          "failureMessages": [],
+          "location": {
+            "line": 108,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PrescriptionController",
+            "updatePrescription"
+          ],
+          "fullName": "PrescriptionController updatePrescription should update a prescription",
+          "status": "passed",
+          "title": "should update a prescription",
+          "duration": 2.988597000000027,
+          "failureMessages": [],
+          "location": {
+            "line": 140,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "PrescriptionController",
+            "deletePrescription"
+          ],
+          "fullName": "PrescriptionController deletePrescription should delete a prescription",
+          "status": "passed",
+          "title": "should delete a prescription",
+          "duration": 10.244527999999946,
+          "failureMessages": [],
+          "location": {
+            "line": 173,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263850852,
+      "endTime": 1771263850905.2446,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/prescription.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "SymptomController",
+            "getAllSymptoms"
+          ],
+          "fullName": "SymptomController getAllSymptoms should return all symptoms with pagination",
+          "status": "passed",
+          "title": "should return all symptoms with pagination",
+          "duration": 9.623255000000029,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SymptomController",
+            "getSymptomById"
+          ],
+          "fullName": "SymptomController getSymptomById should return a symptom by ID",
+          "status": "passed",
+          "title": "should return a symptom by ID",
+          "duration": 2.3259879999999953,
+          "failureMessages": [],
+          "location": {
+            "line": 61,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SymptomController",
+            "createSymptom"
+          ],
+          "fullName": "SymptomController createSymptom should create a new symptom",
+          "status": "passed",
+          "title": "should create a new symptom",
+          "duration": 1.4630379999999832,
+          "failureMessages": [],
+          "location": {
+            "line": 89,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SymptomController",
+            "updateSymptom"
+          ],
+          "fullName": "SymptomController updateSymptom should update a symptom",
+          "status": "passed",
+          "title": "should update a symptom",
+          "duration": 1.3903699999999617,
+          "failureMessages": [],
+          "location": {
+            "line": 119,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "SymptomController",
+            "deleteSymptom"
+          ],
+          "fullName": "SymptomController deleteSymptom should delete a symptom",
+          "status": "passed",
+          "title": "should delete a symptom",
+          "duration": 1.336588000000006,
+          "failureMessages": [],
+          "location": {
+            "line": 150,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263851348,
+      "endTime": 1771263851365.3367,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/symptom.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "UserController",
+            "getAllUsers"
+          ],
+          "fullName": "UserController getAllUsers should return all users with pagination",
+          "status": "passed",
+          "title": "should return all users with pagination",
+          "duration": 13.416016000000013,
+          "failureMessages": [],
+          "location": {
+            "line": 30,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "UserController",
+            "getUserById"
+          ],
+          "fullName": "UserController getUserById should return a user by ID",
+          "status": "passed",
+          "title": "should return a user by ID",
+          "duration": 4.777173000000005,
+          "failureMessages": [],
+          "location": {
+            "line": 61,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "UserController",
+            "getUserById"
+          ],
+          "fullName": "UserController getUserById should return 404 when user not found",
+          "status": "passed",
+          "title": "should return 404 when user not found",
+          "duration": 1.6351829999999836,
+          "failureMessages": [],
+          "location": {
+            "line": 87,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "UserController",
+            "updateUser"
+          ],
+          "fullName": "UserController updateUser should update a user",
+          "status": "passed",
+          "title": "should update a user",
+          "duration": 1.686121000000071,
+          "failureMessages": [],
+          "location": {
+            "line": 109,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "UserController",
+            "deleteUser"
+          ],
+          "fullName": "UserController deleteUser should delete a user",
+          "status": "passed",
+          "title": "should delete a user",
+          "duration": 1.7590910000000122,
+          "failureMessages": [],
+          "location": {
+            "line": 140,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263851241,
+      "endTime": 1771263851265.759,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/controllers/user.controller.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "GET /api/v1/appointments"
+          ],
+          "fullName": "Appointment Routes GET /api/v1/appointments should return list of appointments",
+          "status": "passed",
+          "title": "should return list of appointments",
+          "duration": 61.62188600000013,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "POST /api/v1/appointments"
+          ],
+          "fullName": "Appointment Routes POST /api/v1/appointments should create a new appointment",
+          "status": "passed",
+          "title": "should create a new appointment",
+          "duration": 29.7230669999999,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "GET /api/v1/appointments/:id"
+          ],
+          "fullName": "Appointment Routes GET /api/v1/appointments/:id should return an appointment by ID",
+          "status": "passed",
+          "title": "should return an appointment by ID",
+          "duration": 8.054132000000209,
+          "failureMessages": [],
+          "location": {
+            "line": 45,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "PUT /api/v1/appointments/:id"
+          ],
+          "fullName": "Appointment Routes PUT /api/v1/appointments/:id should update an appointment",
+          "status": "passed",
+          "title": "should update an appointment",
+          "duration": 9.759895000000142,
+          "failureMessages": [],
+          "location": {
+            "line": 55,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "DELETE /api/v1/appointments/:id"
+          ],
+          "fullName": "Appointment Routes DELETE /api/v1/appointments/:id should delete an appointment",
+          "status": "passed",
+          "title": "should delete an appointment",
+          "duration": 9.493410999999924,
+          "failureMessages": [],
+          "location": {
+            "line": 70,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "PATCH /api/v1/appointments/:id/status"
+          ],
+          "fullName": "Appointment Routes PATCH /api/v1/appointments/:id/status should update appointment status",
+          "status": "passed",
+          "title": "should update appointment status",
+          "duration": 8.192301999999927,
+          "failureMessages": [],
+          "location": {
+            "line": 79,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "GET /api/v1/appointments/patient/:patientId"
+          ],
+          "fullName": "Appointment Routes GET /api/v1/appointments/patient/:patientId should return appointments for a patient",
+          "status": "passed",
+          "title": "should return appointments for a patient",
+          "duration": 7.623513000000003,
+          "failureMessages": [],
+          "location": {
+            "line": 95,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Appointment Routes",
+            "GET /api/v1/appointments/doctor/:doctorId"
+          ],
+          "fullName": "Appointment Routes GET /api/v1/appointments/doctor/:doctorId should return appointments for a doctor",
+          "status": "passed",
+          "title": "should return appointments for a doctor",
+          "duration": 7.715005999999903,
+          "failureMessages": [],
+          "location": {
+            "line": 105,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263847168,
+      "endTime": 1771263847312.715,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/appointments.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Auth Routes",
+            "POST /api/v1/auth/register"
+          ],
+          "fullName": "Auth Routes POST /api/v1/auth/register should register a new user successfully",
+          "status": "passed",
+          "title": "should register a new user successfully",
+          "duration": 87.1265219999998,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Auth Routes",
+            "POST /api/v1/auth/login"
+          ],
+          "fullName": "Auth Routes POST /api/v1/auth/login should login and return a token",
+          "status": "passed",
+          "title": "should login and return a token",
+          "duration": 10.005580000000009,
+          "failureMessages": [],
+          "location": {
+            "line": 35,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Auth Routes",
+            "GET /api/v1/auth/me"
+          ],
+          "fullName": "Auth Routes GET /api/v1/auth/me should return current user",
+          "status": "passed",
+          "title": "should return current user",
+          "duration": 9.35022200000003,
+          "failureMessages": [],
+          "location": {
+            "line": 53,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Auth Routes",
+            "POST /api/v1/auth/refresh"
+          ],
+          "fullName": "Auth Routes POST /api/v1/auth/refresh should refresh the token",
+          "status": "passed",
+          "title": "should refresh the token",
+          "duration": 8.447791999999936,
+          "failureMessages": [],
+          "location": {
+            "line": 64,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Auth Routes",
+            "POST /api/v1/auth/logout"
+          ],
+          "fullName": "Auth Routes POST /api/v1/auth/logout should logout successfully",
+          "status": "passed",
+          "title": "should logout successfully",
+          "duration": 9.081118999999944,
+          "failureMessages": [],
+          "location": {
+            "line": 74,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263847168,
+      "endTime": 1771263847293.081,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/auth.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "GET /api/v1/diseases"
+          ],
+          "fullName": "Disease Routes GET /api/v1/diseases should return list of diseases",
+          "status": "passed",
+          "title": "should return list of diseases",
+          "duration": 59.432413,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "POST /api/v1/diseases"
+          ],
+          "fullName": "Disease Routes POST /api/v1/diseases should create a new disease",
+          "status": "passed",
+          "title": "should create a new disease",
+          "duration": 28.17899599999987,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "GET /api/v1/diseases/:id"
+          ],
+          "fullName": "Disease Routes GET /api/v1/diseases/:id should return a disease by ID",
+          "status": "passed",
+          "title": "should return a disease by ID",
+          "duration": 8.67640399999982,
+          "failureMessages": [],
+          "location": {
+            "line": 41,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "PUT /api/v1/diseases/:id"
+          ],
+          "fullName": "Disease Routes PUT /api/v1/diseases/:id should update a disease",
+          "status": "passed",
+          "title": "should update a disease",
+          "duration": 9.174520999999913,
+          "failureMessages": [],
+          "location": {
+            "line": 51,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "DELETE /api/v1/diseases/:id"
+          ],
+          "fullName": "Disease Routes DELETE /api/v1/diseases/:id should delete a disease",
+          "status": "passed",
+          "title": "should delete a disease",
+          "duration": 8.253875999999991,
+          "failureMessages": [],
+          "location": {
+            "line": 66,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "GET /api/v1/diseases/:id/symptoms"
+          ],
+          "fullName": "Disease Routes GET /api/v1/diseases/:id/symptoms should return disease symptoms",
+          "status": "passed",
+          "title": "should return disease symptoms",
+          "duration": 6.0699469999999565,
+          "failureMessages": [],
+          "location": {
+            "line": 75,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "GET /api/v1/diseases/:id/countries"
+          ],
+          "fullName": "Disease Routes GET /api/v1/diseases/:id/countries should return disease countries",
+          "status": "passed",
+          "title": "should return disease countries",
+          "duration": 5.924991000000091,
+          "failureMessages": [],
+          "location": {
+            "line": 85,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "POST /api/v1/diseases/:id/symptoms/:symptomId"
+          ],
+          "fullName": "Disease Routes POST /api/v1/diseases/:id/symptoms/:symptomId should add symptom to disease",
+          "status": "passed",
+          "title": "should add symptom to disease",
+          "duration": 9.706182000000126,
+          "failureMessages": [],
+          "location": {
+            "line": 95,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Disease Routes",
+            "DELETE /api/v1/diseases/:id/symptoms/:symptomId"
+          ],
+          "fullName": "Disease Routes DELETE /api/v1/diseases/:id/symptoms/:symptomId should remove symptom from disease",
+          "status": "passed",
+          "title": "should remove symptom from disease",
+          "duration": 7.528915000000097,
+          "failureMessages": [],
+          "location": {
+            "line": 104,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263849274,
+      "endTime": 1771263849421.5288,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/diseases.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "GET /api/v1/doctors"
+          ],
+          "fullName": "Doctor Routes GET /api/v1/doctors should return list of doctors",
+          "status": "passed",
+          "title": "should return list of doctors",
+          "duration": 54.07020799999998,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "POST /api/v1/doctors"
+          ],
+          "fullName": "Doctor Routes POST /api/v1/doctors should create a new doctor",
+          "status": "passed",
+          "title": "should create a new doctor",
+          "duration": 25.65736200000015,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "GET /api/v1/doctors/:id"
+          ],
+          "fullName": "Doctor Routes GET /api/v1/doctors/:id should return a doctor by ID",
+          "status": "passed",
+          "title": "should return a doctor by ID",
+          "duration": 5.7608470000000125,
+          "failureMessages": [],
+          "location": {
+            "line": 44,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "PUT /api/v1/doctors/:id"
+          ],
+          "fullName": "Doctor Routes PUT /api/v1/doctors/:id should update a doctor",
+          "status": "passed",
+          "title": "should update a doctor",
+          "duration": 7.7974099999999,
+          "failureMessages": [],
+          "location": {
+            "line": 54,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "DELETE /api/v1/doctors/:id"
+          ],
+          "fullName": "Doctor Routes DELETE /api/v1/doctors/:id should delete a doctor",
+          "status": "passed",
+          "title": "should delete a doctor",
+          "duration": 8.01838100000009,
+          "failureMessages": [],
+          "location": {
+            "line": 69,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "GET /api/v1/doctors/:id/appointments"
+          ],
+          "fullName": "Doctor Routes GET /api/v1/doctors/:id/appointments should return doctor appointments",
+          "status": "passed",
+          "title": "should return doctor appointments",
+          "duration": 6.576615999999831,
+          "failureMessages": [],
+          "location": {
+            "line": 78,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "GET /api/v1/doctors/:id/prescriptions"
+          ],
+          "fullName": "Doctor Routes GET /api/v1/doctors/:id/prescriptions should return doctor prescriptions",
+          "status": "passed",
+          "title": "should return doctor prescriptions",
+          "duration": 9.347909999999956,
+          "failureMessages": [],
+          "location": {
+            "line": 88,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Doctor Routes",
+            "GET /api/v1/doctors/specialties/list"
+          ],
+          "fullName": "Doctor Routes GET /api/v1/doctors/specialties/list should return list of specialties",
+          "status": "passed",
+          "title": "should return list of specialties",
+          "duration": 5.648625000000038,
+          "failureMessages": [],
+          "location": {
+            "line": 98,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263849310,
+      "endTime": 1771263849435.6487,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/doctors.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Medical Record Routes",
+            "GET /api/v1/medical-records"
+          ],
+          "fullName": "Medical Record Routes GET /api/v1/medical-records should return list of medical records",
+          "status": "passed",
+          "title": "should return list of medical records",
+          "duration": 56.28416600000003,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medical Record Routes",
+            "POST /api/v1/medical-records"
+          ],
+          "fullName": "Medical Record Routes POST /api/v1/medical-records should create a new medical record",
+          "status": "passed",
+          "title": "should create a new medical record",
+          "duration": 26.194125999999983,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medical Record Routes",
+            "GET /api/v1/medical-records/:id"
+          ],
+          "fullName": "Medical Record Routes GET /api/v1/medical-records/:id should return a medical record by ID",
+          "status": "passed",
+          "title": "should return a medical record by ID",
+          "duration": 6.492738999999915,
+          "failureMessages": [],
+          "location": {
+            "line": 43,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medical Record Routes",
+            "PUT /api/v1/medical-records/:id"
+          ],
+          "fullName": "Medical Record Routes PUT /api/v1/medical-records/:id should update a medical record",
+          "status": "passed",
+          "title": "should update a medical record",
+          "duration": 7.762515000000008,
+          "failureMessages": [],
+          "location": {
+            "line": 53,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medical Record Routes",
+            "DELETE /api/v1/medical-records/:id"
+          ],
+          "fullName": "Medical Record Routes DELETE /api/v1/medical-records/:id should delete a medical record",
+          "status": "passed",
+          "title": "should delete a medical record",
+          "duration": 7.441921999999977,
+          "failureMessages": [],
+          "location": {
+            "line": 68,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medical Record Routes",
+            "GET /api/v1/medical-records/patient/:patientId"
+          ],
+          "fullName": "Medical Record Routes GET /api/v1/medical-records/patient/:patientId should return medical records for a patient",
+          "status": "passed",
+          "title": "should return medical records for a patient",
+          "duration": 4.5950670000000855,
+          "failureMessages": [],
+          "location": {
+            "line": 77,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263848209,
+      "endTime": 1771263848320.595,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/medicalRecords.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Medicine Routes",
+            "GET /api/v1/medicines"
+          ],
+          "fullName": "Medicine Routes GET /api/v1/medicines should return list of medicines",
+          "status": "passed",
+          "title": "should return list of medicines",
+          "duration": 46.22880699999996,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medicine Routes",
+            "POST /api/v1/medicines"
+          ],
+          "fullName": "Medicine Routes POST /api/v1/medicines should create a new medicine",
+          "status": "passed",
+          "title": "should create a new medicine",
+          "duration": 22.624854000000028,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medicine Routes",
+            "GET /api/v1/medicines/:id"
+          ],
+          "fullName": "Medicine Routes GET /api/v1/medicines/:id should return a medicine by ID",
+          "status": "passed",
+          "title": "should return a medicine by ID",
+          "duration": 7.735210000000052,
+          "failureMessages": [],
+          "location": {
+            "line": 42,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medicine Routes",
+            "PUT /api/v1/medicines/:id"
+          ],
+          "fullName": "Medicine Routes PUT /api/v1/medicines/:id should update a medicine",
+          "status": "passed",
+          "title": "should update a medicine",
+          "duration": 6.046993000000043,
+          "failureMessages": [],
+          "location": {
+            "line": 52,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medicine Routes",
+            "DELETE /api/v1/medicines/:id"
+          ],
+          "fullName": "Medicine Routes DELETE /api/v1/medicines/:id should delete a medicine",
+          "status": "passed",
+          "title": "should delete a medicine",
+          "duration": 6.674042999999983,
+          "failureMessages": [],
+          "location": {
+            "line": 67,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medicine Routes",
+            "GET /api/v1/medicines/type/:type"
+          ],
+          "fullName": "Medicine Routes GET /api/v1/medicines/type/:type should return medicines by type",
+          "status": "passed",
+          "title": "should return medicines by type",
+          "duration": 4.671710999999959,
+          "failureMessages": [],
+          "location": {
+            "line": 76,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Medicine Routes",
+            "GET /api/v1/medicines/pharmacy/:pharmacyId"
+          ],
+          "fullName": "Medicine Routes GET /api/v1/medicines/pharmacy/:pharmacyId should return medicines by pharmacy",
+          "status": "passed",
+          "title": "should return medicines by pharmacy",
+          "duration": 5.013432999999964,
+          "failureMessages": [],
+          "location": {
+            "line": 86,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263848191,
+      "endTime": 1771263848292.0134,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/medicines.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "GET /api/v1/patients"
+          ],
+          "fullName": "Patient Routes GET /api/v1/patients should return list of patients",
+          "status": "passed",
+          "title": "should return list of patients",
+          "duration": 66.45889299999999,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "POST /api/v1/patients"
+          ],
+          "fullName": "Patient Routes POST /api/v1/patients should create a new patient",
+          "status": "passed",
+          "title": "should create a new patient",
+          "duration": 38.70116000000007,
+          "failureMessages": [],
+          "location": {
+            "line": 27,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "GET /api/v1/patients/:id"
+          ],
+          "fullName": "Patient Routes GET /api/v1/patients/:id should return a patient by ID",
+          "status": "passed",
+          "title": "should return a patient by ID",
+          "duration": 10.507828000000018,
+          "failureMessages": [],
+          "location": {
+            "line": 47,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "PUT /api/v1/patients/:id"
+          ],
+          "fullName": "Patient Routes PUT /api/v1/patients/:id should update a patient",
+          "status": "passed",
+          "title": "should update a patient",
+          "duration": 11.777565000000095,
+          "failureMessages": [],
+          "location": {
+            "line": 57,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "DELETE /api/v1/patients/:id"
+          ],
+          "fullName": "Patient Routes DELETE /api/v1/patients/:id should delete a patient",
+          "status": "passed",
+          "title": "should delete a patient",
+          "duration": 9.7553190000001,
+          "failureMessages": [],
+          "location": {
+            "line": 72,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "GET /api/v1/patients/:id/diseases"
+          ],
+          "fullName": "Patient Routes GET /api/v1/patients/:id/diseases should return patient diseases",
+          "status": "passed",
+          "title": "should return patient diseases",
+          "duration": 8.877148000000034,
+          "failureMessages": [],
+          "location": {
+            "line": 81,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "GET /api/v1/patients/:id/appointments"
+          ],
+          "fullName": "Patient Routes GET /api/v1/patients/:id/appointments should return patient appointments",
+          "status": "passed",
+          "title": "should return patient appointments",
+          "duration": 7.559676000000081,
+          "failureMessages": [],
+          "location": {
+            "line": 91,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Patient Routes",
+            "GET /api/v1/patients/:id/prescriptions"
+          ],
+          "fullName": "Patient Routes GET /api/v1/patients/:id/prescriptions should return patient prescriptions",
+          "status": "passed",
+          "title": "should return patient prescriptions",
+          "duration": 8.847321000000193,
+          "failureMessages": [],
+          "location": {
+            "line": 101,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263847168,
+      "endTime": 1771263847332.8474,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/patients.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Pharmacy Routes",
+            "GET /api/v1/pharmacies"
+          ],
+          "fullName": "Pharmacy Routes GET /api/v1/pharmacies should return list of pharmacies",
+          "status": "passed",
+          "title": "should return list of pharmacies",
+          "duration": 66.57977199999982,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Pharmacy Routes",
+            "POST /api/v1/pharmacies"
+          ],
+          "fullName": "Pharmacy Routes POST /api/v1/pharmacies should create a new pharmacy",
+          "status": "passed",
+          "title": "should create a new pharmacy",
+          "duration": 38.398166000000174,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Pharmacy Routes",
+            "GET /api/v1/pharmacies/:id"
+          ],
+          "fullName": "Pharmacy Routes GET /api/v1/pharmacies/:id should return a pharmacy by ID",
+          "status": "passed",
+          "title": "should return a pharmacy by ID",
+          "duration": 11.229246999999987,
+          "failureMessages": [],
+          "location": {
+            "line": 44,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Pharmacy Routes",
+            "PUT /api/v1/pharmacies/:id"
+          ],
+          "fullName": "Pharmacy Routes PUT /api/v1/pharmacies/:id should update a pharmacy",
+          "status": "passed",
+          "title": "should update a pharmacy",
+          "duration": 11.225041999999803,
+          "failureMessages": [],
+          "location": {
+            "line": 54,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Pharmacy Routes",
+            "DELETE /api/v1/pharmacies/:id"
+          ],
+          "fullName": "Pharmacy Routes DELETE /api/v1/pharmacies/:id should delete a pharmacy",
+          "status": "passed",
+          "title": "should delete a pharmacy",
+          "duration": 9.793196999999964,
+          "failureMessages": [],
+          "location": {
+            "line": 69,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Pharmacy Routes",
+            "GET /api/v1/pharmacies/country/:countryId"
+          ],
+          "fullName": "Pharmacy Routes GET /api/v1/pharmacies/country/:countryId should return pharmacies by country",
+          "status": "passed",
+          "title": "should return pharmacies by country",
+          "duration": 8.791439000000082,
+          "failureMessages": [],
+          "location": {
+            "line": 78,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Pharmacy Routes",
+            "GET /api/v1/pharmacies/:id/medicines"
+          ],
+          "fullName": "Pharmacy Routes GET /api/v1/pharmacies/:id/medicines should return medicines of a pharmacy",
+          "status": "passed",
+          "title": "should return medicines of a pharmacy",
+          "duration": 7.464271000000053,
+          "failureMessages": [],
+          "location": {
+            "line": 88,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263847168,
+      "endTime": 1771263847324.4644,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/pharmacies.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Prescription Routes",
+            "GET /api/v1/prescriptions"
+          ],
+          "fullName": "Prescription Routes GET /api/v1/prescriptions should return list of prescriptions",
+          "status": "passed",
+          "title": "should return list of prescriptions",
+          "duration": 55.22526300000004,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Prescription Routes",
+            "POST /api/v1/prescriptions"
+          ],
+          "fullName": "Prescription Routes POST /api/v1/prescriptions should create a new prescription",
+          "status": "passed",
+          "title": "should create a new prescription",
+          "duration": 35.4646909999999,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Prescription Routes",
+            "GET /api/v1/prescriptions/:id"
+          ],
+          "fullName": "Prescription Routes GET /api/v1/prescriptions/:id should return a prescription by ID",
+          "status": "passed",
+          "title": "should return a prescription by ID",
+          "duration": 8.933105999999952,
+          "failureMessages": [],
+          "location": {
+            "line": 43,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Prescription Routes",
+            "DELETE /api/v1/prescriptions/:id"
+          ],
+          "fullName": "Prescription Routes DELETE /api/v1/prescriptions/:id should delete a prescription",
+          "status": "passed",
+          "title": "should delete a prescription",
+          "duration": 6.126492999999982,
+          "failureMessages": [],
+          "location": {
+            "line": 53,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Prescription Routes",
+            "GET /api/v1/prescriptions/patient/:patientId"
+          ],
+          "fullName": "Prescription Routes GET /api/v1/prescriptions/patient/:patientId should return prescriptions for a patient",
+          "status": "passed",
+          "title": "should return prescriptions for a patient",
+          "duration": 6.885714000000007,
+          "failureMessages": [],
+          "location": {
+            "line": 62,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Prescription Routes",
+            "GET /api/v1/prescriptions/doctor/:doctorId"
+          ],
+          "fullName": "Prescription Routes GET /api/v1/prescriptions/doctor/:doctorId should return prescriptions for a doctor",
+          "status": "passed",
+          "title": "should return prescriptions for a doctor",
+          "duration": 6.573671999999988,
+          "failureMessages": [],
+          "location": {
+            "line": 72,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263849403,
+      "endTime": 1771263849525.5737,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/prescriptions.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Stats Routes",
+            "GET /api/v1/stats/dashboard"
+          ],
+          "fullName": "Stats Routes GET /api/v1/stats/dashboard should return dashboard statistics",
+          "status": "passed",
+          "title": "should return dashboard statistics",
+          "duration": 53.579587999999944,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Stats Routes",
+            "GET /api/v1/stats/diseases"
+          ],
+          "fullName": "Stats Routes GET /api/v1/stats/diseases should return disease statistics",
+          "status": "passed",
+          "title": "should return disease statistics",
+          "duration": 9.711197000000084,
+          "failureMessages": [],
+          "location": {
+            "line": 26,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Stats Routes",
+            "GET /api/v1/stats/appointments"
+          ],
+          "fullName": "Stats Routes GET /api/v1/stats/appointments should return appointment statistics",
+          "status": "passed",
+          "title": "should return appointment statistics",
+          "duration": 7.14923500000009,
+          "failureMessages": [],
+          "location": {
+            "line": 36,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Stats Routes",
+            "GET /api/v1/stats/patients"
+          ],
+          "fullName": "Stats Routes GET /api/v1/stats/patients should return patient statistics",
+          "status": "passed",
+          "title": "should return patient statistics",
+          "duration": 7.125105000000076,
+          "failureMessages": [],
+          "location": {
+            "line": 46,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263848257,
+      "endTime": 1771263848337.125,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/stats.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "Symptom Routes",
+            "GET /api/v1/symptoms"
+          ],
+          "fullName": "Symptom Routes GET /api/v1/symptoms should return list of symptoms",
+          "status": "passed",
+          "title": "should return list of symptoms",
+          "duration": 52.188146999999844,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Symptom Routes",
+            "POST /api/v1/symptoms"
+          ],
+          "fullName": "Symptom Routes POST /api/v1/symptoms should create a new symptom",
+          "status": "passed",
+          "title": "should create a new symptom",
+          "duration": 36.75748799999997,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Symptom Routes",
+            "GET /api/v1/symptoms/:id"
+          ],
+          "fullName": "Symptom Routes GET /api/v1/symptoms/:id should return a symptom by ID",
+          "status": "passed",
+          "title": "should return a symptom by ID",
+          "duration": 10.229849000000058,
+          "failureMessages": [],
+          "location": {
+            "line": 41,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Symptom Routes",
+            "PUT /api/v1/symptoms/:id"
+          ],
+          "fullName": "Symptom Routes PUT /api/v1/symptoms/:id should update a symptom",
+          "status": "passed",
+          "title": "should update a symptom",
+          "duration": 8.824008999999933,
+          "failureMessages": [],
+          "location": {
+            "line": 51,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Symptom Routes",
+            "DELETE /api/v1/symptoms/:id"
+          ],
+          "fullName": "Symptom Routes DELETE /api/v1/symptoms/:id should delete a symptom",
+          "status": "passed",
+          "title": "should delete a symptom",
+          "duration": 12.92243799999983,
+          "failureMessages": [],
+          "location": {
+            "line": 66,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "Symptom Routes",
+            "GET /api/v1/symptoms/:id/diseases"
+          ],
+          "fullName": "Symptom Routes GET /api/v1/symptoms/:id/diseases should return diseases associated with symptom",
+          "status": "passed",
+          "title": "should return diseases associated with symptom",
+          "duration": 6.5777300000002015,
+          "failureMessages": [],
+          "location": {
+            "line": 75,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263849495,
+      "endTime": 1771263849625.5776,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/symptoms.routes.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "User Routes",
+            "GET /api/v1/users"
+          ],
+          "fullName": "User Routes GET /api/v1/users should return list of users",
+          "status": "passed",
+          "title": "should return list of users",
+          "duration": 54.94787699999995,
+          "failureMessages": [],
+          "location": {
+            "line": 15,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "User Routes",
+            "GET /api/v1/users/:id"
+          ],
+          "fullName": "User Routes GET /api/v1/users/:id should return a user by ID",
+          "status": "passed",
+          "title": "should return a user by ID",
+          "duration": 12.57845199999997,
+          "failureMessages": [],
+          "location": {
+            "line": 25,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "User Routes",
+            "PUT /api/v1/users/:id"
+          ],
+          "fullName": "User Routes PUT /api/v1/users/:id should update a user",
+          "status": "passed",
+          "title": "should update a user",
+          "duration": 25.104473999999982,
+          "failureMessages": [],
+          "location": {
+            "line": 35,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "User Routes",
+            "DELETE /api/v1/users/:id"
+          ],
+          "fullName": "User Routes DELETE /api/v1/users/:id should delete a user",
+          "status": "passed",
+          "title": "should delete a user",
+          "duration": 6.81211200000007,
+          "failureMessages": [],
+          "location": {
+            "line": 50,
+            "column": 5
+          },
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "User Routes",
+            "GET /api/v1/users/profile/me"
+          ],
+          "fullName": "User Routes GET /api/v1/users/profile/me should return current user profile",
+          "status": "passed",
+          "title": "should return current user profile",
+          "duration": 6.4318719999999985,
+          "failureMessages": [],
+          "location": {
+            "line": 59,
+            "column": 5
+          },
+          "meta": {}
+        }
+      ],
+      "startTime": 1771263848237,
+      "endTime": 1771263848345.432,
+      "status": "passed",
+      "message": "",
+      "name": "/home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/test/routes/users.routes.test.ts"
+    }
+  ]
+}

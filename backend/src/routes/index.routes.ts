@@ -31,6 +31,17 @@ router.use('/medical-records', medicalRecordRoutes);
 router.use('/stats', statsRoutes);
 
 // Route de santé de l'API
+/**
+ * @openapi
+ * /health:
+ *   get:
+ *     summary: Health check
+ *     tags:
+ *       - Health
+ *     responses:
+ *       200:
+ *         description: API is running
+ */
 router.get('/health', (req, res) => {
   res.status(200).json({
     success: true,
