@@ -70,12 +70,12 @@ class AppointmentController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.appointment.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.appointment.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.appointment.findMany(params),
+            findUnique: (params) => database_1.default.appointment.findUnique(params),
             create: (params) => database_1.default.appointment.create({ data: params.data }),
             update: (params) => database_1.default.appointment.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.appointment.delete({ where: params.where }),
-            count: (params) => database_1.default.appointment.count({ where: params?.where }),
+            count: (params) => database_1.default.appointment.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllAppointments = this.generic.getAll;

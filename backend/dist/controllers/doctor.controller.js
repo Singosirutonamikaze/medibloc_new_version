@@ -63,12 +63,12 @@ class DoctorController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.doctor.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.doctor.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.doctor.findMany(params),
+            findUnique: (params) => database_1.default.doctor.findUnique(params),
             create: (params) => database_1.default.doctor.create({ data: params.data }),
             update: (params) => database_1.default.doctor.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.doctor.delete({ where: params.where }),
-            count: (params) => database_1.default.doctor.count({ where: params?.where }),
+            count: (params) => database_1.default.doctor.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllDoctors = this.generic.getAll;

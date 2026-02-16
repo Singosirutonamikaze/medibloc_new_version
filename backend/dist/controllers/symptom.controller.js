@@ -18,8 +18,9 @@ class SymptomController {
                     response = { success: false, error: 'Identifiant invalide' };
                 }
                 else {
-                    // Relation name may vary; use a safe any cast for now
-                    const diseases = await database_1.default.disease.findMany({ where: { symptoms: { some: { id } } } });
+                    const diseases = await database_1.default.disease.findMany({
+                        where: { symptoms: { some: { symptomId: id } } }
+                    });
                     response = { success: true, data: diseases };
                 }
             }
@@ -30,12 +31,12 @@ class SymptomController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.symptom.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.symptom.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.symptom.findMany(params),
+            findUnique: (params) => database_1.default.symptom.findUnique(params),
             create: (params) => database_1.default.symptom.create({ data: params.data }),
             update: (params) => database_1.default.symptom.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.symptom.delete({ where: params.where }),
-            count: (params) => database_1.default.symptom.count({ where: params?.where }),
+            count: (params) => database_1.default.symptom.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllSymptoms = this.generic.getAll;

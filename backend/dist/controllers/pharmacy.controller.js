@@ -49,12 +49,12 @@ class PharmacyController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.pharmacy.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.pharmacy.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.pharmacy.findMany(params),
+            findUnique: (params) => database_1.default.pharmacy.findUnique(params),
             create: (params) => database_1.default.pharmacy.create({ data: params.data }),
             update: (params) => database_1.default.pharmacy.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.pharmacy.delete({ where: params.where }),
-            count: (params) => database_1.default.pharmacy.count({ where: params?.where }),
+            count: (params) => database_1.default.pharmacy.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllPharmacies = this.generic.getAll;

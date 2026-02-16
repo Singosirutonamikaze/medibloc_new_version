@@ -29,12 +29,12 @@ class MedicalRecordController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.medicalRecord.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.medicalRecord.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.medicalRecord.findMany(params),
+            findUnique: (params) => database_1.default.medicalRecord.findUnique(params),
             create: (params) => database_1.default.medicalRecord.create({ data: params.data }),
             update: (params) => database_1.default.medicalRecord.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.medicalRecord.delete({ where: params.where }),
-            count: (params) => database_1.default.medicalRecord.count({ where: params?.where }),
+            count: (params) => database_1.default.medicalRecord.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllMedicalRecords = this.generic.getAll;

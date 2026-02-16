@@ -156,11 +156,11 @@ export const exclude = <T, Key extends keyof T>(
   keys: Key[]
 ): Omit<T, Key> => {
   const newObj = { ...obj };
-  
+
   keys.forEach((key) => {
     delete newObj[key];
   });
-  
+
   return newObj;
 };
 

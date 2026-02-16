@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -41,8 +42,8 @@ enum DiseaseSeverity {
 }
 
 enum MedicineType {
-  PHARMACEUTICAL  // Médicament de pharmacie
-  HERBAL         // Plante médicinale
+  PHARMACEUTICAL // Médicament de pharmacie
+  HERBAL // Plante médicinale
 }
 
 // ============================================
@@ -58,7 +59,7 @@ model User {
   role      Role     @default(PATIENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // Relations
   patientProfile Patient?
   doctorProfile  Doctor?
@@ -66,28 +67,28 @@ model User {
 }
 
 model Patient {
-  id            Int             @id @default(autoincrement())
-  userId        Int             @unique
-  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  birthDate     DateTime?
-  gender        Gender?
-  phone         String?
-  address       String?
-  
+  id        Int       @id @default(autoincrement())
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  birthDate DateTime?
+  gender    Gender?
+  phone     String?
+  address   String?
+
   // Relations
-  diseases      PatientDisease[]
-  appointments  Appointment[]
-  prescriptions Prescription[]
+  diseases       PatientDisease[]
+  appointments   Appointment[]
+  prescriptions  Prescription[]
   medicalRecords MedicalRecord[]
 }
 
 model Doctor {
-  id            Int            @id @default(autoincrement())
-  userId        Int            @unique
-  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  specialty     String?
-  phone         String?
-  
+  id        Int     @id @default(autoincrement())
+  userId    Int     @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialty String?
+  phone     String?
+
   // Relations
   appointments  Appointment[]
   prescriptions Prescription[]
@@ -125,21 +126,21 @@ model Appointment {
 
 // Catalogue des maladies (pré-rempli par seed ou ajouté par admin)
 model Disease {
-  id                 Int                 @id @default(autoincrement())
-  name               String              @unique
-  description        String?
-  isViral            Boolean             @default(false)
-  isBacterial        Boolean             @default(false)
-  isGenetic          Boolean             @default(false)
-  isChronic          Boolean             @default(false)
-  
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  isViral     Boolean @default(false)
+  isBacterial Boolean @default(false)
+  isGenetic   Boolean @default(false)
+  isChronic   Boolean @default(false)
+
   // Relations
   symptoms           DiseaseSymptom[]
   prevalentCountries DiseaseCountry[]
   patientDiseases    PatientDisease[]
-  
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Catalogue des symptômes
@@ -154,12 +155,12 @@ model Symptom {
 
 // Relation entre maladie et symptômes
 model DiseaseSymptom {
-  id         Int     @id @default(autoincrement())
-  disease    Disease @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
-  diseaseId  Int
-  symptom    Symptom @relation(fields: [symptomId], references: [id], onDelete: Cascade)
-  symptomId  Int
-  isCommon   Boolean @default(true) // Symptôme fréquent ou rare
+  id        Int     @id @default(autoincrement())
+  disease   Disease @relation(fields: [diseaseId], references: [id], onDelete: Cascade)
+  diseaseId Int
+  symptom   Symptom @relation(fields: [symptomId], references: [id], onDelete: Cascade)
+  symptomId Int
+  isCommon  Boolean @default(true) // Symptôme fréquent ou rare
 
   @@unique([diseaseId, symptomId])
 }
@@ -182,7 +183,7 @@ model DiseaseCountry {
   diseaseId      Int
   country        Country @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId      Int
-  prevalenceRate Float?  // Taux de prévalence (%)
+  prevalenceRate Float? // Taux de prévalence (%)
   isEndemic      Boolean @default(false)
 
   @@unique([diseaseId, countryId])
@@ -194,23 +195,23 @@ model DiseaseCountry {
 
 // Maladie diagnostiquée chez un patient
 model PatientDisease {
-  id             Int             @id @default(autoincrement())
-  patientId      Int
-  patient        Patient         @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  diseaseId      Int
-  disease        Disease         @relation(fields: [diseaseId], references: [id])
-  
-  diagnosedAt    DateTime        @default(now())
-  status         DiseaseStatus   @default(ACTIVE)
-  severity       DiseaseSeverity @default(MODERATE)
-  notes          String?
-  
+  id        Int     @id @default(autoincrement())
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  diseaseId Int
+  disease   Disease @relation(fields: [diseaseId], references: [id])
+
+  diagnosedAt DateTime        @default(now())
+  status      DiseaseStatus   @default(ACTIVE)
+  severity    DiseaseSeverity @default(MODERATE)
+  notes       String?
+
   // Relations
-  symptoms       PatientSymptom[]
-  medications    PatientMedication[]
-  
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  symptoms    PatientSymptom[]
+  medications PatientMedication[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([patientId, diseaseId])
 }
@@ -236,47 +237,47 @@ model PatientSymptom {
 
 // Pharmacies (ajoutées par admin)
 model Pharmacy {
-  id          Int        @id @default(autoincrement())
-  name        String
-  address     String
-  city        String
-  countryId   Int
-  country     Country    @relation(fields: [countryId], references: [id])
-  phone       String?
-  email       String?
-  
+  id        Int     @id @default(autoincrement())
+  name      String
+  address   String
+  city      String
+  countryId Int
+  country   Country @relation(fields: [countryId], references: [id])
+  phone     String?
+  email     String?
+
   // Relations
-  medicines   Medicine[]
-  
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  medicines Medicine[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Catalogue des médicaments (ajouté par admin)
 model Medicine {
-  id          Int                @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
-  type        MedicineType       // Pharmaceutique ou Plante médicinale
+  type        MedicineType // Pharmaceutique ou Plante médicinale
   description String?
-  composition String?            // Composition du médicament
-  
+  composition String? // Composition du médicament
+
   // Si c'est une plante médicinale
-  scientificName String?         // Nom scientifique de la plante
-  commonNames    String[]        // Noms communs
-  
+  scientificName String? // Nom scientifique de la plante
+  commonNames    String[] // Noms communs
+
   // Si c'est un médicament de pharmacie
-  pharmacyId     Int?
-  pharmacy       Pharmacy?       @relation(fields: [pharmacyId], references: [id])
-  
+  pharmacyId Int?
+  pharmacy   Pharmacy? @relation(fields: [pharmacyId], references: [id])
+
   // Informations générales
-  sideEffects    String[]        // Effets secondaires
-  contraindications String[]     // Contre-indications
-  
+  sideEffects       String[] // Effets secondaires
+  contraindications String[] // Contre-indications
+
   // Relations
   patientMedications PatientMedication[]
-  
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // Médicaments prescrits à un patient pour une maladie spécifique
@@ -286,16 +287,16 @@ model PatientMedication {
   patientDisease   PatientDisease @relation(fields: [patientDiseaseId], references: [id], onDelete: Cascade)
   medicineId       Int
   medicine         Medicine       @relation(fields: [medicineId], references: [id])
-  
-  dosage           String         // Ex: "500mg"
-  frequency        String         // Ex: "2 fois par jour"
-  duration         String?        // Ex: "7 jours"
-  startDate        DateTime       @default(now())
-  endDate          DateTime?
-  notes            String?        // Instructions spéciales
-  
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+
+  dosage    String // Ex: "500mg"
+  frequency String // Ex: "2 fois par jour"
+  duration  String? // Ex: "7 jours"
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  notes     String? // Instructions spéciales
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // ============================================
@@ -304,17 +305,17 @@ model PatientMedication {
 
 // Ordonnances globales
 model Prescription {
-  id          Int      @id @default(autoincrement())
-  doctorId    Int
-  doctor      Doctor   @relation(fields: [doctorId], references: [id])
-  patientId   Int
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  
-  medications String   // Liste des médicaments
-  diagnosis   String?  // Diagnostic
+  id        Int     @id @default(autoincrement())
+  doctorId  Int
+  doctor    Doctor  @relation(fields: [doctorId], references: [id])
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  medications String // Liste des médicaments
+  diagnosis   String? // Diagnostic
   notes       String?
-  
-  issuedAt    DateTime @default(now())
+
+  issuedAt DateTime @default(now())
 }
 
 // Dossiers médicaux

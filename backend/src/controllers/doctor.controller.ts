@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
+import { Doctor, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse } from '../types';
+import { ApiResponse, CreateDoctorDto, UpdateDoctorDto } from '../types';
 
-type DoctorCreate = unknown;
-type DoctorUpdate = unknown;
+type DoctorCreateInput = Prisma.DoctorCreateInput;
+type DoctorUpdateInput = Prisma.DoctorUpdateInput;
 
 export class DoctorController {
-  private generic: GenericController<unknown, DoctorCreate, DoctorUpdate>;
+  private generic: GenericController<Doctor, DoctorCreateInput, DoctorUpdateInput>;
 
   public getAllDoctors: (req: Request, res: Response) => Promise<Response>;
   public createDoctor: (req: Request, res: Response) => Promise<Response>;
@@ -17,15 +18,18 @@ export class DoctorController {
 
   constructor() {
     const repo = {
-      findMany: (params?: { where?: Record<string, unknown>; skip?: number; take?: number; include?: Record<string, unknown> }) =>
-        prisma.doctor.findMany({ where: params?.where as any, skip: params?.skip, take: params?.take, include: params?.include as any }),
-      findUnique: (params: { where: { id: number }; include?: Record<string, unknown> }) =>
-        prisma.doctor.findUnique({ where: params.where as any, include: params.include as any }),
-      create: (params: { data: DoctorCreate }) => prisma.doctor.create({ data: params.data as any }),
-      update: (params: { where: { id: number }; data: DoctorUpdate }) =>
-        prisma.doctor.update({ where: params.where as any, data: params.data as any }),
-      delete: (params: { where: { id: number } }) => prisma.doctor.delete({ where: params.where as any }),
-      count: (params?: { where?: Record<string, unknown> }) => prisma.doctor.count({ where: params?.where as any }),
+      findMany: (params?: Prisma.DoctorFindManyArgs) =>
+        prisma.doctor.findMany(params),
+      findUnique: (params: Prisma.DoctorFindUniqueArgs) =>
+        prisma.doctor.findUnique(params),
+      create: (params: { data: DoctorCreateInput }) =>
+        prisma.doctor.create({ data: params.data }),
+      update: (params: { where: { id: number }; data: DoctorUpdateInput }) =>
+        prisma.doctor.update({ where: params.where, data: params.data }),
+      delete: (params: { where: { id: number } }) =>
+        prisma.doctor.delete({ where: params.where }),
+      count: (params?: Prisma.DoctorCountArgs) =>
+        prisma.doctor.count(params),
     };
 
     this.generic = new GenericController(repo);

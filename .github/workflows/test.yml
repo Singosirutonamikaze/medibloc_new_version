@@ -1,0 +1,78 @@
+name: Tests Backend MediBloc
+
+on:
+  # Exécuter à chaque push sur main et develop
+  push:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/test.yml'
+  
+  # Exécuter à chaque pull request
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+  
+  # Exécuter manuellement
+  workflow_dispatch:
+  
+  # Exécuter automatiquement toutes les 2 heures
+  schedule:
+    - cron: '0 */2 * * *'  # Toutes les 2 heures
+
+jobs:
+  test:
+    name: Tests Backend
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+      
+      - name: Generate Prisma Client
+        working-directory: ./backend
+        run: npx prisma generate
+      
+      - name: Run tests
+        working-directory: ./backend
+        run: npm run test:run
+      
+      - name: Build
+        working-directory: ./backend
+        run: npm run build
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-node-${{ matrix.node-version }}
+          path: backend/logs/
+          retention-days: 30
+
+  notify:
+    name: Notification
+    needs: test
+    runs-on: ubuntu-latest
+    if: failure()
+    
+    steps:
+      - name: Send notification on failure
+        run: |
+          echo " Les tests ont échoué!"
+          echo "Consultez les logs dans l'onglet Actions"

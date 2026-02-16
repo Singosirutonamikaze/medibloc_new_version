@@ -49,12 +49,12 @@ class PrescriptionController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.prescription.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.prescription.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.prescription.findMany(params),
+            findUnique: (params) => database_1.default.prescription.findUnique(params),
             create: (params) => database_1.default.prescription.create({ data: params.data }),
             update: (params) => database_1.default.prescription.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.prescription.delete({ where: params.where }),
-            count: (params) => database_1.default.prescription.count({ where: params?.where }),
+            count: (params) => database_1.default.prescription.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllPrescriptions = this.generic.getAll;

@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
+import { User, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse } from '../types';
+import { ApiResponse, AuthRequest } from '../types';
 
-type UserCreate = unknown;
-type UserUpdate = unknown;
+type UserCreateInput = Prisma.UserCreateInput;
+type UserUpdateInput = Prisma.UserUpdateInput;
 
 export class UserController {
-	private generic: GenericController<unknown, UserCreate, UserUpdate>;
+	private generic: GenericController<User, UserCreateInput, UserUpdateInput>;
 
 	public getAllUsers: (req: Request, res: Response) => Promise<Response>;
 	public getUserById: (req: Request, res: Response) => Promise<Response>;
@@ -16,15 +17,18 @@ export class UserController {
 
 	constructor() {
 		const repo = {
-			findMany: (params?: { where?: Record<string, unknown>; skip?: number; take?: number; include?: Record<string, unknown> }) =>
-				prisma.user.findMany({ where: params?.where as any, skip: params?.skip, take: params?.take, include: params?.include as any }),
-			findUnique: (params: { where: { id: number }; include?: Record<string, unknown> }) =>
-				prisma.user.findUnique({ where: params.where as any, include: params.include as any }),
-			create: (params: { data: UserCreate }) => prisma.user.create({ data: params.data as any }),
-			update: (params: { where: { id: number }; data: UserUpdate }) =>
-				prisma.user.update({ where: params.where as any, data: params.data as any }),
-			delete: (params: { where: { id: number } }) => prisma.user.delete({ where: params.where as any }),
-			count: (params?: { where?: Record<string, unknown> }) => prisma.user.count({ where: params?.where as any }),
+			findMany: (params?: Prisma.UserFindManyArgs) =>
+				prisma.user.findMany(params),
+			findUnique: (params: Prisma.UserFindUniqueArgs) =>
+				prisma.user.findUnique(params),
+			create: (params: { data: UserCreateInput }) =>
+				prisma.user.create({ data: params.data }),
+			update: (params: { where: { id: number }; data: UserUpdateInput }) =>
+				prisma.user.update({ where: params.where, data: params.data }),
+			delete: (params: { where: { id: number } }) =>
+				prisma.user.delete({ where: params.where }),
+			count: (params?: Prisma.UserCountArgs) =>
+				prisma.user.count(params),
 		};
 
 		this.generic = new GenericController(repo);
@@ -36,9 +40,9 @@ export class UserController {
 		this.deleteUser = this.generic.delete;
 	}
 
-	public getUserProfile = async (req: Request & { user?: { id: number } }, res: Response): Promise<Response> => {
+	public getUserProfile = async (req: AuthRequest, res: Response): Promise<Response> => {
 		let status = 200;
-		let response: ApiResponse<unknown | null> = { success: true, data: null };
+		let response: ApiResponse<Prisma.UserGetPayload<{ include: { patientProfile: true; doctorProfile: true; adminProfile: true } }> | null> = { success: true, data: null };
 
 		try {
 			const userId = req.user?.id;
@@ -46,7 +50,14 @@ export class UserController {
 				status = 401;
 				response = { success: false, error: 'Non authentifié' };
 			} else {
-				const user = await prisma.user.findUnique({ where: { id: userId }, include: { profile: true } as any });
+				const user = await prisma.user.findUnique({
+					where: { id: userId },
+					include: {
+						patientProfile: true,
+						doctorProfile: true,
+						adminProfile: true
+					}
+				});
 				if (!user) {
 					status = 404;
 					response = { success: false, error: "Utilisateur non trouvé" };

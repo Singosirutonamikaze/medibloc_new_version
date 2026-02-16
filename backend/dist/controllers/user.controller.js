@@ -18,7 +18,14 @@ class UserController {
                     response = { success: false, error: 'Non authentifié' };
                 }
                 else {
-                    const user = await database_1.default.user.findUnique({ where: { id: userId }, include: { profile: true } });
+                    const user = await database_1.default.user.findUnique({
+                        where: { id: userId },
+                        include: {
+                            patientProfile: true,
+                            doctorProfile: true,
+                            adminProfile: true
+                        }
+                    });
                     if (!user) {
                         status = 404;
                         response = { success: false, error: "Utilisateur non trouvé" };
@@ -35,12 +42,12 @@ class UserController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.user.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.user.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.user.findMany(params),
+            findUnique: (params) => database_1.default.user.findUnique(params),
             create: (params) => database_1.default.user.create({ data: params.data }),
             update: (params) => database_1.default.user.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.user.delete({ where: params.where }),
-            count: (params) => database_1.default.user.count({ where: params?.where }),
+            count: (params) => database_1.default.user.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         // bind route methods

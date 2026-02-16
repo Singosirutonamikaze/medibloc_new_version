@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
+import { Disease, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse } from '../types';
+import { ApiResponse, CreateDiseaseDto, UpdateDiseaseDto } from '../types';
 
-type DiseaseCreate = unknown;
-type DiseaseUpdate = unknown;
+type DiseaseCreateInput = Prisma.DiseaseCreateInput;
+type DiseaseUpdateInput = Prisma.DiseaseUpdateInput;
 
 export class DiseaseController {
-  private generic: GenericController<unknown, DiseaseCreate, DiseaseUpdate>;
+  private generic: GenericController<Disease, DiseaseCreateInput, DiseaseUpdateInput>;
 
   public getAllDiseases: (req: Request, res: Response) => Promise<Response>;
   public createDisease: (req: Request, res: Response) => Promise<Response>;
@@ -17,15 +18,18 @@ export class DiseaseController {
 
   constructor() {
     const repo = {
-      findMany: (params?: { where?: Record<string, unknown>; skip?: number; take?: number; include?: Record<string, unknown> }) =>
-        prisma.disease.findMany({ where: params?.where as any, skip: params?.skip, take: params?.take, include: params?.include as any }),
-      findUnique: (params: { where: { id: number }; include?: Record<string, unknown> }) =>
-        prisma.disease.findUnique({ where: params.where as any, include: params.include as any }),
-      create: (params: { data: DiseaseCreate }) => prisma.disease.create({ data: params.data as any }),
-      update: (params: { where: { id: number }; data: DiseaseUpdate }) =>
-        prisma.disease.update({ where: params.where as any, data: params.data as any }),
-      delete: (params: { where: { id: number } }) => prisma.disease.delete({ where: params.where as any }),
-      count: (params?: { where?: Record<string, unknown> }) => prisma.disease.count({ where: params?.where as any }),
+      findMany: (params?: Prisma.DiseaseFindManyArgs) =>
+        prisma.disease.findMany(params),
+      findUnique: (params: Prisma.DiseaseFindUniqueArgs) =>
+        prisma.disease.findUnique(params),
+      create: (params: { data: DiseaseCreateInput }) =>
+        prisma.disease.create({ data: params.data }),
+      update: (params: { where: { id: number }; data: DiseaseUpdateInput }) =>
+        prisma.disease.update({ where: params.where, data: params.data }),
+      delete: (params: { where: { id: number } }) =>
+        prisma.disease.delete({ where: params.where }),
+      count: (params?: Prisma.DiseaseCountArgs) =>
+        prisma.disease.count(params),
     };
 
     this.generic = new GenericController(repo);
@@ -39,14 +43,14 @@ export class DiseaseController {
 
   public getDiseaseSymptoms = async (req: Request, res: Response): Promise<Response> => {
     let status = 200;
-    let response: ApiResponse<unknown> = { success: true, data: null };
+    let response: ApiResponse<Prisma.DiseaseSymptomGetPayload<{ include: { symptom: true } }>[] | null> = { success: true, data: null };
     try {
       const id = Number(req.params.id);
       if (!id || id <= 0) {
         status = 400;
         response = { success: false, error: 'Identifiant invalide' };
       } else {
-        const disease = await prisma.disease.findUnique({ where: { id }, include: { symptoms: true } as any });
+        const disease = await prisma.disease.findUnique({ where: { id }, include: { symptoms: { include: { symptom: true } } } });
         if (!disease) {
           status = 404;
           response = { success: false, error: 'Maladie non trouvée' };
@@ -64,14 +68,14 @@ export class DiseaseController {
 
   public getDiseaseCountries = async (req: Request, res: Response): Promise<Response> => {
     let status = 200;
-    let response: ApiResponse<unknown> = { success: true, data: null };
+    let response: ApiResponse<Prisma.CountryGetPayload<{}>[]> = { success: true, data: [] };
     try {
       const id = Number(req.params.id);
       if (!id || id <= 0) {
         status = 400;
         response = { success: false, error: 'Identifiant invalide' };
       } else {
-  const countries = await prisma.country.findMany({ where: { diseasesPresent: { some: { diseaseId: id } } } });
+        const countries = await prisma.country.findMany({ where: { diseasesPresent: { some: { diseaseId: id } } } });
         response = { success: true, data: countries };
       }
     } catch (err: unknown) {
@@ -84,7 +88,7 @@ export class DiseaseController {
 
   public addSymptomToDisease = async (req: Request, res: Response): Promise<Response> => {
     let status = 200;
-    let response: ApiResponse<unknown> = { success: true, data: null };
+    let response: ApiResponse<Disease | null> = { success: true, data: null };
     try {
       const id = Number(req.params.id);
       const symptomId = Number(req.params.symptomId);
@@ -92,7 +96,7 @@ export class DiseaseController {
         status = 400;
         response = { success: false, error: 'Identifiants invalides' };
       } else {
-        const updated = await prisma.disease.update({ where: { id }, data: { symptoms: { connect: { id: symptomId } } } as any });
+        const updated = await prisma.disease.update({ where: { id }, data: { symptoms: { connect: { id: symptomId } } } });
         response = { success: true, data: updated };
       }
     } catch (err: unknown) {

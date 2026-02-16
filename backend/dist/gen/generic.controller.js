@@ -1,4 +1,22 @@
 "use strict";
+/**
+ * Repository<T, CreateDto, UpdateDto>
+ *
+ * A minimal, strongly-typed repository contract that the GenericController
+ * expects. It is intentionally narrow to stay ORM-agnostic while matching
+ * common patterns found in clients like Prisma.
+ *
+ * @template T - Entity type returned by the repository.
+ * @template CreateDto - Shape of the data used to create a new entity.
+ * @template UpdateDto - Shape of the data used to update an existing entity.
+ *
+ * @remarks
+ * - Implementations should return entity instances (or null for not found)
+ *   and respect the optional `include` argument to load relations when needed.
+ * - The `count` method is optional: when absent, the controller may infer
+ *   total counts from non-paginated findMany results. If provided, it should
+ *   return the total number of records matching the provided `where`.
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 const helpers_1 = require("../utils/helpers");
 /**

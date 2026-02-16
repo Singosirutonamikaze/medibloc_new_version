@@ -1,0 +1,24 @@
+# Fichier de service systemd pour les tests automatiques MediBloc Backend
+# Pour utiliser ce service:
+# 1. Copiez ce fichier vers: /etc/systemd/system/medibloc-test.service
+# 2. Modifiez le chemin PROJECT_DIR dans le script run-tests-periodic.sh
+# 3. Activez le timer avec: sudo systemctl enable medibloc-test.timer
+# 4. Démarrez le timer avec: sudo systemctl start medibloc-test.timer
+# 5. Vérifiez le statut: sudo systemctl status medibloc-test.timer
+
+[Unit]
+Description=MediBloc Backend Tests
+After=network.target
+
+[Service]
+Type=oneshot
+# IMPORTANT: Remplacez USER par votre nom d'utilisateur
+User=YOUR_USERNAME
+# IMPORTANT: Remplacez ce chemin par le chemin absolu de votre projet
+WorkingDirectory=/path/to/your/project/backend
+ExecStart=/bin/bash /path/to/your/project/backend/scripts/run-tests-periodic.sh
+StandardOutput=append:/path/to/your/project/backend/logs/systemd-test.log
+StandardError=append:/path/to/your/project/backend/logs/systemd-test-error.log
+
+[Install]
+WantedBy=multi-user.target

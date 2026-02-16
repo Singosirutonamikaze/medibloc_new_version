@@ -1,0 +1,32 @@
+# Configuration Cron pour exécuter les tests MediBloc Backend toutes les 2 heures
+# 
+# Pour installer cette configuration cron:
+# 1. Ouvrez l'éditeur cron: crontab -e
+# 2. Ajoutez l'une des lignes ci-dessous selon vos besoins
+# 3. Sauvegardez et quittez
+# 4. Vérifiez avec: crontab -l
+#
+# Format: minute heure jour mois jour_semaine commande
+
+# IMPORTANT: Remplacez /path/to/your/project par le chemin absolu de votre projet
+
+# Option 1: Exécuter toutes les 2 heures (à 00:00, 02:00, 04:00, etc.)
+0 */2 * * * cd /path/to/your/project/backend && ./scripts/run-tests-periodic.sh
+
+# Option 2: Exécuter aux heures spécifiques (8h, 10h, 12h, 14h, 16h, 18h)
+# 0 8,10,12,14,16,18 * * * cd /path/to/your/project/backend && ./scripts/run-tests-periodic.sh
+
+# Option 3: Exécuter toutes les 2 heures seulement pendant les heures de travail (8h-18h)
+# 0 8-18/2 * * 1-5 cd /path/to/your/project/backend && ./scripts/run-tests-periodic.sh
+
+# Option 4: Exécuter toutes les heures pendant la journée
+# 0 9-17 * * * /bin/bash /home/siruto/Documents/CodesDocs/react_web/medibloc_new_version/backend/scripts/run-tests-periodic.sh
+
+# Pour voir les logs:
+# tail -f logs/latest-test.log
+
+# Pour lister tous les logs:
+# ls -lht logs/test-*.log
+
+# Pour voir les derniers logs:
+# ls -t logs/test-*.log | head -5 | xargs tail -n 50

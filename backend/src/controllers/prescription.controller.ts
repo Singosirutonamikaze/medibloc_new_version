@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
+import { Prescription, Prisma } from '@prisma/client';
 import prisma from '../config/database';
 import GenericController from '../gen/generic.controller';
-import { ApiResponse } from '../types';
+import { ApiResponse, CreatePrescriptionDto } from '../types';
 
-type PrescriptionCreate = unknown;
-type PrescriptionUpdate = unknown;
+type PrescriptionCreateInput = Prisma.PrescriptionCreateInput;
+type PrescriptionUpdateInput = Prisma.PrescriptionUpdateInput;
 
 export class PrescriptionController {
-  private generic: GenericController<unknown, PrescriptionCreate, PrescriptionUpdate>;
+  private generic: GenericController<Prescription, PrescriptionCreateInput, PrescriptionUpdateInput>;
 
   public getAllPrescriptions: (req: Request, res: Response) => Promise<Response>;
   public createPrescription: (req: Request, res: Response) => Promise<Response>;
@@ -17,15 +18,18 @@ export class PrescriptionController {
 
   constructor() {
     const repo = {
-      findMany: (params?: { where?: Record<string, unknown>; skip?: number; take?: number; include?: Record<string, unknown> }) =>
-        prisma.prescription.findMany({ where: params?.where as any, skip: params?.skip, take: params?.take, include: params?.include as any }),
-      findUnique: (params: { where: { id: number }; include?: Record<string, unknown> }) =>
-        prisma.prescription.findUnique({ where: params.where as any, include: params.include as any }),
-      create: (params: { data: PrescriptionCreate }) => prisma.prescription.create({ data: params.data as any }),
-      update: (params: { where: { id: number }; data: PrescriptionUpdate }) =>
-        prisma.prescription.update({ where: params.where as any, data: params.data as any }),
-      delete: (params: { where: { id: number } }) => prisma.prescription.delete({ where: params.where as any }),
-      count: (params?: { where?: Record<string, unknown> }) => prisma.prescription.count({ where: params?.where as any }),
+      findMany: (params?: Prisma.PrescriptionFindManyArgs) =>
+        prisma.prescription.findMany(params),
+      findUnique: (params: Prisma.PrescriptionFindUniqueArgs) =>
+        prisma.prescription.findUnique(params),
+      create: (params: { data: PrescriptionCreateInput }) =>
+        prisma.prescription.create({ data: params.data }),
+      update: (params: { where: { id: number }; data: PrescriptionUpdateInput }) =>
+        prisma.prescription.update({ where: params.where, data: params.data }),
+      delete: (params: { where: { id: number } }) =>
+        prisma.prescription.delete({ where: params.where }),
+      count: (params?: Prisma.PrescriptionCountArgs) =>
+        prisma.prescription.count(params),
     };
 
     this.generic = new GenericController(repo);
@@ -39,19 +43,19 @@ export class PrescriptionController {
 
   public getPatientPrescriptions = async (req: Request, res: Response): Promise<Response> => {
     let status = 200;
-    let response: ApiResponse<unknown[]> = { success: true, data: [] };
+    let response: ApiResponse<Prescription[]> = { success: true, data: [] };
     try {
       const patientId = Number(req.params.patientId);
       if (!patientId || patientId <= 0) {
         status = 400;
-        response = { success: false, error: 'Identifiant de patient invalide' } as ApiResponse<unknown[]>;
+        response = { success: false, error: 'Identifiant de patient invalide' };
       } else {
-        const prescriptions = await prisma.prescription.findMany({ where: { patientId } as any });
+        const prescriptions = await prisma.prescription.findMany({ where: { patientId } });
         response = { success: true, data: prescriptions };
       }
     } catch (err: unknown) {
       status = 500;
-      response = { success: false, error: err instanceof Error ? err.message : 'Erreur interne' } as ApiResponse<unknown[]>;
+      response = { success: false, error: err instanceof Error ? err.message : 'Erreur interne' };
     }
 
     return res.status(status).json(response);
@@ -59,19 +63,19 @@ export class PrescriptionController {
 
   public getDoctorPrescriptions = async (req: Request, res: Response): Promise<Response> => {
     let status = 200;
-    let response: ApiResponse<unknown[]> = { success: true, data: [] };
+    let response: ApiResponse<Prescription[]> = { success: true, data: [] };
     try {
       const doctorId = Number(req.params.doctorId);
       if (!doctorId || doctorId <= 0) {
         status = 400;
-        response = { success: false, error: 'Identifiant de médecin invalide' } as ApiResponse<unknown[]>;
+        response = { success: false, error: 'Identifiant de médecin invalide' };
       } else {
-        const prescriptions = await prisma.prescription.findMany({ where: { doctorId } as any });
+        const prescriptions = await prisma.prescription.findMany({ where: { doctorId } });
         response = { success: true, data: prescriptions };
       }
     } catch (err: unknown) {
       status = 500;
-      response = { success: false, error: err instanceof Error ? err.message : 'Erreur interne' } as ApiResponse<unknown[]>;
+      response = { success: false, error: err instanceof Error ? err.message : 'Erreur interne' };
     }
 
     return res.status(status).json(response);

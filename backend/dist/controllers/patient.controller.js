@@ -18,7 +18,10 @@ class PatientController {
                     response = { success: false, error: 'Identifiant invalide' };
                 }
                 else {
-                    const patient = await database_1.default.patient.findUnique({ where: { id }, include: { diseases: true } });
+                    const patient = await database_1.default.patient.findUnique({
+                        where: { id },
+                        include: { diseases: { include: { disease: true } } }
+                    });
                     if (!patient) {
                         status = 404;
                         response = { success: false, error: 'Patient non trouvé' };
@@ -36,7 +39,7 @@ class PatientController {
         };
         this.getPatientAppointments = async (req, res) => {
             let status = 200;
-            let response = { success: true, data: null };
+            let response = { success: true, data: [] };
             try {
                 const id = Number(req.params.id);
                 if (!id || id <= 0) {
@@ -56,7 +59,7 @@ class PatientController {
         };
         this.getPatientPrescriptions = async (req, res) => {
             let status = 200;
-            let response = { success: true, data: null };
+            let response = { success: true, data: [] };
             try {
                 const id = Number(req.params.id);
                 if (!id || id <= 0) {
@@ -75,12 +78,12 @@ class PatientController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.patient.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.patient.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.patient.findMany(params),
+            findUnique: (params) => database_1.default.patient.findUnique(params),
             create: (params) => database_1.default.patient.create({ data: params.data }),
             update: (params) => database_1.default.patient.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.patient.delete({ where: params.where }),
-            count: (params) => database_1.default.patient.count({ where: params?.where }),
+            count: (params) => database_1.default.patient.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllPatients = this.generic.getAll;

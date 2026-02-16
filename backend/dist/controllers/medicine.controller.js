@@ -13,7 +13,7 @@ class MedicineController {
             let response = { success: true, data: [] };
             try {
                 const type = req.params.type;
-                const medicines = await database_1.default.medicine.findMany({ where: { type: type } });
+                const medicines = await database_1.default.medicine.findMany({ where: { type } });
                 response = { success: true, data: medicines };
             }
             catch (err) {
@@ -43,12 +43,12 @@ class MedicineController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.medicine.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.medicine.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.medicine.findMany(params),
+            findUnique: (params) => database_1.default.medicine.findUnique(params),
             create: (params) => database_1.default.medicine.create({ data: params.data }),
             update: (params) => database_1.default.medicine.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.medicine.delete({ where: params.where }),
-            count: (params) => database_1.default.medicine.count({ where: params?.where }),
+            count: (params) => database_1.default.medicine.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllMedicines = this.generic.getAll;

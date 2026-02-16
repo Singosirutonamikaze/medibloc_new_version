@@ -18,7 +18,7 @@ class DiseaseController {
                     response = { success: false, error: 'Identifiant invalide' };
                 }
                 else {
-                    const disease = await database_1.default.disease.findUnique({ where: { id }, include: { symptoms: true } });
+                    const disease = await database_1.default.disease.findUnique({ where: { id }, include: { symptoms: { include: { symptom: true } } } });
                     if (!disease) {
                         status = 404;
                         response = { success: false, error: 'Maladie non trouvée' };
@@ -36,7 +36,7 @@ class DiseaseController {
         };
         this.getDiseaseCountries = async (req, res) => {
             let status = 200;
-            let response = { success: true, data: null };
+            let response = { success: true, data: [] };
             try {
                 const id = Number(req.params.id);
                 if (!id || id <= 0) {
@@ -97,12 +97,12 @@ class DiseaseController {
             return res.status(status).json(response);
         };
         const repo = {
-            findMany: (params) => database_1.default.disease.findMany({ where: params?.where, skip: params?.skip, take: params?.take, include: params?.include }),
-            findUnique: (params) => database_1.default.disease.findUnique({ where: params.where, include: params.include }),
+            findMany: (params) => database_1.default.disease.findMany(params),
+            findUnique: (params) => database_1.default.disease.findUnique(params),
             create: (params) => database_1.default.disease.create({ data: params.data }),
             update: (params) => database_1.default.disease.update({ where: params.where, data: params.data }),
             delete: (params) => database_1.default.disease.delete({ where: params.where }),
-            count: (params) => database_1.default.disease.count({ where: params?.where }),
+            count: (params) => database_1.default.disease.count(params),
         };
         this.generic = new generic_controller_1.default(repo);
         this.getAllDiseases = this.generic.getAll;

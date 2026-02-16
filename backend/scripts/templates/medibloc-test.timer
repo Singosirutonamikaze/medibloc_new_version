@@ -1,0 +1,22 @@
+# Timer systemd pour exécuter les tests toutes les 2 heures
+# Pour utiliser ce timer:
+# 1. Copiez ce fichier vers: /etc/systemd/system/medibloc-test.timer
+# 2. Rechargez systemd: sudo systemctl daemon-reload
+# 3. Activez le timer: sudo systemctl enable medibloc-test.timer
+# 4. Démarrez le timer: sudo systemctl start medibloc-test.timer
+# 5. Vérifiez: systemctl list-timers | grep medibloc
+
+[Unit]
+Description=Exécute les tests MediBloc Backend toutes les 2 heures
+Requires=medibloc-test.service
+
+[Timer]
+# Exécute toutes les 2 heures
+OnCalendar=*-*-* 00/2:00:00
+# Exécute aussi au démarrage si un run a été manqué
+Persistent=true
+# Décalage aléatoire de 0-5 minutes pour éviter les pics de charge
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
