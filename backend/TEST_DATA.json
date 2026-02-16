@@ -1,0 +1,383 @@
+{
+  "auth": {
+    "register": {
+      "url": "http://localhost:3000/api/v1/auth/register",
+      "method": "POST",
+      "body": {
+        "email": "test@example.com",
+        "password": "Password123!",
+        "firstName": "John",
+        "lastName": "Doe",
+        "role": "PATIENT"
+      }
+    },
+    "login": {
+      "url": "http://localhost:3000/api/v1/auth/login",
+      "method": "POST",
+      "body": {
+        "email": "test@example.com",
+        "password": "Password123!"
+      }
+    },
+    "me": {
+      "url": "http://localhost:3000/api/v1/auth/me",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    }
+  },
+  "patients": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/patients",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "userId": 1,
+        "dateOfBirth": "1990-01-15",
+        "gender": "MALE",
+        "phone": "+1234567890",
+        "address": "123 Main St, City",
+        "emergencyContact": "+0987654321",
+        "bloodType": "O+",
+        "allergies": "Pollen, Peanuts"
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/patients?page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/patients/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "update": {
+      "url": "http://localhost:3000/api/v1/patients/1",
+      "method": "PUT",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "phone": "+1234567899",
+        "address": "456 New St, City"
+      }
+    }
+  },
+  "doctors": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/doctors",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "userId": 2,
+        "specialization": "Cardiology",
+        "licenseNumber": "LIC123456",
+        "phone": "+1234567890",
+        "officeAddress": "789 Medical Center",
+        "consultationFee": 150.00
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/doctors?page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/doctors/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "update": {
+      "url": "http://localhost:3000/api/v1/doctors/1",
+      "method": "PUT",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "consultationFee": 175.00,
+        "officeAddress": "999 New Medical Center"
+      }
+    }
+  },
+  "appointments": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/appointments",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "patientId": 1,
+        "doctorId": 1,
+        "date": "2026-02-20T10:00:00Z",
+        "reason": "Routine checkup",
+        "notes": "Patient has slight fever"
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/appointments?status=PENDING&page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/appointments/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "update": {
+      "url": "http://localhost:3000/api/v1/appointments/1",
+      "method": "PUT",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "date": "2026-02-21T14:00:00Z",
+        "notes": "Rescheduled by patient request"
+      }
+    },
+    "updateStatus": {
+      "url": "http://localhost:3000/api/v1/appointments/1/status",
+      "method": "PATCH",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "status": "CONFIRMED"
+      }
+    }
+  },
+  "prescriptions": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/prescriptions",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "patientId": 1,
+        "medicineId": 1,
+        "dosage": "500mg",
+        "frequency": "Twice daily",
+        "duration": "7 days",
+        "notes": "Take with food"
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/prescriptions?patientId=1&page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/prescriptions/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    }
+  },
+  "medicines": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/medicines",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "name": "Paracetamol",
+        "dosage": "500mg",
+        "price": 5.99,
+        "pharmacyId": 1
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/medicines?search=para&page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/medicines/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "update": {
+      "url": "http://localhost:3000/api/v1/medicines/1",
+      "method": "PUT",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "price": 6.99,
+        "dosage": "650mg"
+      }
+    }
+  },
+  "pharmacies": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/pharmacies",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "name": "HealthCare Pharmacy",
+        "licenseNumber": "PHAR-2024-001",
+        "phone": "+1234567890",
+        "address": "123 Pharmacy St, City"
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/pharmacies?page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/pharmacies/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    }
+  },
+  "medicalRecords": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/medical-records",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "patientId": 1,
+        "doctorId": 1,
+        "diagnosis": "Common cold",
+        "treatment": "Rest and fluids",
+        "notes": "Patient recovering well"
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/medical-records?page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/medical-records/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    }
+  },
+  "diseases": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/diseases",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "name": "Malaria",
+        "description": "Mosquito-borne disease",
+        "severity": "MODERATE"
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/diseases?search=mal&page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/diseases/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    }
+  },
+  "symptoms": {
+    "create": {
+      "url": "http://localhost:3000/api/v1/symptoms",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      },
+      "body": {
+        "name": "Fever",
+        "description": "Elevated body temperature",
+        "severity": "MODERATE"
+      }
+    },
+    "getAll": {
+      "url": "http://localhost:3000/api/v1/symptoms?search=fever&page=1&limit=10",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "getById": {
+      "url": "http://localhost:3000/api/v1/symptoms/1",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    }
+  },
+  "stats": {
+    "dashboard": {
+      "url": "http://localhost:3000/api/v1/stats/dashboard",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "diseases": {
+      "url": "http://localhost:3000/api/v1/stats/diseases",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "appointments": {
+      "url": "http://localhost:3000/api/v1/stats/appointments",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    },
+    "patients": {
+      "url": "http://localhost:3000/api/v1/stats/patients",
+      "method": "GET",
+      "headers": {
+        "Authorization": "Bearer <TOKEN>"
+      }
+    }
+  }
+}
