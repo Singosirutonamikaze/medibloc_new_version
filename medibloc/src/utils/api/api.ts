@@ -105,9 +105,11 @@ const PRESCRIPTIONS_ENDPOINTS = {
   GET_ALL: '/',
   GET_BY_ID: (id: number) => `/${id}`,
   CREATE: '/',
+  UPDATE: (id: number) => `/${id}`,
   DELETE: (id: number) => `/${id}`,
   GET_BY_PATIENT: (patientId: number) => `/patient/${patientId}`,
   GET_BY_DOCTOR: (doctorId: number) => `/doctor/${doctorId}`,
+  GET_MEDICINES: (id: number) => `/${id}/medicines`,
 } as const;
 
 // Configuration des endpoints pour les dossiers médicaux
@@ -118,6 +120,8 @@ const MEDICAL_RECORDS_ENDPOINTS = {
   UPDATE: (id: number) => `/${id}`,
   DELETE: (id: number) => `/${id}`,
   GET_BY_PATIENT: (patientId: number) => `/patient/${patientId}`,
+  GET_BY_DOCTOR: (doctorId: number) => `/doctor/${doctorId}`,
+  GET_BY_APPOINTMENT: (appointmentId: number) => `/appointment/${appointmentId}`,
 } as const;
 
 // Configuration des endpoints pour les statistiques

@@ -1,0 +1,1 @@
+export { DoctorForm } from './DoctorForm';
