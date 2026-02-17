@@ -1,1 +1,16 @@
 @import 'tailwindcss';
+@layer base {
+  :root {
+    --font-display: "Satoshi", "sans-serif";
+    --breakpoint-3xl: 1920px;
+    --color-primary: #524cde;
+    --color-secondary: #ad6fd8;
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-avocado-100: #ffffff;
+    --color-avocado-200: #ad6fd8;
+    --color-avocado-300: #524cde;
+    --color-avocado-400: #000000;
+    --color-avocado-500: #524cde;
+  }
+}

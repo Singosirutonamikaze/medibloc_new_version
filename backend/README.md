@@ -4,7 +4,7 @@ API serveur pour le système de gestion médicale MediBloc.
 
 ## Technologies utilisées
 
-- **Node.js** 18 ou plus récent
+- **Node.js** 20 ou plus récent
 - **TypeScript** 5.x
 - **Express.js** - Serveur web
 - **Prisma ORM** - Pour communiquer avec la base de données

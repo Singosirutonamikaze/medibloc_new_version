@@ -14,3 +14,4 @@ export { Radio } from './Radio';
 export { Select } from './Select';
 export { Spinner } from './Spinner';
 export { TextArea } from './TextArea';
+export { Tooltip } from './Tooltip';
