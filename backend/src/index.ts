@@ -35,37 +35,36 @@ app.use(morgan('dev')); // Aussi afficher dans la console
 
 // Build safe CORS options from configuration
 const buildCorsOptions = () => {
-  const { origin, parsedOrigins, credentials } = config.cors as any;
+  const { origin, parsedOrigins, credentials } = config.cors;
 
   // If wildcard is used, do not send credentials (browsers disallow Access-Control-Allow-Origin: * with credentials)
-  if (origin === "http://localhost:5173") {
+  if (origin === "*") {
     if (credentials) {
       console.warn(
-        'CORS: origin="http://localhost:5173" and credentials=true is not supported by browsers. Credentials will be disabled.'
+        'CORS: origin="*" and credentials=true is not supported by browsers. Credentials will be disabled.'
       );
     }
     return {
-      origin: "http://localhost:5173",
+      origin: "*",
       credentials: false,
     };
   }
 
-  // Use a whitelist function for multiple or single origins
-  const whitelist = Array.isArray(parsedOrigins) ? parsedOrigins : [origin];
+  const whitelist = parsedOrigins.length > 0 ? parsedOrigins : [origin];
 
   return {
     origin: (
-      reqOrigin: unknown,
+      reqOrigin: string | undefined,
       callback: (err: Error | null, allow?: boolean) => void
     ) => {
       // Allow requests with no origin (like curl or server-to-server requests)
       if (!reqOrigin) return callback(null, true);
-      if (whitelist.includes(reqOrigin as string)) {
+      if (whitelist.includes(reqOrigin)) {
         return callback(null, true);
       }
       return callback(new Error("Not allowed by CORS"));
     },
-    credentials: !!credentials,
+    credentials,
   };
 };
 
