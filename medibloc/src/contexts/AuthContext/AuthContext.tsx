@@ -1,9 +1,20 @@
-import { createContext, useEffect, useMemo, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import type { AuthContextType, AuthUser, LoginCredentials, RegisterData } from '../../types';
 import { authService, storageService } from '../../services';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+/**
+ * Hook pour utiliser le contexte d'authentification
+ */
+export function useAuth(): AuthContextType {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
 
 type AuthProviderProps = Readonly<{ children: ReactNode }>;
 
@@ -34,6 +45,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setToken(response.token);
     storageService.setToken(response.token);
     storageService.setUser(response.user);
+    return response;
   }, []);
 
   const register = useCallback(async (data: RegisterData) => {
@@ -42,6 +54,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setToken(response.token);
     storageService.setToken(response.token);
     storageService.setUser(response.user);
+    return response;
   }, []);
 
   const logout = useCallback(() => {

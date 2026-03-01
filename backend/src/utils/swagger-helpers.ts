@@ -259,7 +259,7 @@ export const COMMON_SCHEMAS = {
     properties: {
       success: { type: "boolean" },
       data: { type: "array", items: itemSchema },
-      pagination: this.pagination
+      pagination: COMMON_SCHEMAS.pagination
     }
   })
 };

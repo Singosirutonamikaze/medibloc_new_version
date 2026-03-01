@@ -1,148 +1,125 @@
-# MediBloc - Système de Gestion Médical
+# MediBloc
 
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue.svg)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18+-61dafb.svg)](https://react.dev/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+MediBloc est une plateforme web de gestion médicale full-stack destinée aux patients, médecins et administrateurs. Elle centralise la gestion des dossiers médicaux, des rendez-vous, des prescriptions, des médicaments et des pharmacies au sein d'une interface unique et sécurisée.
 
-MediBloc est une plateforme web complète de gestion médical permettant aux patients, médecins et pharmaciens de gérer efficacement les dossiers médicaux, rendez-vous, et prescriptions.
+## Aperçu technique
 
-## Table des matières
+| Couche | Technologies |
+| ------ | ----------- |
+| Backend | Node.js 18+, Express, TypeScript, Prisma ORM, PostgreSQL |
+| Frontend | React 19, TypeScript, Tailwind CSS v4, Vite, React Router v7 |
+| Tests | Vitest, Supertest, Testing Library |
+| Documentation API | Swagger / OpenAPI |
+| Authentification | JWT avec contrôle d'accès basé sur les rôles (RBAC) |
 
-- [Fonctionnalités](#fonctionnalités)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Utilisation](#utilisation)
-- [API REST](#api-rest)
-- [Tests](#tests)
-- [Documentation](#documentation)
-- [Sécurité](#sécurité)
-- [Contribution](#contribution)
-- [Licence](#licence)
+## Structure du dépôt
 
-## Fonctionnalités
-
-### 🏥 Gestion Patients
-- Créer et modifier des profils patients
-- Historique médical complet
-- Gestion des dossiers médicaux
-- Suivi des rendez-vous
-
-### 👨‍⚕️ Gestion Médecins
-- Profil médecin avec spécialité
-- Gestion du calendrier des rendez-vous
-- Prescription de médicaments
-- Historique des patients
-
-### 💊 Gestion Pharmacie
-- Inventaire des médicaments
-- Traitement des ordonnances
-- Historique des prescriptions
-
-### 📅 Rendez-vous
-- Système de réservation
-- Notification et rappels
-- Gestion des statuts (en attente, confirmé, annulé)
-
-### 🔐 Authentification
-- Authentification JWT
-- Contrôle d'accès basé sur les rôles (RBAC)
-- Sécurité des données sensibles
-
-## Architecture
-
-```
+```text
 medibloc_new_version/
-├── backend/                    # API Node.js/Express
+├── backend/                    API REST Node.js / Express
 │   ├── src/
-│   │   ├── controllers/        # Logique métier
-│   │   ├── routes/            # Définition des routes
-│   │   ├── middleware/        # Authentification, validation
-│   │   ├── config/            # Configuration, base de données
-│   │   ├── types/             # Types TypeScript
-│   │   └── utils/             # Utilitaires et helpers
-│   ├── test/                  # Tests unitaires et d'intégration
-│   └── prisma/                # Schéma et migrations de BD
-├── medibloc/                   # Interface React
-│   ├── src/
-│   │   ├── components/        # Composants réutilisables
-│   │   ├── pages/             # Pages de l'application
-│   │   ├── contexts/          # Contexte React (Auth, etc.)
-│   │   ├── services/          # Services API
-│   │   └── types/             # Types TypeScript
-│   └── public/                # Ressources statiques
-└── docs/                       # Documentation
-
-Stack:
-- **Backend**: Node.js, Express, TypeScript, Prisma, PostgreSQL
-- **Frontend**: React, TypeScript, React Router, Axios
-- **Tests**: Vitest, Supertest
-- **Documentation**: Swagger/OpenAPI
+│   │   ├── controllers/        Logique métier par ressource
+│   │   ├── routes/             Définition des routes HTTP
+│   │   ├── middleware/         Authentification, validation, gestion d'erreurs
+│   │   ├── config/             Base de données, Swagger, variables d'environnement
+│   │   ├── scheduler/          Tâches planifiées (tests périodiques)
+│   │   ├── types/              Types TypeScript partagés
+│   │   └── utils/              Utilitaires et helpers
+│   ├── prisma/
+│   │   ├── schema.prisma       Schéma de base de données
+│   │   └── migrations/         Historique des migrations
+│   ├── test/                   Tests unitaires et d'intégration
+│   ├── scripts/                Scripts d'automatisation et de déploiement
+│   ├── logs/                   Rapports de tests générés automatiquement
+│   ├── README-DEPLOYMENT.md    Guide de déploiement complet
+│   └── README-TESTS.md         Guide d'automatisation des tests
+│
+└── medibloc/                   Interface React
+    ├── src/
+    │   ├── components/         Composants UI (Atomic Design)
+    │   ├── pages/              Pages organisées par rôle
+    │   ├── contexts/           Contextes React (Auth, Thème, Notifications)
+    │   ├── hooks/              Hooks personnalisés par domaine
+    │   ├── services/           Clients API par ressource
+    │   ├── routes/             Configuration du routage
+    │   ├── types/              Types TypeScript par domaine
+    │   ├── utils/              Constantes, helpers, configuration
+    │   └── docs/
+    │       ├── architectures/ARCHITECTURE.md   Architecture frontend détaillée
+    │       └── readme/COMPONENTS.md            Catalogue des composants UI
+    └── public/                 Ressources statiques
 ```
+
+## Domaines fonctionnels
+
+Le système couvre les ressources suivantes, chacune disposant de ses propres routes, contrôleur, service et types :
+
+- **Utilisateurs et authentification** — inscription, connexion, gestion des rôles (Patient, Médecin, Admin)
+- **Patients** — profils, dossiers médicaux, suivi des maladies et symptômes
+- **Médecins** — profils, spécialités, liste d'appointments
+- **Rendez-vous** — réservation, confirmation, annulation, statuts
+- **Maladies et symptômes** — catalogue, association maladie/symptôme/pays, diagnostic patient
+- **Médicaments et pharmacies** — catalogue pharmaceutique et plantes médicinales, gestion des stocks
+- **Prescriptions** — ordonnances médicaux avec détail des traitements
+- **Statistiques** — données agrégées pour les tableaux de bord
+
+## Prérequis
+
+- Node.js >= 18.x
+- PostgreSQL >= 12.x
+- npm ou pnpm
+- Git
 
 ## Installation
 
-### Prérequis
-
-- Node.js >= 18.x
-- npm ou pnpm
-- PostgreSQL >= 12.x
-- Git
-
-### Cloner le repository
+### Backend
 
 ```bash
 git clone https://github.com/Singosirutonamikaze/medibloc_new_version.git
-cd medibloc_new_version
-```
+cd medibloc_new_version/backend
 
-### Installation du Backend
-
-```bash
-cd backend
 npm install
 
-# Créer le fichier .env en copiant .env.example
+# Copier le fichier d'environnement et le renseigner
 cp .env.example .env
 
-# Générer une clé JWT forte
+# Générer une clé JWT sécurisée
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-# Ajouter la clé dans .env en tant que JWT_SECRET
 
-# Configurer DATABASE_URL dans .env
+# Appliquer les migrations de base de données
+npm run prisma:migrate
 
-# Exécuter les migrations
-npm run db:migrate
-
-# (Optionnel) Seed la base de données
-npm run db:seed
+# Démarrer le serveur de développement
+npm run dev
 ```
 
-### Installation du Frontend
+### Frontend
 
 ```bash
-cd medibloc
+cd medibloc_new_version/medibloc
+
 npm install
 
-# Configuration du .env (si nécessaire)
+# Copier le fichier d'environnement (si nécessaire)
 cp .env.example .env.local
+
+# Démarrer le serveur de développement
+npm run dev
 ```
 
 ## Configuration
 
-### Variables d'environnement Backend
+### Variables d'environnement — Backend
 
 ```env
-# Database
+# Base de données
 DATABASE_URL="postgresql://user:password@localhost:5432/medibloc"
-PASSWORD="your_database_password"
 
-# JWT Security (REQUIRED)
-JWT_SECRET="generated-secret-key-min-32-chars"
+# Sécurité JWT (obligatoire, minimum 32 caractères)
+JWT_SECRET="votre-cle-secrete-generee"
 JWT_EXPIRES_IN="7d"
 
-# Server
+# Serveur
 PORT=3000
 NODE_ENV="development"
 
@@ -151,319 +128,170 @@ CORS_ORIGIN="http://localhost:5173"
 CORS_CREDENTIALS="false"
 ```
 
-### Variables d'environnement Frontend
+### Variables d'environnement — Frontend
 
 ```env
 VITE_API_URL="http://localhost:3000/api/v1"
 ```
 
-## Utilisation
+## Commandes disponibles
 
-### Démarrer le Backend
+### Commandes Backend
 
 ```bash
-cd backend
-
-# Développement avec rechargement automatique
-npm run dev
-
-# Production
-npm run build
-npm run start
-
-# Tests
-npm run test
-npm run test:watch
-
-# Couverture de tests
-npm run test:coverage
-
-# Linting
-npm run lint
-
-# Type checking
-npm run type-check
+npm run dev              # Serveur de développement avec rechargement automatique
+npm run build            # Compilation TypeScript + génération Prisma Client
+npm run start            # Démarrage en production
+npm run test             # Exécution des tests (mode watch)
+npm run test:run         # Exécution unique des tests
+npm run test:coverage    # Rapport de couverture de code
+npm run prisma:migrate   # Appliquer les migrations
+npm run prisma:studio    # Interface visuelle Prisma
+npm run prisma:seed      # Seed de la base de données
 ```
 
-### Démarrer le Frontend
+### Commandes Frontend
 
 ```bash
-cd medibloc
-
-# Développement
-npm run dev
-
-# Production
-npm run build
-npm run preview
-
-# Tests
-npm run test
-
-# Linting
-npm run lint:fix
+npm run dev              # Serveur de développement Vite
+npm run build            # Compilation de production
+npm run preview          # Prévisualisation du build
+npm run test             # Exécution des tests
+npm run lint             # Vérification du code
 ```
 
-### Accéder à l'application
+## Points d'accès
 
-- **Frontend**: http://localhost:5173
-- **API**: http://localhost:3000/api/v1
-- **Documentation API**: http://localhost:3000/api-docs
-- **HealthCheck**: http://localhost:3000/health
+| Service | URL |
+| ------- | --- |
+| Frontend | <http://localhost:5173> |
+| API REST | <http://localhost:3000/api/v1> |
+| Documentation Swagger | <http://localhost:3000/api-docs> |
+| Health check | <http://localhost:3000/health> |
 
-## API REST
+## API REST — Exemples
 
-### Authentification
+Les endpoints suivent la convention REST. Tous les endpoints protégés nécessitent un header `Authorization: Bearer <token>`.
 
-#### Créer un compte
-```bash
+### Inscription
+
+```http
 POST /api/v1/auth/register
 Content-Type: application/json
 
 {
-  "email": "user@example.com",
-  "password": "SecurePassword123!",
-  "firstName": "John",
-  "lastName": "Doe"
+  "email": "patient@example.com",
+  "password": "MotDePasseSecure123!",
+  "firstName": "SINGO",
+  "lastName": "Yao Dieu Donné"
 }
 ```
 
-**Response (201)**:
-```json
-{
-  "success": true,
-  "data": {
-    "user": {
-      "id": 1,
-      "email": "user@example.com",
-      "firstName": "John",
-      "lastName": "Doe"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  }
-}
-```
+### Connexion
 
-#### Se connecter
-```bash
+```http
 POST /api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "user@example.com",
-  "password": "SecurePassword123!"
+  "email": "patient@example.com",
+  "password": "MotDePasseSecure123!"
 }
 ```
 
-### Patients
+### Créer un rendez-vous
 
-#### Créer un patient
-```bash
-POST /api/v1/patients
-Authorization: Bearer <TOKEN>
-Content-Type: application/json
-
-{
-  "userId": 1,
-  "dateOfBirth": "1990-01-15",
-  "gender": "MALE",
-  "phone": "+33612345678",
-  "address": "123 Rue principale, Paris",
-  "bloodType": "O+",
-  "allergies": "Pénicilline"
-}
-```
-
-#### Récupérer tous les patients
-```bash
-GET /api/v1/patients?page=1&limit=10
-Authorization: Bearer <TOKEN>
-```
-
-**Response (200)**:
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "userId": 1,
-      "dateOfBirth": "1990-01-15",
-      "gender": "MALE",
-      "phone": "+33612345678",
-      "address": "123 Rue principale, Paris",
-      "bloodType": "O+",
-      "allergies": "Pénicilline"
-    }
-  ],
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 45,
-    "totalPages": 5
-  }
-}
-```
-
-### Médecins
-
-#### Créer un médecin
-```bash
-POST /api/v1/doctors
-Authorization: Bearer <TOKEN>
-Content-Type: application/json
-
-{
-  "userId": 2,
-  "specialty": "Cardiologie",
-  "licenseNumber": "CARD-12345",
-  "phone": "+33654321098"
-}
-```
-
-#### Récupérer tous les médecins
-```bash
-GET /api/v1/doctors?page=1&limit=10
-```
-
-### Rendez-vous
-
-#### Créer un rendez-vous
-```bash
+```http
 POST /api/v1/appointments
-Authorization: Bearer <TOKEN>
+Authorization: Bearer <token>
 Content-Type: application/json
 
 {
   "patientId": 1,
-  "doctorId": 1,
-  "appointmentDate": "2026-03-15T14:30:00Z",
-  "reason": "Suivi cardiaque",
-  "status": "PENDING"
+  "doctorId": 2,
+  "scheduledAt": "2026-04-10T09:00:00Z",
+  "reason": "Consultation de suivi"
 }
 ```
 
-#### Récupérer les rendez-vous d'un patient
-```bash
-GET /api/v1/appointments/patient/1
-Authorization: Bearer <TOKEN>
-```
-
-### Documentation complète
-
-Pour plus de détails sur tous les endpoints disponibles, consultez la documentation Swagger :
-
-```
-http://localhost:3000/api-docs
-```
+Pour la référence complète de tous les endpoints disponibles, consulter la documentation Swagger accessible à l'adresse `http://localhost:3000/api-docs` une fois le serveur démarré.
 
 ## Tests
 
-### Exécuter les tests
+Les tests sont organisés en tests unitaires pour les contrôleurs et en tests d'intégration pour les routes.
 
 ```bash
 cd backend
 
-# Exécuter tous les tests
-npm run test
+# Exécuter tous les tests une fois
+npm run test:run
 
-# Mode watch (re-run au changement de fichier)
+# Mode watch (relance automatique à chaque modification)
 npm run test:watch
 
-# Couverture de code
+# Rapport de couverture
 npm run test:coverage
-
-# Tests spécifiques
-npm run test -- routes/auth.routes.test
 ```
 
-### Structure des tests
+La structure des tests reflète celle du code source :
 
-```
+```text
 backend/test/
-├── routes/           # Tests d'intégration des routes
-├── controllers/      # Tests unitaires des contrôleurs
-├── setup/           # Configuration et mocks
-└── helpers          # Utilitaires de test
+├── controllers/     Tests unitaires des contrôleurs
+├── routes/          Tests d'intégration des routes HTTP
+└── setup/           Configuration globale et mocks
 ```
 
-## Documentation
+Les rapports HTML et JSON des tests sont générés dans `backend/logs/`.
 
-- [Architecture détaillée](medibloc/ARCHITECTURE.md)
-- [Composants React](medibloc/COMPONENTS.md)
-- [Guide de déploiement Backend](backend/README-DEPLOYMENT.md)
-- [Guide des tests](backend/README-TESTS.md)
+Pour la configuration de l'automatisation des tests (cron, systemd, GitHub Actions, Render), se référer à `backend/README-TESTS.md`.
+
+## Documentation interne
+
+| Document | Emplacement | Contenu |
+| -------- | ----------- | ------- |
+| Architecture frontend | `medibloc/src/docs/architectures/ARCHITECTURE.md` | Organisation des dossiers, principes d'Atomic Design, conventions d'exportation |
+| Catalogue des composants | `medibloc/src/docs/readme/COMPONENTS.md` | Liste et description de tous les composants UI (atoms, molecules, organisms) |
+| Guide de déploiement | `backend/README-DEPLOYMENT.md` | Déploiement sur Render, VPS, configuration systemd et GitHub Actions |
+| Guide des tests | `backend/README-TESTS.md` | Automatisation des tests avec cron, systemd, scripts shell |
+| Journal des modifications | `CHANGELOG.md` | Historique des versions et changements notables |
+
+## Déploiement
+
+Le projet peut être déployé sur Render, un VPS Linux ou tout environnement Node.js compatible. Le guide complet est disponible dans `backend/README-DEPLOYMENT.md`.
+
+Les tests en intégration continue sont préconfigurés via GitHub Actions dans `.github/workflows/`.
 
 ## Sécurité
 
-### Bonnes pratiques implémentées
-
-✅ **Authentification JWT**
-- Tokens signés avec clé forte (minimum 32 caractères)
-- Expiration configurable
-- Validation stricte du token
-
-✅ **CORS Configuration**
-- Liste blanche d'origines
-- Credentials désactivés pour les accès publics
-- Avertissement pour usage de wildcard (*)
-
-✅ **Validation des données**
-- Schémas de validation strictes
-- Sanitization des entrées utilisateur
-- Messages d'erreur génériques
-
-✅ **Gestion des erreurs**
-- Pas d'exposition d'informations sensibles
-- Logging sécurisé
-- Middleware d'erreur centralisé
-
-✅ **Base de données**
-- Migrations de schéma versionnées
-- Requêtes paramétrées (Prisma)
-- Pas de SQL injection possible
-
-✅ **Environnement**
-- .env non commité au repository
-- .env.example fourni pour documentation
-- Variables obligatoires validées au démarrage
-
-### Rapports de sécurité
-
-Pour signaler une vulnérabilité, veuillez envoyer un email privé à:
-```
-security@example.com
-```
-
-Ne publiez pas les vulnérabilités publiquement jusqu'à ce qu'elles soient corrigées.
+- Les tokens JWT sont signés avec une clé secrète d'au minimum 32 caractères, obligatoirement fournie via variable d'environnement.
+- Le middleware CORS applique une liste blanche d'origines autorisées.
+- Toutes les entrées utilisateur sont validées via `express-validator` avant traitement.
+- Le fichier `.env` n'est pas inclus dans le dépôt ; un fichier `.env.example` documente les variables requises.
+- Les requêtes en base de données passent exclusivement par Prisma, éliminant tout risque d'injection SQL.
+- Les messages d'erreur exposés au client ne contiennent pas d'informations système sensibles.
 
 ## Contribution
 
-Les contributions sont bienvenues! Voici comment faire:
-
-1. Forkez le projet (`git clone <votre-fork>`)
-2. Créez une branche (`git checkout -b feature/AmazingFeature`)
-3. Commitez vos changements (`git commit -m 'Add AmazingFeature'`)
-4. Poussez vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
-
-### Standards de code
-
-- Utilisez TypeScript pour la sécurité des types
-- Suivez le style existant via le linter
-- Écrivez des tests pour les nouvelles fonctionnalités
-- Documentez les changements complexes
+1. Créer une branche à partir de `main`
+2. Apporter les modifications en respectant le style de code existant (TypeScript strict, linting activé)
+3. Écrire ou mettre à jour les tests correspondants
+4. Ouvrir une pull request avec une description claire des changements
 
 ## Licence
 
-Ce projet est sous licence MIT. Voir [LICENSE](LICENSE) pour plus de détails.
+Ce projet est distribué sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour les termes complets.
 
-## Support
+## Pour aller plus loin
 
-- 📧 Email: support@medibloc.dev
-- 🐛 Issues: https://github.com/Singosirutonamikaze/medibloc_new_version/issues
-- 💬 Discussions: https://github.com/Singosirutonamikaze/medibloc_new_version/discussions
+Chaque partie du projet dispose de sa propre documentation détaillée :
+
+- [Guide de déploiement Backend](backend/README-DEPLOYMENT.md) — mise en ligne sur Render, VPS, configuration GitHub Actions
+- [Guide des tests Backend](backend/README-TESTS.md) — automatisation avec cron, systemd et scripts shell
+- [Architecture Frontend](medibloc/src/docs/architectures/ARCHITECTURE.md) — organisation des dossiers et conventions
+- [Catalogue des composants](medibloc/src/docs/readme/COMPONENTS.md) — référence de tous les composants UI
+- [Journal des modifications](CHANGELOG.md) — historique des versions
 
 ---
 
-**Créé avec ❤️ par Siruto**
+![MediBloc](medibloc/public/logo.png)

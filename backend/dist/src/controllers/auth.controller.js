@@ -70,13 +70,13 @@ class AuthController {
                 if (userId) {
                     const user = await database_1.default.user.findUnique({ where: { id: userId } });
                     if (user) {
-                        status = 404;
-                        response = { success: false, error: 'Utilisateur non trouvé' };
-                    }
-                    else {
                         // @ts-ignore
                         const { password: _pwd, ...safeUser } = user;
                         response = { success: true, data: safeUser };
+                    }
+                    else {
+                        status = 404;
+                        response = { success: false, error: 'Utilisateur non trouvé' };
                     }
                 }
             }

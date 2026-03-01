@@ -16,14 +16,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-[var(--color-primary)] text-[var(--color-white)]',
-  secondary: 'bg-[var(--color-secondary)] text-[var(--color-white)]',
-  success: 'bg-[var(--color-primary)] text-[var(--color-white)]',
-  danger: 'bg-[var(--color-black)] text-[var(--color-white)]',
-  warning: 'bg-[var(--color-secondary)] text-[var(--color-white)]',
-  info: 'bg-[var(--color-primary)] text-[var(--color-white)]',
-  light: 'bg-[var(--color-white)] text-[var(--color-black)] border border-[var(--color-black)]',
-  dark: 'bg-[var(--color-black)] text-[var(--color-white)]',
+  primary: 'bg-(--color-primary) text-(--color-white)',
+  secondary: 'bg-(--color-secondary) text-(--color-white)',
+  success: 'bg-(--color-primary) text-(--color-white)',
+  danger: 'bg-(--color-black) text-(--color-white)',
+  warning: 'bg-(--color-secondary) text-(--color-white)',
+  info: 'bg-(--color-primary) text-(--color-white)',
+  light: 'bg-(--color-white) text-(--color-black) border border-(--color-black)',
+  dark: 'bg-(--color-black) text-(--color-white)',
 };
 
 export const Button = ({
