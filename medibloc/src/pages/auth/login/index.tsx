@@ -5,10 +5,8 @@ import { FiMail, FiLock, FiAlertCircle, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useAuth } from '../../../contexts/AuthContext';
 import { ROUTES } from '../../../utils/constants/routes.constants';
 import { ROLE_DEFAULT_ROUTES } from '../../../utils/constants/roles.constants';
+import { AuthLayout } from '../../../components/layouts/AuthLayout';
 
-/**
- * Page de connexion
- */
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -42,8 +40,6 @@ export default function LoginPage() {
 
     try {
       const response = await login({ email, password });
-
-      // Redirection basée sur le rôle via mapping centralisé
       const defaultRoute = ROLE_DEFAULT_ROUTES[response.user.role] ?? ROUTES.PUBLIC.HOME;
       navigate(defaultRoute, { replace: true });
     } catch (err) {
@@ -55,39 +51,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-(--ui-bg)">
-      <div className="w-full max-w-md">
-        {/* Logo/Titre */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2 text-(--ui-text)">
-            MediBloc
-          </h1>
-          <p className="text-sm text-(--ui-text-secondary)">
-            Connectez-vous à votre espace personnel
-          </p>
-        </div>
-
-        {/* Formulaire */}
-        <div className="rounded-lg p-8 shadow-sm bg-(--ui-surface)">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Message d'erreur */}
+    <AuthLayout title="Bienvenue" description="Connectez-vous à votre espace personnel">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div role="alert" aria-live="assertive" className="flex items-start gap-3 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-                <FiAlertCircle className="text-red-600 dark:text-red-400 shrink-0 mt-0.5" size={20} />
-                <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+              <div role="alert" aria-live="assertive" className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+                <FiAlertCircle className="mt-0.5 shrink-0 text-rose-500" size={18} />
+                <p className="text-sm text-rose-700">{error}</p>
               </div>
             )}
 
-            {/* Champ Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2 text-(--ui-text)">
+            <div className="space-y-1.5">
+              <label htmlFor="email" className="block text-sm font-medium text-(--ui-text)">
                 Adresse email
               </label>
               <div className="relative">
-                <FiMail
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-secondary)"
-                  size={20}
-                />
+                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted)" size={18} />
                 <input
                   id="email"
                   type="email"
@@ -96,21 +74,17 @@ export default function LoginPage() {
                   required
                   autoComplete="email"
                   placeholder="votre@email.com"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-0 bg-(--ui-bg) border-(--ui-border) text-(--ui-text)"
+                  className="w-full rounded-xl border border-(--ui-border) bg-(--ui-bg) py-2.5 pl-10 pr-4 text-sm text-(--ui-text) outline-none transition-all focus:border-(--ui-info) focus:ring-2 focus:ring-(--ui-info-dim)"
                 />
               </div>
             </div>
 
-            {/* Champ Mot de passe */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2 text-(--ui-text)">
+            <div className="space-y-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-(--ui-text)">
                 Mot de passe
               </label>
               <div className="relative">
-                <FiLock
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-secondary)"
-                  size={20}
-                />
+                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted)" size={18} />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -119,50 +93,40 @@ export default function LoginPage() {
                   required
                   autoComplete="current-password"
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-0 bg-(--ui-bg) border-(--ui-border) text-(--ui-text)"
+                  className="w-full rounded-xl border border-(--ui-border) bg-(--ui-bg) py-2.5 pl-10 pr-10 text-sm text-(--ui-text) outline-none transition-all focus:border-(--ui-info) focus:ring-2 focus:ring-(--ui-info-dim)"
                 />
                 <button
                   type="button"
                   onClick={handleToggleShowPassword}
                   aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-(--ui-text-secondary) hover:text-(--color-primary)"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted) transition-colors hover:text-(--ui-text)"
                 >
                   {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                 </button>
               </div>
             </div>
 
-            {/* Bouton de connexion */}
             <button
               type="submit"
               disabled={isLoading || !email || !password}
-              className={`w-full py-2.5 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed text-white ${isLoading ? 'bg-(--ui-border)' : 'bg-(--color-primary)'}`}
+              className="mt-2 w-full rounded-xl bg-linear-to-r from-[#4A90E2] to-[#2ECC71] py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {isLoading ? 'Connexion en cours...' : 'Se connecter'}
             </button>
           </form>
 
-          {/* Lien vers inscription */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-(--ui-text-secondary)">
-              Vous n&apos;avez pas de compte ?{' '}
+          <div className="mt-6 border-t border-(--ui-border-soft) pt-5 text-center">
+            <p className="text-sm text-(--ui-text-muted)">
+              Pas encore de compte ?{' '}
               <button
+                type="button"
                 onClick={handleGoToRegister}
-                className="font-medium hover:underline text-(--color-primary)"
+                className="font-semibold text-(--ui-info) transition-opacity hover:opacity-75"
               >
-                Créer un compte patient
+                Créer un compte
               </button>
             </p>
           </div>
-        </div>
-
-        {/* Note pour les médecins et admins */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-(--ui-text-tertiary)">
-            Les espaces médecins et administrateurs nécessitent des accès spécifiques.
-          </p>
-        </div>
-      </div>
-    </div>
+    </AuthLayout>
   );
 }

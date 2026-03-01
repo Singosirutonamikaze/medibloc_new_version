@@ -7,7 +7,7 @@ type FooterProps = Readonly<{
 export const Footer = ({ onOpen }: FooterProps) => {
   return (
     <div>
-      <footer className="fixed bottom-6 left-11 z-40 h-16 w-16 -translate-x-1/2">
+      <footer className="fixed right-4 bottom-20 z-40 h-16 w-16 sm:right-6 sm:bottom-20">
         <button
           type="button"
           aria-label="Ouvrir le menu social"

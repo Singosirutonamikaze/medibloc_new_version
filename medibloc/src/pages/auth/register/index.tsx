@@ -4,10 +4,8 @@ import { FiMail, FiLock, FiUser, FiAlertCircle, FiCheckCircle, FiEye, FiEyeOff }
 import { useAuth } from '../../../contexts/AuthContext';
 import { Role } from '../../../types/common/common.types';
 import { ROUTES } from '../../../utils/constants/routes.constants';
+import { AuthLayout } from '../../../components/layouts/AuthLayout';
 
-/**
- * Page d'inscription
- */
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
@@ -40,13 +38,8 @@ export default function RegisterPage() {
     navigate(ROUTES.PUBLIC.LOGIN);
   }, [navigate]);
 
-  const toggleShowPassword = useCallback(() => {
-    setShowPassword((v) => !v);
-  }, []);
-
-  const toggleShowConfirmPassword = useCallback(() => {
-    setShowConfirmPassword((v) => !v);
-  }, []);
+  const toggleShowPassword = useCallback(() => setShowPassword((v) => !v), []);
+  const toggleShowConfirmPassword = useCallback(() => setShowConfirmPassword((v) => !v), []);
 
   const isFormValid = Boolean(
     formData.email &&
@@ -59,10 +52,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-
-    // Validation côté client (déjà couverte par isFormValid)
     if (!isFormValid) return;
-
     setIsLoading(true);
 
     try {
@@ -73,10 +63,7 @@ export default function RegisterPage() {
         lastName: formData.lastName,
         role: Role.PATIENT,
       });
-
       setSuccess(true);
-
-      // Redirection après 2 secondes
       setTimeout(() => {
         navigate(ROUTES.PATIENT.DASHBOARD, { replace: true });
       }, 2000);
@@ -87,106 +74,70 @@ export default function RegisterPage() {
     }
   };
 
+  const inputClass = 'w-full rounded-xl border border-(--ui-border) bg-(--ui-bg) py-2.5 pl-10 pr-4 text-sm text-(--ui-text) outline-none transition-all focus:border-(--ui-info) focus:ring-2 focus:ring-(--ui-info-dim)';
+
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-(--ui-bg)">
-        <div className="w-full max-w-md text-center">
-          <div className="rounded-lg p-8 shadow-sm bg-(--ui-surface)">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/20 mb-4">
-              <FiCheckCircle className="text-green-600 dark:text-green-400" size={32} />
-            </div>
-            <h2 className="text-xl font-bold mb-2 text-(--ui-text)">
-              Compte créé avec succès !
-            </h2>
-            <p className="text-sm text-(--ui-text-secondary)">
-              Vous allez être redirigé vers votre espace patient...
-            </p>
-          </div>
+      <AuthLayout title="Compte créé avec succès !" description="Vous allez être redirigé vers votre espace patient...">
+        <div className="flex flex-col items-center gap-4 py-6">
+          <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-500">
+            <FiCheckCircle size={32} />
+          </span>
+          <p className="text-sm text-(--ui-text-muted)">Bienvenue sur Medibloc !</p>
         </div>
-      </div>
+      </AuthLayout>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-(--ui-bg)">
-      <div className="w-full max-w-md">
-        {/* Logo/Titre */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2 text-(--ui-text)">
-            MediBloc
-          </h1>
-          <p className="text-sm text-(--ui-text-secondary)">
-            Créez votre compte patient
-          </p>
-        </div>
-
-        {/* Formulaire */}
-        <div className="rounded-lg p-8 shadow-sm bg-(--ui-surface)">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Message d'erreur */}
+    <AuthLayout title="Créer un compte" description="Rejoignez Medibloc en quelques secondes">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div role="alert" aria-live="assertive" className="flex items-start gap-3 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-                <FiAlertCircle className="text-red-600 dark:text-red-400 shrink-0 mt-0.5" size={20} />
-                <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+              <div role="alert" aria-live="assertive" className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+                <FiAlertCircle className="mt-0.5 shrink-0 text-rose-500" size={18} />
+                <p className="text-sm text-rose-700">{error}</p>
               </div>
             )}
 
-            {/* Prénom */}
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium mb-2 text-(--ui-text)">
-                Prénom
-              </label>
-              <div className="relative">
-                <FiUser
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-secondary)"
-                  size={20}
-                />
-                <input
-                  id="firstName"
-                  type="text"
-                  value={formData.firstName}
-                  onChange={handleFirstName}
-                  required
-                  autoComplete="given-name"
-                  placeholder="Votre prénom"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-0 bg-(--ui-bg) border-(--ui-border) text-(--ui-text)"
-                />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="firstName" className="block text-sm font-medium text-(--ui-text)">Prénom</label>
+                <div className="relative">
+                  <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted)" size={18} />
+                  <input
+                    id="firstName"
+                    type="text"
+                    value={formData.firstName}
+                    onChange={handleFirstName}
+                    required
+                    autoComplete="given-name"
+                    placeholder="Prénom"
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label htmlFor="lastName" className="block text-sm font-medium text-(--ui-text)">Nom</label>
+                <div className="relative">
+                  <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted)" size={18} />
+                  <input
+                    id="lastName"
+                    type="text"
+                    value={formData.lastName}
+                    onChange={handleLastName}
+                    required
+                    autoComplete="family-name"
+                    placeholder="Nom"
+                    className={inputClass}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Nom */}
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium mb-2 text-(--ui-text)">
-                Nom
-              </label>
+            <div className="space-y-1.5">
+              <label htmlFor="email" className="block text-sm font-medium text-(--ui-text)">Adresse email</label>
               <div className="relative">
-                <FiUser
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-secondary)"
-                  size={20}
-                />
-                <input
-                  id="lastName"
-                  type="text"
-                  value={formData.lastName}
-                  onChange={handleLastName}
-                  required
-                  autoComplete="family-name"
-                  placeholder="Votre nom"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-0 bg-(--ui-bg) border-(--ui-border) text-(--ui-text)"
-                />
-              </div>
-            </div>
-
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2 text-(--ui-text)">
-                Adresse email
-              </label>    
-              <div className="relative">
-                <FiMail
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-secondary)"
-                  size={20}
-                />
+                <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted)" size={18} />
                 <input
                   id="email"
                   type="email"
@@ -195,21 +146,15 @@ export default function RegisterPage() {
                   required
                   autoComplete="email"
                   placeholder="votre@email.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-0 bg-(--ui-bg) border-(--ui-border) text-(--ui-text)"
+                  className={inputClass}
                 />
               </div>
             </div>
 
-            {/* Mot de passe */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2 text-(--ui-text)">
-                Mot de passe
-              </label>
+            <div className="space-y-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-(--ui-text)">Mot de passe</label>
               <div className="relative">
-                <FiLock
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-secondary)"
-                  size={20}
-                />
+                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted)" size={18} />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
@@ -217,30 +162,19 @@ export default function RegisterPage() {
                   onChange={handlePassword}
                   required
                   autoComplete="new-password"
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-0 bg-(--ui-bg) border-(--ui-border) text-(--ui-text)"
+                  placeholder="Min. 6 caractères"
+                  className="w-full rounded-xl border border-(--ui-border) bg-(--ui-bg) py-2.5 pl-10 pr-10 text-sm text-(--ui-text) outline-none transition-all focus:border-(--ui-info) focus:ring-2 focus:ring-(--ui-info-dim)"
                 />
-                <button
-                  type="button"
-                  onClick={toggleShowPassword}
-                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-(--ui-text-secondary) hover:text-(--color-primary)"
-                >
+                <button type="button" onClick={toggleShowPassword} aria-label={showPassword ? 'Masquer' : 'Afficher'} className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted) hover:text-(--ui-text)">
                   {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                 </button>
               </div>
             </div>
 
-            {/* Confirmation mot de passe */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2 text-(--ui-text)">
-                Confirmer le mot de passe
-              </label>
+            <div className="space-y-1.5">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-(--ui-text)">Confirmer le mot de passe</label>
               <div className="relative">
-                <FiLock
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-secondary)"
-                  size={20}
-                />
+                <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted)" size={18} />
                 <input
                   id="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -249,43 +183,32 @@ export default function RegisterPage() {
                   required
                   autoComplete="new-password"
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-0 bg-(--ui-bg) border-(--ui-border) text-(--ui-text)"
+                  className="w-full rounded-xl border border-(--ui-border) bg-(--ui-bg) py-2.5 pl-10 pr-10 text-sm text-(--ui-text) outline-none transition-all focus:border-(--ui-info) focus:ring-2 focus:ring-(--ui-info-dim)"
                 />
-                <button
-                  type="button"
-                  onClick={toggleShowConfirmPassword}
-                  aria-label={showConfirmPassword ? 'Masquer la confirmation du mot de passe' : 'Afficher la confirmation du mot de passe'}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-(--ui-text-secondary) hover:text-(--color-primary)"
-                >
+                <button type="button" onClick={toggleShowConfirmPassword} aria-label={showConfirmPassword ? 'Masquer' : 'Afficher'} className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ui-text-muted) hover:text-(--ui-text)">
                   {showConfirmPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
                 </button>
               </div>
             </div>
 
-            {/* Bouton d'inscription */}
             <button
               type="submit"
               disabled={isLoading || !isFormValid}
-              className={`w-full py-2.5 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed text-white ${isLoading ? 'bg-(--ui-border)' : 'bg-(--color-primary)'}`}
+              className="mt-2 w-full rounded-xl bg-linear-to-r from-[#4A90E2] to-[#2ECC71] py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {isLoading ? 'Création du compte...' : 'Créer mon compte'}
             </button>
           </form>
 
-          {/* Lien vers connexion */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-(--ui-text-secondary)">
+          <div className="mt-6 border-t border-(--ui-border-soft) pt-5 text-center">
+            <p className="text-sm text-(--ui-text-muted)">
               Vous avez déjà un compte ?{' '}
-              <button
-                onClick={handleGoToLogin}
-                className="font-medium hover:underline text-(--color-primary)"
-              >
+              <button type="button" onClick={handleGoToLogin} className="font-semibold text-(--ui-info) transition-opacity hover:opacity-75">
                 Se connecter
               </button>
             </p>
           </div>
-        </div>
-      </div>
-    </div>
+    </AuthLayout>
   );
 }
+  

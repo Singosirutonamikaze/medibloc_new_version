@@ -3,67 +3,88 @@
   :root {
     --font-display: "Satoshi", "sans-serif";
     --breakpoint-3xl: 1920px;
-    /* Accent unique — vert ECG, médical, distinctif */
+    /* ── Accent ─────────────────────────────── */
     --color-primary: #00C878;
     --color-primary-dim: rgba(0, 200, 120, 0.12);
     --color-primary-glow: rgba(0, 200, 120, 0.25);
-    /* Surfaces — mode clair */
+    /* ── Surfaces ───────────────────────────── */
     --ui-bg: #F2F2EE;
+    /* page background         */
     --ui-surface: #FAFAF7;
-    --ui-surface-soft: #EBEBЕ6;
-    --ui-border-soft: #E0DFD8;
-    --ui-border: #CCCCC4;
-    /* Typographie */
-    --ui-text: #0E0E0D;
-    --ui-text-muted: #6B6B60;
-    --ui-text-subtle: #A3A399;
-    /* Hero sombre */
-    --ui-hero-bg: #0E0E0D;
-    --ui-hero-surface: #1A1A18;
-    --ui-hero-border: #2A2A27;
-    --ui-hero-text: #F2F2EE;
-    --ui-hero-muted: #8A8A80;
-  }
-  :root.dark, :root[data-theme='dark'] {
-    --ui-bg: #0E0E0D;
-    --ui-surface: #161614;
-    --ui-surface-soft: #1E1E1B;
-    --ui-border-soft: #2A2A27;
-    --ui-border: #333330;
-    --ui-text: #F2F2EE;
-    --ui-text-muted: #8A8A80;
-    --ui-text-subtle: #5A5A52;
-    --ui-hero-bg: #0E0E0D;
-    --ui-hero-surface: #1A1A18;
-    --ui-hero-border: #2A2A27;
-    --ui-hero-text: #F2F2EE;
-    --ui-hero-muted: #8A8A80;
-  }
-  :root[data-theme='light'] {
-    --ui-bg: #F2F2EE;
-    --ui-surface: #FAFAF7;
+    /* cards, panels           */
     --ui-surface-soft: #EEEEE9;
+    /* inputs, chips, badges   */
+    --ui-surface-hard: #E4E4DE;
+    /* hover states, pressed   */
+    /* ── Borders ────────────────────────────── */
     --ui-border-soft: #E0DFD8;
+    /* subtle dividers         */
     --ui-border: #CCCCC4;
-    --ui-text: #0E0E0D;
-    --ui-text-muted: #6B6B60;
-    --ui-text-subtle: #A3A399;
+    /* default borders         */
+    --ui-border-hard: #B8B8B0;
+    /* focused / strong        */
+    /* ── Typography ─────────────────────────── */
+    --ui-text: #111827;
+    /* primary text            */
+    --ui-text-muted: #475569;
+    /* secondary / labels      */
+    --ui-text-subtle: #94A3B8;
+    /* placeholders, disabled  */
+    /* ── Hero (always dark) ─────────────────── */
     --ui-hero-bg: #0E0E0D;
     --ui-hero-surface: #1A1A18;
     --ui-hero-border: #2A2A27;
     --ui-hero-text: #F2F2EE;
     --ui-hero-muted: #8A8A80;
+    /* ── Semantic states ─────────────────────── */
+    --ui-success: #00C878;
+    --ui-success-dim: rgba(0, 200, 120, 0.12);
+    --ui-warning: #F59E0B;
+    --ui-warning-dim: rgba(245, 158, 11, 0.12);
+    --ui-danger: #EF4444;
+    --ui-danger-dim: rgba(239, 68, 68, 0.12);
+    --ui-info: #3B82F6;
+    --ui-info-dim: rgba(59, 130, 246, 0.12);
+    /* ── Shadows ─────────────────────────────── */
+    --ui-shadow-xs: 0 1px 2px rgba(14, 14, 13, 0.04);
+    --ui-shadow-sm: 0 2px 6px rgba(14, 14, 13, 0.06), 0 1px 2px rgba(14, 14, 13, 0.04);
+    --ui-shadow-md: 0 4px 16px rgba(14, 14, 13, 0.08), 0 2px 4px rgba(14, 14, 13, 0.04);
+    --ui-shadow-lg: 0 8px 32px rgba(14, 14, 13, 0.10), 0 4px 8px rgba(14, 14, 13, 0.06);
   }
+  /* ── Dark mode ───────────────────────────── */
+  :root.dark, :root[data-theme='dark'] {
+    --ui-bg: color-mix(in srgb, var(--ui-hero-bg) 84%, var(--ui-info) 16%);
+    --ui-surface: color-mix(in srgb, var(--ui-hero-surface) 86%, var(--ui-info) 14%);
+    --ui-surface-soft: color-mix(in srgb, var(--ui-hero-surface) 74%, var(--ui-info) 26%);
+    --ui-surface-hard: color-mix(in srgb, var(--ui-hero-surface) 62%, var(--ui-info) 38%);
+    --ui-border-soft: color-mix(in srgb, var(--ui-hero-border) 72%, var(--ui-info) 28%);
+    --ui-border: color-mix(in srgb, var(--ui-hero-border) 58%, var(--ui-info) 42%);
+    --ui-border-hard: color-mix(in srgb, var(--ui-hero-border) 45%, var(--ui-info) 55%);
+    --ui-text: #E6ECFF;
+    --ui-text-muted: #A9B6D3;
+    --ui-text-subtle: #7C8CB0;
+    --ui-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.20);
+    --ui-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.20);
+    --ui-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.32), 0 2px 4px rgba(0, 0, 0, 0.20);
+    --ui-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.40), 0 4px 8px rgba(0, 0, 0, 0.28);
+  }
+  /* ── System preference fallback ─────────── */
   @media (prefers-color-scheme: dark) {
-    :root {
-      --ui-bg: #0E0E0D;
-      --ui-surface: #161614;
-      --ui-surface-soft: #1E1E1B;
-      --ui-border-soft: #2A2A27;
-      --ui-border: #333330;
-      --ui-text: #F2F2EE;
-      --ui-text-muted: #8A8A80;
-      --ui-text-subtle: #5A5A52;
+    :root:not([data-theme='light']) {
+      --ui-bg: color-mix(in srgb, var(--ui-hero-bg) 84%, var(--ui-info) 16%);
+      --ui-surface: color-mix(in srgb, var(--ui-hero-surface) 86%, var(--ui-info) 14%);
+      --ui-surface-soft: color-mix(in srgb, var(--ui-hero-surface) 74%, var(--ui-info) 26%);
+      --ui-surface-hard: color-mix(in srgb, var(--ui-hero-surface) 62%, var(--ui-info) 38%);
+      --ui-border-soft: color-mix(in srgb, var(--ui-hero-border) 72%, var(--ui-info) 28%);
+      --ui-border: color-mix(in srgb, var(--ui-hero-border) 58%, var(--ui-info) 42%);
+      --ui-border-hard: color-mix(in srgb, var(--ui-hero-border) 45%, var(--ui-info) 55%);
+      --ui-text: #E6ECFF;
+      --ui-text-muted: #A9B6D3;
+      --ui-text-subtle: #7C8CB0;
+      --ui-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.20);
+      --ui-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.28), 0 1px 2px rgba(0, 0, 0, 0.20);
+      --ui-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.32), 0 2px 4px rgba(0, 0, 0, 0.20);
+      --ui-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.40), 0 4px 8px rgba(0, 0, 0, 0.28);
     }
   }
   body {
@@ -80,23 +101,205 @@
   }
 }
 
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-blob-1 {
+  animation-duration: 4s;
+}
+
+.auth-blob-2 {
+  animation-duration: 6s;
+}
+
+.auth-blob-3 {
+  animation-duration: 5s;
+}
+
+.auth-anim-logo {
+  animation: slideDown 0.6s ease both;
+}
+
+.auth-anim-content {
+  animation: slideUp 0.7s ease both;
+}
+
+.auth-anim-item-1 {
+  animation: slideUp 0.6s ease both;
+  animation-delay: 0.30s;
+}
+
+.auth-anim-item-2 {
+  animation: slideUp 0.6s ease both;
+  animation-delay: 0.45s;
+}
+
+.auth-anim-item-3 {
+  animation: slideUp 0.6s ease both;
+  animation-delay: 0.60s;
+}
+
+.auth-anim-btn {
+  animation: slideUp 0.6s ease both;
+  animation-delay: 0.80s;
+}
+
 @layer components {
-  .app-surface {
+  /* ── Surfaces ───────────────────────────── */
+  .surface {
     background: var(--ui-surface);
     border: 1px solid var(--ui-border-soft);
     border-radius: 0.75rem;
+    box-shadow: var(--ui-shadow-xs);
   }
-  .app-surface-soft {
+  .surface-soft {
     background: var(--ui-surface-soft);
     border: 1px solid var(--ui-border-soft);
     border-radius: 0.75rem;
   }
-  .app-title {
+  .surface-hard {
+    background: var(--ui-surface-hard);
+    border: 1px solid var(--ui-border);
+    border-radius: 0.75rem;
+  }
+  /* ── Typography ─────────────────────────── */
+  .text-default {
+    color: var(--ui-text);
+  }
+  .text-muted {
+    color: var(--ui-text-muted);
+  }
+  .text-subtle {
+    color: var(--ui-text-subtle);
+  }
+  .heading {
     color: var(--ui-text);
     font-weight: 700;
     letter-spacing: -0.03em;
+    line-height: 1.15;
   }
-  .app-muted {
+  /* ── Dividers ───────────────────────────── */
+  .divider {
+    border-color: var(--ui-border-soft);
+  }
+  .divider-hard {
+    border-color: var(--ui-border);
+  }
+  /* ── Primary button ─────────────────────── */
+  .btn-primary {
+    background: var(--color-primary);
+    color: #0E0E0D;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover {
+    opacity: 0.88;
+    box-shadow: 0 0 0 4px var(--color-primary-glow);
+  }
+  /* ── Ghost button ───────────────────────── */
+  .btn-ghost {
+    background: transparent;
     color: var(--ui-text-muted);
+    border: 1px solid var(--ui-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-ghost:hover {
+    background: var(--ui-surface-soft);
+    color: var(--ui-text);
+    border-color: var(--ui-border-hard);
+  }
+  /* ── Input ──────────────────────────────── */
+  .input {
+    background: var(--ui-surface-soft);
+    color: var(--ui-text);
+    border: 1px solid var(--ui-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .input::placeholder {
+    color: var(--ui-text-subtle);
+  }
+  .input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-dim);
+  }
+  /* ── Badge ──────────────────────────────── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 99px;
+    background: var(--ui-surface-soft);
+    color: var(--ui-text-muted);
+    border: 1px solid var(--ui-border-soft);
+  }
+  .badge-primary {
+    background: var(--color-primary-dim);
+    color: var(--color-primary);
+    border-color: transparent;
+  }
+  .badge-success {
+    background: var(--ui-success-dim);
+    color: var(--ui-success);
+    border-color: transparent;
+  }
+  .badge-warning {
+    background: var(--ui-warning-dim);
+    color: var(--ui-warning);
+    border-color: transparent;
+  }
+  .badge-danger {
+    background: var(--ui-danger-dim);
+    color: var(--ui-danger);
+    border-color: transparent;
+  }
+  .badge-info {
+    background: var(--ui-info-dim);
+    color: var(--ui-info);
+    border-color: transparent;
+  }
+  /* ── Hero section ───────────────────────── */
+  .hero {
+    background: var(--ui-hero-bg);
+    color: var(--ui-hero-text);
+  }
+  .hero-surface {
+    background: var(--ui-hero-surface);
+    border: 1px solid var(--ui-hero-border);
+    border-radius: 0.75rem;
+  }
+  .hero-muted {
+    color: var(--ui-hero-muted);
   }
 }

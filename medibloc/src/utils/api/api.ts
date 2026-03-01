@@ -1,12 +1,12 @@
-export const API_BASE_URL = 'https://medibloc-new-version.onrender.com';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string ?? 'http://localhost:3000';
 
 // Configuration des endpoints pour l'authentification
 const AUTH_ENDPOINTS = {
-  REGISTER: '/register',
-  LOGIN: '/login',
-  LOGOUT: '/logout',
-  REFRESH: '/refresh',
-  ME: '/me',
+  REGISTER: '/auth/register',
+  LOGIN: '/auth/login',
+  LOGOUT: '/auth/logout',
+  REFRESH: '/auth/refresh',
+  ME: '/auth/me',
 } as const;
 
 // Configuration des endpoints pour les utilisateurs

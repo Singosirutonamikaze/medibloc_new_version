@@ -65,6 +65,7 @@ const buildCorsOptions = () => {
     ) => {
       // Allow requests with no origin (like curl or server-to-server requests)
       if (!reqOrigin) return callback(null, true);
+      console.log(`[CORS] reqOrigin="${reqOrigin}" | whitelist=${JSON.stringify(whitelist)}`);
       if (whitelist.includes(reqOrigin)) {
         return callback(null, true);
       }

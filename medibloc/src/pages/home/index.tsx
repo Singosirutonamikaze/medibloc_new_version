@@ -1,296 +1,163 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FiArrowRight, FiArrowUpRight } from 'react-icons/fi';
-import { MainLayout } from '../../components';
-import { ROUTES } from '../../utils/constants/routes.constants';
+import { useEffect, useRef, useState } from "react"
+import { FiX } from "react-icons/fi"
+import { useNavigate } from "react-router-dom"
+import { Footer, Header, Tooltip } from "../../components"
+import { HeroSection } from "../../components/molecules/HeroSection"
+import logo from "../../assets/logo/logo.png"
+import { ROUTES } from "../../utils/constants/routes.constants"
+import { ServiceSection } from "../../components/molecules/ServiceSection"
+import { ActiviteSection } from "../../components/molecules/ActiviteSection"
+import { ExperienceSection } from "../../components/molecules/ExperienceSection"
 
-/**
- * Signature visuelle : ligne ECG — sobre, médicale, distinctive.
- */
-const EcgLine = () => (
-  <svg
-    viewBox="0 0 800 60"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-full"
-    aria-hidden="true"
-  >
-    <path
-      d="M0 30 L150 30 L162 30 L172 22 L177 38 L182 30 L196 30
-         L208 2 L214 58 L220 30 L234 30 L242 18 L250 30
-         L380 30
-         L392 30 L402 22 L407 38 L412 30 L426 30
-         L438 2 L444 58 L450 30 L464 30 L472 18 L480 30
-         L800 30"
-      stroke="#00C878"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+function HomePage() {
+  const [isSocialOpen, setIsSocialOpen] = useState(false)
+  const tooltipPanelRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
-const modules = [
-  {
-    n: '01',
-    title: 'Dossiers médicaux',
-    desc: 'Historique patient complet — maladies, antécédents, documents médicaux archivés de façon structurée.',
-  },
-  {
-    n: '02',
-    title: 'Rendez-vous',
-    desc: 'Planification, confirmation et suivi des consultations entre patients et praticiens.',
-  },
-  {
-    n: '03',
-    title: 'Prescriptions',
-    desc: 'Ordonnances médicales numérisées avec détail des traitements, dosages et durées.',
-  },
-  {
-    n: '04',
-    title: 'Pharmacies et médicaments',
-    desc: 'Catalogue pharmaceutique et plantes médicinales avec gestion des stocks.',
-  },
-  {
-    n: '05',
-    title: 'Maladies et symptômes',
-    desc: 'Référentiel structuré de maladies, symptômes et données de prévalence par pays.',
-  },
-  {
-    n: '06',
-    title: 'Statistiques',
-    desc: 'Données agrégées pour les tableaux de bord des administrateurs et praticiens.',
-  },
-] as const;
+  useEffect(() => {
+    if (!isSocialOpen) {
+      return
+    }
 
-const stats = [
-  { value: '3 rôles', label: 'Patient · Médecin · Admin' },
-  { value: 'API REST', label: 'Documentée Swagger/OpenAPI' },
-  { value: 'JWT + RBAC', label: 'Auth sécurisée par rôle' },
-] as const;
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!tooltipPanelRef.current?.contains(event.target as Node)) {
+        setIsSocialOpen(false)
+      }
+    }
 
-export default function HomePage() {
-  const navigate = useNavigate();
-  const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>(() => {
-    const saved = localStorage.getItem('medibloc-theme');
-    if (saved === 'light' || saved === 'dark' || saved === 'auto') return saved;
-    return 'auto';
-  });
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsSocialOpen(false)
+      }
+    }
 
-  const applyTheme = (t: 'auto' | 'light' | 'dark') => {
-    setTheme(t);
-    const root = document.documentElement;
-    if (t === 'auto') delete root.dataset.theme;
-    else root.dataset.theme = t;
-    localStorage.setItem('medibloc-theme', t);
-  };
+    document.addEventListener('mousedown', handleOutsideClick)
+    document.addEventListener('keydown', handleEscape)
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [isSocialOpen])
 
   return (
-    <MainLayout>
-      <div className="space-y-4">
+    <div className="relative min-h-screen overflow-hidden bg-(--ui-bg)">
+      <div className="pointer-events-none absolute -left-24 -top-12 h-72 w-72 rounded-full bg-(--ui-info-dim) blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 top-10 h-80 w-80 rounded-full bg-(--ui-info-dim) blur-3xl" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-linear-to-b from-(--ui-surface-soft) via-(--ui-surface) to-transparent" />
 
-        {/* ──────────────────────────────────────────── HERO */}
-        <section
-          className="relative overflow-hidden rounded-2xl px-8 pb-0 pt-14 sm:px-14 sm:pt-20"
-          style={{ background: 'var(--ui-hero-bg)' }}
-        >
-          <div className="mb-10 inline-flex items-center gap-2">
-            <span className="size-2 rounded-full bg-[#00C878]" />
-            <span
-              className="text-xs font-medium uppercase tracking-widest"
-              style={{ color: 'var(--ui-hero-muted)' }}
-            >
-              Plateforme active
-            </span>
-          </div>
+      <div className="relative px-2 sm:px-0">
+        <Header />
 
-          <h1
-            className="text-5xl font-bold leading-[1.07] tracking-[-0.04em] sm:text-6xl lg:text-7xl"
-            style={{ color: 'var(--ui-hero-text)' }}
-          >
-            La médecine mérite<br />
-            <span style={{ color: '#00C878' }}>mieux qu'un tableur.</span>
-          </h1>
+        <main className="mx-auto mt-8 w-full max-w-7xl px-3 pb-28 sm:px-4">
+          <HeroSection
+            title="Medibloc simplifie votre travail au quotidien"
+            subtitle="Vous gérez les patients, les rendez-vous, les prescriptions et les dossiers médicaux dans un seul outil. Vous gagnez du temps et vous améliorez la qualité du suivi."
+            cta={{
+              primary: { label: 'Accéder à la plateforme', onClick: () => { globalThis.location.href = '/login'; } },
+              secondary: { label: 'Créer un compte', onClick: () => { globalThis.location.href = '/register'; } },
+            }}
+          />
+          <ServiceSection />
+          <ActiviteSection />
+          <ExperienceSection />
+        </main>
 
-          <p
-            className="mt-6 max-w-lg text-base leading-relaxed sm:text-lg"
-            style={{ color: 'var(--ui-hero-muted)' }}
-          >
-            MediBloc centralise dossiers médicaux, rendez-vous et prescriptions
-            dans une interface unique — pensée pour les patients, les médecins
-            et les administrateurs.
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <button
-              type="button"
-              onClick={() => navigate(ROUTES.PUBLIC.REGISTER)}
-              className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-black transition-opacity hover:opacity-90"
-              style={{ background: '#00C878' }}
-            >
-              Créer un compte
-              <FiArrowRight size={16} />
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate(ROUTES.PUBLIC.LOGIN)}
-              className="inline-flex items-center gap-2 rounded-lg border px-6 py-3 text-sm font-semibold transition-colors hover:border-white/30"
-              style={{
-                borderColor: 'var(--ui-hero-border)',
-                color: 'var(--ui-hero-muted)',
-              }}
-            >
-              Se connecter
-              <FiArrowUpRight size={16} />
-            </button>
-          </div>
-
-          {/* Ligne ECG — identité visuelle */}
-          <div className="mt-16 opacity-50">
-            <EcgLine />
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── STATS */}
-        <section
-          className="grid grid-cols-3 divide-x overflow-hidden rounded-2xl border"
-          style={{
-            background: 'var(--ui-surface)',
-            borderColor: 'var(--ui-border-soft)',
-          }}
-        >
-          {stats.map((s) => (
-            <div key={s.label} className="px-6 py-6 sm:px-8">
-              <p
-                className="text-lg font-bold tracking-tight sm:text-xl"
-                style={{ color: 'var(--ui-text)' }}
-              >
-                {s.value}
-              </p>
-              <p
-                className="mt-0.5 text-xs sm:text-sm"
-                style={{ color: 'var(--ui-text-muted)' }}
-              >
-                {s.label}
+        <footer className="border-t border-(--ui-border-soft) bg-(--ui-surface)">
+          <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-4 py-8 sm:grid-cols-3 sm:py-10">
+            <div>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center rounded-xl bg-white p-1.5 shadow-sm">
+                  <img src={logo} alt="Medibloc" className="h-7 w-auto object-contain" />
+                </div>
+                <span className="text-base font-bold bg-linear-to-r from-[#4A90E2] to-[#2ECC71] bg-clip-text text-transparent">
+                  Medi<span className="text-[#2ECC71]">Bloc</span>
+                </span>
+              </div>
+              <p className="mt-3 text-sm leading-relaxed text-(--ui-text-muted)">
+                Une plateforme conçue pour simplifier la gestion médicale au quotidien.
               </p>
             </div>
-          ))}
-        </section>
-
-        {/* ──────────────────────────────────────────── MODULES */}
-        <section>
-          <div className="mb-6">
-            <p
-              className="mb-1 text-xs font-semibold uppercase tracking-widest"
-              style={{ color: '#00C878' }}
-            >
-              Fonctionnalités
-            </p>
-            <h2
-              className="text-2xl font-bold tracking-tight sm:text-3xl"
-              style={{ color: 'var(--ui-text)' }}
-            >
-              Six modules. Une plateforme.
-            </h2>
-          </div>
-
-          <div
-            className="divide-y overflow-hidden rounded-2xl border"
-            style={{ borderColor: 'var(--ui-border-soft)' }}
-          >
-            {modules.map((m) => (
-              <div
-                key={m.n}
-                className="flex items-start gap-6 px-6 py-5 transition-colors sm:px-8"
-                style={{ background: 'var(--ui-surface)' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--ui-surface-soft)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--ui-surface)';
-                }}
-              >
-                <span
-                  className="min-w-[2.5rem] text-sm font-bold tabular-nums"
-                  style={{ color: '#00C878' }}
-                >
-                  {m.n}
-                </span>
-                <div>
-                  <p
-                    className="text-sm font-semibold sm:text-base"
-                    style={{ color: 'var(--ui-text)' }}
-                  >
-                    {m.title}
-                  </p>
-                  <p
-                    className="mt-0.5 text-sm leading-relaxed"
-                    style={{ color: 'var(--ui-text-muted)' }}
-                  >
-                    {m.desc}
-                  </p>
-                </div>
+            <div>
+              <h4 className="text-sm font-semibold text-(--ui-text)">Accès rapide</h4>
+              <ul className="mt-3 space-y-2">
+                <li>
+                  <button type="button" onClick={() => navigate(ROUTES.PUBLIC.LOGIN)} className="text-sm text-(--ui-text-muted) transition-colors hover:text-(--ui-text)">
+                    Connexion
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => navigate(ROUTES.PUBLIC.REGISTER)} className="text-sm text-(--ui-text-muted) transition-colors hover:text-(--ui-text)">
+                    Créer un compte
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-(--ui-text)">À propos</h4>
+              <p className="mt-3 text-sm leading-relaxed text-(--ui-text-muted)">
+                Medibloc est une solution médicale pensée pour les professionnels de santé et leurs patients.
+                Sécurisée, simple et disponible en tout lieu.
+              </p>
+              <div className="mt-3">
+                <button type="button" onClick={() => navigate(ROUTES.PUBLIC.REGISTER)} className="text-sm font-medium text-(--ui-info) transition-opacity hover:opacity-75">
+                  Commencer gratuitement →
+                </button>
               </div>
-            ))}
+            </div>
           </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── CTA */}
-        <section
-          className="rounded-2xl px-8 py-14 text-center sm:px-14"
-          style={{ background: 'var(--ui-hero-bg)' }}
-        >
-          <p
-            className="text-xs font-semibold uppercase tracking-widest"
-            style={{ color: '#00C878' }}
-          >
-            Commencer
-          </p>
-          <h2
-            className="mx-auto mt-4 max-w-xl text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
-            style={{ color: 'var(--ui-hero-text)' }}
-          >
-            Prenez le contrôle de votre parcours de santé dès aujourd'hui.
-          </h2>
-          <button
-            type="button"
-            onClick={() => navigate(ROUTES.PUBLIC.REGISTER)}
-            className="mt-8 inline-flex items-center gap-2 rounded-lg px-8 py-3 text-sm font-semibold text-black transition-opacity hover:opacity-90"
-            style={{ background: '#00C878' }}
-          >
-            Créer un compte
-            <FiArrowRight size={16} />
-          </button>
-        </section>
-
-        {/* ──────────────────────────────────────────── THEME */}
-        <div className="flex justify-end pb-2">
-          <div
-            className="inline-flex h-8 items-center gap-0.5 rounded-lg border p-0.5"
-            style={{
-              borderColor: 'var(--ui-border-soft)',
-              background: 'var(--ui-surface)',
-            }}
-          >
-            {(['auto', 'light', 'dark'] as const).map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => applyTheme(t)}
-                className="h-6 rounded-md px-3 text-xs font-medium transition-colors"
-                style={
-                  theme === t
-                    ? { background: '#00C878', color: '#000' }
-                    : { color: 'var(--ui-text-muted)' }
-                }
-              >
-                {t === 'auto' ? 'Auto' : t === 'light' ? 'Clair' : 'Sombre'}
-              </button>
-            ))}
+          <div className="border-t border-(--ui-border-soft) py-4 text-center text-xs text-(--ui-text-muted)">
+            © {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })} Medibloc — L'amour de la santé est unique pour ton bonheur.
           </div>
-        </div>
+        </footer>
 
+        {isSocialOpen && (
+          <div className="fixed inset-0 z-40 flex items-center justify-center backdrop-blur-sm bg-black/30">
+            <button
+              type="button"
+              aria-label="Fermer le panneau social"
+              onClick={() => setIsSocialOpen(false)}
+              className="absolute inset-0"
+            />
+
+            <div
+              ref={tooltipPanelRef}
+              className="relative z-50 w-[min(92vw,420px)] overflow-hidden rounded-xl border border-(--ui-border-soft) bg-(--ui-surface) shadow-2xl"
+            >
+            
+              <div className="flex items-center justify-between border-b border-(--ui-border-soft) px-5 py-4">
+                <div className="flex items-center gap-2.5">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                  </span>
+                  <p className="text-sm font-semibold text-(--ui-text)">Suivez-nous</p>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Fermer"
+                  onClick={() => setIsSocialOpen(false)}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-(--ui-text-muted) transition-colors hover:bg-(--ui-surface-soft) hover:text-(--ui-text)"
+                >
+                  <FiX size={18} />
+                </button>
+              </div>
+
+              {/* Corps */}
+              <div className="px-5 py-6">
+                <p className="mb-5 text-center text-xs text-(--ui-text-muted)">
+                  Retrouvez Medibloc sur vos plateformes préférées
+                </p>
+                <Tooltip />
+              </div>
+            </div>
+          </div>
+        )}
+
+        <Footer onOpen={() => setIsSocialOpen((previous) => !previous)} />
       </div>
-    </MainLayout>
-  );
+    </div>
+  )
 }
+
+export default HomePage
