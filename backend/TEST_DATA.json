@@ -5,7 +5,7 @@
       "method": "POST",
       "body": {
         "email": "test@example.com",
-        "password": "Password123!",
+        "password": "${TEST_PASSWORD}",
         "firstName": "John",
         "lastName": "Doe",
         "role": "PATIENT"
@@ -16,7 +16,7 @@
       "method": "POST",
       "body": {
         "email": "test@example.com",
-        "password": "Password123!"
+        "password": "${TEST_PASSWORD}"
       }
     },
     "me": {
