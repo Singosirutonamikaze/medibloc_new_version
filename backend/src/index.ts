@@ -34,11 +34,17 @@ app.use(morgan(morganFormat, { stream: accessLogStream }));
 app.use(morgan('dev')); // Aussi afficher dans la console
 
 // Build safe CORS options from configuration
+// SECURITY NOTE: Using origin='*' allows ANY domain to access this API
+// Only use '*' in development for testing. In production, specify allowed origins explicitly.
 const buildCorsOptions = () => {
   const { origin, parsedOrigins, credentials } = config.cors;
 
   // If wildcard is used, do not send credentials (browsers disallow Access-Control-Allow-Origin: * with credentials)
   if (origin === "*") {
+    console.warn(
+      '⚠️  SECURITY WARNING: CORS is configured with origin="*" (allows all domains). ' +
+      'This should only be used in development. For production, set CORS_ORIGIN to specific domains.'
+    );
     if (credentials) {
       console.warn(
         'CORS: origin="*" and credentials=true is not supported by browsers. Credentials will be disabled.'

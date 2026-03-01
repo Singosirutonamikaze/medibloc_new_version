@@ -41,13 +41,14 @@
  *   the `Repository` interface; this keeps the controller generic and easily testable.
  *
  * @example
- * // Example of wiring a controller for a `User` repository (pseudo-code)
- * // const userController = new GenericController<User, CreateUserDto, UpdateUserDto>(userRepo);
- * // router.get('/users', userController.getAll);
- * // router.get('/users/:id', userController.getOne);
- * // router.post('/users', userController.create);
- * // router.put('/users/:id', userController.update);
- * // router.delete('/users/:id', userController.delete);
+ * Usage with a repository:
+ * const userController = new GenericController<User, CreateUserDto, UpdateUserDto>(userRepo);
+ * const router = Router();
+ * router.get('/users', userController.getAll.bind(userController));
+ * router.get('/users/:id', userController.getOne.bind(userController));
+ * router.post('/users', userController.create.bind(userController));
+ * router.put('/users/:id', userController.update.bind(userController));
+ * router.delete('/users/:id', userController.delete.bind(userController));
  */
 
 /**

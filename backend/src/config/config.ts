@@ -24,7 +24,9 @@ export const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
 
   jwt: {
-    secret: process.env.JWT_SECRET || 'ERFSFGSdskfdgfgyerbfsuerezZTFrszhjczeghdkgzegdzalkarznsdgrazadhzdvzagf&',
+    secret: process.env.JWT_SECRET || (() => {
+      throw new Error('JWT_SECRET environment variable is required for security. Please set it in your .env file.');
+    })(),
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
 
@@ -33,10 +35,11 @@ export const config = {
   },
 
   cors: {
-    // CORS_ORIGIN can be:
-    // - '*' to allow all origins (credentials will be disabled in that case)
+    // SECURITY: CORS_ORIGIN can be:
+    // - '*' to allow all origins (DEVELOPMENT ONLY - browser disables credentials automatically)
     // - a single origin string (https://example.com)
     // - a comma-separated list of origins (https://a.com,https://b.com)
+    // WARNING: Using '*' in production allows any domain to access your API and is a security risk
     origin: corsOrigin,
     // parsedOrigins is derived from origin and is an array when origin is a list
     parsedOrigins: corsParsedOrigins,
