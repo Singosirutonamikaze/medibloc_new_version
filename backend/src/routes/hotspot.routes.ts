@@ -16,18 +16,18 @@ const controller = new HotspotController();
  *         name: disease
  *         schema:
  *           type: string
- *         description: Filtrer par nom de maladie (ex: "Dengue")
+ *         description: 'Filtrer par nom de maladie (ex: "Dengue")'
  *       - in: query
  *         name: source
  *         schema:
  *           type: string
  *           enum: [WHO, ECDC, ProMED]
- *         description: Filtrer par source de données
+ *         description: 'Filtrer par source de données (ex: WHO, ECDC, ProMED)'
  *       - in: query
  *         name: minCases
  *         schema:
  *           type: integer
- *         description: Filtre totalCases >= N
+ *         description: 'Filtre sur totalCases >= N (ex: 100)'
  *     responses:
  *       200:
  *         description: Liste des hotspots épidémiques

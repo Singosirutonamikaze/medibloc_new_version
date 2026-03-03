@@ -379,7 +379,7 @@ const DISEASE_INFO: Record<string, DiseaseInfo> = {
     color: "#f39c12",
     description:
       "Arbovirose transmise par Aedes aegypti, responsable d'épidémies dans les régions tropicales.",
-    whoIndicators: ["DENGUE_CASES"],
+    whoIndicators: [], // WHO GHO ne publie pas les cas dengue — source: ECDC/ProMED uniquement
   },
   Choléra: {
     activeRate: 0.33,
@@ -392,7 +392,7 @@ const DISEASE_INFO: Record<string, DiseaseInfo> = {
     color: "#1abc9c",
     description:
       "Infection intestinale aiguë causée par Vibrio cholerae, liée à l'eau contaminée.",
-    whoIndicators: ["CHOLERA_0000000001"],
+    whoIndicators: ["WHS3_47", "CHOLERA_0000000001"],
   },
   Méningite: {
     activeRate: 0.42,
@@ -406,7 +406,7 @@ const DISEASE_INFO: Record<string, DiseaseInfo> = {
     color: "#c0392b",
     description:
       "Inflammation des méninges d'origine bactérienne ou virale, urgence médicale absolue.",
-    whoIndicators: ["MENINGITIS_CASES"],
+    whoIndicators: [],
   },
   Mpox: {
     activeRate: 0.45,
@@ -420,7 +420,7 @@ const DISEASE_INFO: Record<string, DiseaseInfo> = {
     color: "#8e44ad",
     description:
       "Maladie virale émergente causée par le virus Monkeypox, zoonose d'origine africaine.",
-    whoIndicators: ["MPOX_CASES"],
+    whoIndicators: [],
   },
   Grippe: {
     activeRate: 0.25,
@@ -615,28 +615,28 @@ const ECDC_DATASETS: Array<{
   casesCol: string[];
   weekCol: string[];
 }> = [
-  {
-    diseaseFR: "Grippe",
-    url: "https://opendata.ecdc.europa.eu/influenza/surveillance/data.csv",
-    codeCol: ["countryCode", "GeoId", "country_code"],
-    casesCol: ["cases", "NewConfCases", "NumberOfCases"],
-    weekCol: ["week", "year_week", "ReportingYear"],
-  },
-  {
-    diseaseFR: "Covid19",
-    url: "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv",
-    codeCol: ["countryCode", "GeoId", "country_code"],
-    casesCol: ["cases", "NewConfCases", "NumberOfCases"],
-    weekCol: ["week", "year_week", "ReportingYear"],
-  },
-  {
-    diseaseFR: "Rougeole",
-    url: "https://opendata.ecdc.europa.eu/measles/nationbycountry/data.csv",
-    codeCol: ["countryCode", "GeoId", "country_code"],
-    casesCol: ["cases", "NewConfCases", "NumberOfCases"],
-    weekCol: ["week", "year_week", "ReportingYear"],
-  },
-];
+    {
+      diseaseFR: "Grippe",
+      url: "https://opendata.ecdc.europa.eu/influenza/surveillance/country/data.csv",
+      codeCol: ["countryCode", "GeoId", "country_code", "CountryCode"],
+      casesCol: ["cases", "NewConfCases", "NumberOfCases", "Cases"],
+      weekCol: ["week", "year_week", "ReportingYear", "Week"],
+    },
+    {
+      diseaseFR: "Covid19",
+      url: "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv",
+      codeCol: ["countryCode", "GeoId", "country_code"],
+      casesCol: ["cases", "NewConfCases", "NumberOfCases"],
+      weekCol: ["week", "year_week", "ReportingYear"],
+    },
+    {
+      diseaseFR: "Rougeole",
+      url: "https://opendata.ecdc.europa.eu/measles/nationalcasesbymonth/data.csv",
+      codeCol: ["countryCode", "GeoId", "country_code", "CountryCode"],
+      casesCol: ["cases", "NewConfCases", "NumberOfCases", "Cases"],
+      weekCol: ["week", "year_week", "ReportingYear", "Month"],
+    },
+  ];
 
 function findColIndex(headers: string[], candidates: string[]): number {
   for (const candidate of candidates) {
