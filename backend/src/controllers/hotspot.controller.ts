@@ -581,22 +581,23 @@ async function fetchWHO(): Promise<RawHotspot[]> {
   const cached = whoCache.get<RawHotspot[]>(cacheKey);
   if (cached) return cached;
 
-  const results: RawHotspot[] = [];
   const now = new Date().toISOString();
 
-  for (const { diseaseFR, indicators } of WHO_DISEASES) {
-    const records = await findWHORecords(indicators);
-    for (const record of records) {
-      results.push({
+  // Toutes les maladies WHO en parallèle (au lieu d'un for-await séquentiel)
+  const perDisease = await Promise.all(
+    WHO_DISEASES.map(async ({ diseaseFR, indicators }) => {
+      const records = await findWHORecords(indicators);
+      return records.map<RawHotspot>((record) => ({
         isoAlpha3: record.SpatialDim,
         diseaseFR,
         totalCases: Math.round(record.NumericValue!),
         lastUpdated: now,
         source: "WHO",
-      });
-    }
-  }
+      }));
+    }),
+  );
 
+  const results = perDisease.flat();
   whoCache.set(cacheKey, results);
   console.log(`[WHO] ${results.length} entrées chargées`);
   return results;
@@ -615,13 +616,7 @@ const ECDC_DATASETS: Array<{
   casesCol: string[];
   weekCol: string[];
 }> = [
-    {
-      diseaseFR: "Grippe",
-      url: "https://opendata.ecdc.europa.eu/influenza/surveillance/country/data.csv",
-      codeCol: ["countryCode", "GeoId", "country_code", "CountryCode"],
-      casesCol: ["cases", "NewConfCases", "NumberOfCases", "Cases"],
-      weekCol: ["week", "year_week", "ReportingYear", "Week"],
-    },
+    // Covid19 — seule source ECDC active (URL stable)
     {
       diseaseFR: "Covid19",
       url: "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv",
@@ -629,13 +624,10 @@ const ECDC_DATASETS: Array<{
       casesCol: ["cases", "NewConfCases", "NumberOfCases"],
       weekCol: ["week", "year_week", "ReportingYear"],
     },
-    {
-      diseaseFR: "Rougeole",
-      url: "https://opendata.ecdc.europa.eu/measles/nationalcasesbymonth/data.csv",
-      codeCol: ["countryCode", "GeoId", "country_code", "CountryCode"],
-      casesCol: ["cases", "NewConfCases", "NumberOfCases", "Cases"],
-      weekCol: ["week", "year_week", "ReportingYear", "Month"],
-    },
+    // Grippe (Influenza) — URL à valider sur opendata.ecdc.europa.eu avant de réactiver
+    // { diseaseFR: "Grippe", url: "https://opendata.ecdc.europa.eu/influenza/...", ... }
+    // Rougeole — Couverte par WHO (WHS3_62), ECDC désactivé jusqu'à URL confirmée
+    // { diseaseFR: "Rougeole", url: "https://opendata.ecdc.europa.eu/measles/...", ... }
   ];
 
 function findColIndex(headers: string[], candidates: string[]): number {
@@ -709,23 +701,26 @@ async function fetchECDC(): Promise<RawHotspot[]> {
   const cached = ecdcCache.get<RawHotspot[]>(cacheKey);
   if (cached) return cached;
 
-  const results: RawHotspot[] = [];
-  for (const dataset of ECDC_DATASETS) {
-    try {
-      const response = await axios.get<string>(dataset.url, {
-        timeout: ECDC_TIMEOUT,
-        responseType: "text",
-      });
-      const hotspots = parseEcdcCsv(response.data, dataset.diseaseFR, dataset);
-      results.push(...hotspots);
-      console.log(`[ECDC] ${dataset.diseaseFR}: ${hotspots.length} entrées`);
-    } catch (err) {
-      console.error(
-        `[ECDC] Échec ${dataset.diseaseFR}:`,
-        (err as Error).message,
-      );
+  // Tous les datasets ECDC en parallèle
+  const settled = await Promise.allSettled(
+    ECDC_DATASETS.map((dataset) =>
+      axios
+        .get<string>(dataset.url, { timeout: ECDC_TIMEOUT, responseType: "text" })
+        .then((response) => ({
+          diseaseFR: dataset.diseaseFR,
+          hotspots: parseEcdcCsv(response.data, dataset.diseaseFR, dataset),
+        })),
+    ),
+  );
+
+  const results = settled.flatMap((res, i) => {
+    if (res.status === "rejected") {
+      console.error(`[ECDC] Échec ${ECDC_DATASETS[i].diseaseFR}:`, (res.reason as Error).message);
+      return [] as RawHotspot[];
     }
-  }
+    console.log(`[ECDC] ${res.value.diseaseFR}: ${res.value.hotspots.length} entrées`);
+    return res.value.hotspots;
+  });
 
   ecdcCache.set(cacheKey, results);
   console.log(`[ECDC] Total ${results.length} entrées chargées`);
