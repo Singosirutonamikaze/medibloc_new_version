@@ -25,8 +25,11 @@ export const config = {
 
   jwt: {
     secret: process.env.JWT_SECRET || (() => {
-      if (process.env.NODE_ENV === 'test') return 'medibloc-test-secret-key';
-      throw new Error('JWT_SECRET environment variable is required for security. Please set it in your .env file.');
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('JWT_SECRET environment variable is required for security. Please set it in your .env file.');
+      }
+      // Fallback sécurisé pour les environnements dev/test — jamais utilisé en production
+      return 'medibloc-insecure-fallback-not-for-production';
     })(),
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
