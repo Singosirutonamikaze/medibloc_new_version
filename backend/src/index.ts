@@ -26,6 +26,13 @@ const accessLogStream = fs.createWriteStream(
   { flags: 'a' }
 );
 
+// Validation critique : JWT_SECRET obligatoire en production
+// (fait ici au démarrage du serveur, pas au niveau module, pour ne pas casser les tests)
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  console.error('[FATAL] JWT_SECRET environment variable is required in production. Please set it in your .env file.');
+  process.exit(1);
+}
+
 const app: Application = express();
 
 // Middleware

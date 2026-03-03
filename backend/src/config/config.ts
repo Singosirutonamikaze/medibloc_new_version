@@ -24,13 +24,10 @@ export const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
 
   jwt: {
-    secret: process.env.JWT_SECRET || (() => {
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('JWT_SECRET environment variable is required for security. Please set it in your .env file.');
-      }
-      // Fallback sécurisé pour les environnements dev/test — jamais utilisé en production
-      return 'medibloc-insecure-fallback-not-for-production';
-    })(),
+    // Le throw production est géré dans src/index.ts au démarrage du serveur
+    // Ici on utilise toujours le fallback pour éviter un crash au moment de l'import du module
+    // (notamment dans les tests Vitest qui importent les modules avant d'injecter les env vars)
+    secret: process.env.JWT_SECRET || 'medibloc-insecure-fallback-not-for-production',
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
 
