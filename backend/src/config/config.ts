@@ -27,7 +27,7 @@ export const config = {
     // Le throw production est géré dans src/index.ts au démarrage du serveur
     // Ici on utilise toujours le fallback pour éviter un crash au moment de l'import du module
     // (notamment dans les tests Vitest qui importent les modules avant d'injecter les env vars)
-    secret: process.env.JWT_SECRET || 'medibloc-insecure-fallback-not-for-production',
+    secret: process.env.JWT_SECRET || 'e52cee36b80703736f458daf3605d8293e8bee2103e4866c48ba33df0d827708',
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
   },
 
