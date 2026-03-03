@@ -61,7 +61,7 @@ export interface LoginDto {
   password: string;
 }
 
-export interface JwtPayload extends AuthenticatedUser {}
+export interface JwtPayload extends AuthenticatedUser { }
 
 // ============================================
 // TYPES PATIENT
@@ -511,3 +511,8 @@ export interface ApiError {
 
 
 export type SanitizedUser = Omit<User, 'password'>;
+
+// ============================================
+// TYPES ÉPI-SURVEILLANCE (re-export)
+// ============================================
+export type { DiseaseHotspot, EpiSource, HotspotApiResponse, RawHotspot, HotspotsQueryParams } from './epidemio.types';

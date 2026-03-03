@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './auth.routes';
 import userRoutes from './user.routes';
+import hotspotRoutes from './hotspot.routes';
 import patientRoutes from './patient.routes';
 import doctorRoutes from './doctor.routes';
 import appointmentRoutes from './appointment.routes';
@@ -16,6 +17,9 @@ const router = Router();
 
 // Routes d'authentification
 router.use('/auth', authRoutes);
+
+// Routes Épi-Surveillance (public — pas d'auth requise)
+router.use('/hotspots', hotspotRoutes);
 
 // Routes protégées
 router.use('/users', userRoutes);

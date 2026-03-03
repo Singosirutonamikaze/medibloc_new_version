@@ -16,9 +16,37 @@ export class AuthController {
         response = { success: false, error: 'Email déjà utilisé' };
       } else {
         const hashed = await hashPassword(body.password);
-        const user = await prisma.user.create({ data: { email: body.email, password: hashed, firstName: body.firstName, lastName: body.lastName, role: body.role ?? 'PATIENT' } as any });
+        const role = body.role ?? 'PATIENT';
+
+        const user = await prisma.user.create({
+          data: {
+            email: body.email,
+            password: hashed,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            role: role as any,
+            // Créer le profil lié selon le rôle
+            ...(role === 'PATIENT' && {
+              patientProfile: { create: {} },
+            }),
+            ...(role === 'DOCTOR' && {
+              doctorProfile: { create: {} },
+            }),
+            ...(role === 'ADMIN' && {
+              adminProfile: { create: {} },
+            }),
+          },
+          include: {
+            patientProfile: role === 'PATIENT',
+            doctorProfile: role === 'DOCTOR',
+            adminProfile: role === 'ADMIN',
+          },
+        });
+
         const token = generateToken({ id: user.id, email: user.email, role: user.role } as any);
-        response = { success: true, data: { user, token }, message: 'Utilisateur créé' };
+        // @ts-ignore
+        const { password: _pwd, ...safeUser } = user;
+        response = { success: true, data: { user: safeUser, token }, message: 'Utilisateur créé' };
       }
     } catch (err: unknown) {
       status = 500;

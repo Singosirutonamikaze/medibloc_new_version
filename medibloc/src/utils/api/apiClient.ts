@@ -1,12 +1,11 @@
 import axios, { type AxiosInstance, type AxiosError, type InternalAxiosRequestConfig, type AxiosResponse } from 'axios';
-import { API_BASE_URL } from './api';
 import { storageService } from '../../services/storage/storage.service';
 
 /**
  * Instance Axios configurée pour l'API
  */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: `${API_BASE_URL}/api/v1`,
+  baseURL: '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },

@@ -20,5 +20,14 @@ export default defineConfig({
       json: `logs/test-results-${timestamp}.json`,
       html: `logs/test-report-${timestamp}.html`,
     },
+    // Variables d'env injectées avant tout import de module
+    env: {
+      NODE_ENV: 'test',
+      JWT_SECRET: 'medibloc-test-secret-key-for-ci-only',
+      JWT_EXPIRES_IN: '1d',
+      DATABASE_URL: 'postgresql://test:test@localhost:5432/medibloc_test',
+      PORT: '3001',
+      CORS_ORIGIN: 'http://localhost:5173',
+    },
   },
 });

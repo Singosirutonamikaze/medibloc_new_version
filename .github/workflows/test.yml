@@ -52,6 +52,13 @@ jobs:
       - name: Run tests
         working-directory: ./backend
         run: npm run test:run
+        env:
+          NODE_ENV: test
+          JWT_SECRET: medibloc-test-secret-key-for-ci-only
+          JWT_EXPIRES_IN: 1d
+          DATABASE_URL: postgresql://test:test@localhost:5432/medibloc_test
+          PORT: '3001'
+          CORS_ORIGIN: 'http://localhost:5173'
       
       - name: Build
         working-directory: ./backend
