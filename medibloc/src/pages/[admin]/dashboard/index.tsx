@@ -19,7 +19,6 @@ export default function AdminDashboard() {
         <DashboardStats />
         <DashboardCalendar />
         <DashboardWorld />
-
       </main>
     </div>
   );

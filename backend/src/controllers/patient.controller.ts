@@ -19,9 +19,9 @@ export class PatientController {
   constructor() {
     const repo = {
       findMany: (params?: Prisma.PatientFindManyArgs) =>
-        prisma.patient.findMany(params),
+        prisma.patient.findMany({ ...params, include: { user: true } }),
       findUnique: (params: Prisma.PatientFindUniqueArgs) =>
-        prisma.patient.findUnique(params),
+        prisma.patient.findUnique({ ...params, include: { user: true } }),
       create: (params: { data: PatientCreateInput }) =>
         prisma.patient.create({ data: params.data }),
       update: (params: { where: { id: number }; data: PatientUpdateInput }) =>

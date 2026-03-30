@@ -16,7 +16,7 @@ const AUTH_ENDPOINTS = {
 const USERS_ENDPOINTS = {
   GET_ALL: '/users',
   GET_BY_ID: (id: number) => `/users/${id}`,
-  CREATE: '/users',
+  CREATE: '/auth/register',
   UPDATE: (id: number) => `/users/${id}`,
   DELETE: (id: number) => `/users/${id}`,
   PROFILE_ME: '/users/profile/me',
