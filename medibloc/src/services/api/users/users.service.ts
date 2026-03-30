@@ -49,4 +49,26 @@ export const usersService = {
     const response = await apiClient.get<ApiResponse>(ENDPOINTS.USERS.PROFILE_ME);
     return response.data.data;
   },
+
+  /**
+   * Uploader une photo de profil (max 2 Mo, images seulement)
+   */
+  uploadAvatar: async (id: number, file: File): Promise<{ avatarUrl: string }> => {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    const response = await apiClient.post<ApiResponse<{ avatarUrl: string }>>(
+      ENDPOINTS.USERS.UPLOAD_AVATAR(id),
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+    return response.data.data!;
+  },
+
+  /**
+   * Supprimer la photo de profil
+   */
+  deleteAvatar: async (id: number): Promise<void> => {
+    await apiClient.delete(ENDPOINTS.USERS.DELETE_AVATAR(id));
+  },
 };
+

@@ -90,6 +90,9 @@ app.use(morgan("dev"));
 // Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Fichiers statiques — avatars uploadés
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 // API Routes
 app.use("/api/v1", routes);
 

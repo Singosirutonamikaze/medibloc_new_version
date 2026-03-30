@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller';
+import { UploadController } from '../controllers/upload.controller';
+import { uploadAvatarMiddleware } from '../middleware/upload.middleware';
 import { authMiddleware } from '../middleware/auth.middleware';
 
 /**
@@ -141,6 +143,7 @@ import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();
 const userController = new UserController();
+const uploadController = new UploadController();
 
 // Toutes les routes nécessitent une authentification
 router.use(authMiddleware);
@@ -179,5 +182,31 @@ router.delete('/:id', userController.deleteUser);
  * @access Private
  */
 router.get('/profile/me', userController.getUserProfile);
+
+/**
+ * @route POST /api/v1/users/:id/avatar
+ * @description Upload d'une photo de profil (max 2 Mo, images seulement)
+ * @access Private
+ */
+router.post('/:id/avatar', (req, res, next) => {
+  uploadAvatarMiddleware(req, res, (err) => {
+    if (err) {
+      return res.status(err.message.includes('File too large') ? 413 : 400).json({
+        success: false,
+        error: err.message.includes('File too large')
+          ? 'Fichier trop volumineux. Maximum autorisé : 2 Mo'
+          : err.message,
+      });
+    }
+    next();
+  });
+}, uploadController.uploadAvatar);
+
+/**
+ * @route DELETE /api/v1/users/:id/avatar
+ * @description Supprimer la photo de profil
+ * @access Private
+ */
+router.delete('/:id/avatar', uploadController.deleteAvatar);
 
 export default router;

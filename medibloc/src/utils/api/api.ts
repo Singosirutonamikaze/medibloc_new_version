@@ -20,6 +20,8 @@ const USERS_ENDPOINTS = {
   UPDATE: (id: number) => `/users/${id}`,
   DELETE: (id: number) => `/users/${id}`,
   PROFILE_ME: '/users/profile/me',
+  UPLOAD_AVATAR: (id: number) => `/users/${id}/avatar`,
+  DELETE_AVATAR: (id: number) => `/users/${id}/avatar`,
 } as const;
 
 // Configuration des endpoints pour les patients

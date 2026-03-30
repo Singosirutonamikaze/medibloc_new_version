@@ -6,6 +6,7 @@ export interface User {
   firstName: string;
   lastName: string;
   role: Role;
+  avatarUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,4 +24,5 @@ export interface UpdateUserDto {
   firstName?: string;
   lastName?: string;
   role?: Role;
+  avatarUrl?: string;
 }
