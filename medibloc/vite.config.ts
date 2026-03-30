@@ -15,6 +15,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/uploads': {
+        target: 'https://medibloc-new-version.onrender.com',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 })

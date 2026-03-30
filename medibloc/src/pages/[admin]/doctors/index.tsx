@@ -38,9 +38,20 @@ export default function AdminDoctorsPage() {
     {
       header: "Identité",
       render: (d) => (
-        <span className="font-semibold text-white">
-          {d.user?.firstName ? `Dr. ${d.user.firstName} ${d.user.lastName}` : `Docteur #${d.id}`}
-        </span>
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-800 border border-slate-700 shrink-0">
+            {d.user?.avatarUrl ? (
+              <img src={d.user.avatarUrl.startsWith('http') ? d.user.avatarUrl : `${API_BASE_URL}${d.user.avatarUrl}`} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase bg-slate-800">
+                {d.user?.firstName?.[0] || 'D'}
+              </div>
+            )}
+          </div>
+          <span className="font-semibold text-white">
+            {d.user?.firstName ? `Dr. ${d.user.firstName} ${d.user.lastName}` : `Docteur #${d.id}`}
+          </span>
+        </div>
       )
     },
     {
@@ -182,6 +193,7 @@ export default function AdminDoctorsPage() {
           doctor={editingDoctor}
           onClose={() => setFormIsOpen(false)}
           onSubmit={handleFormSubmit}
+          onRefresh={fetchData}
           loading={loading}
         />
       )}
@@ -189,7 +201,7 @@ export default function AdminDoctorsPage() {
   );
 }
 
-function DoctorFormModal({ doctor, onClose, onSubmit, loading }: { doctor: Doctor | null; onClose: () => void; onSubmit: (data: any) => void; loading: boolean }) {
+function DoctorFormModal({ doctor, onClose, onSubmit, onRefresh, loading }: { doctor: Doctor | null; onClose: () => void; onSubmit: (data: any) => void; onRefresh: () => void; loading: boolean }) {
   const isEditing = !!doctor;
 
   const [formData, setFormData] = useState({
@@ -237,8 +249,8 @@ function DoctorFormModal({ doctor, onClose, onSubmit, loading }: { doctor: Docto
             <AvatarUploader
               userId={doctor?.userId || 0}
               currentAvatarUrl={doctor?.user?.avatarUrl}
-              onAvatarUpdated={() => fetchData()}
-              onAvatarDeleted={() => fetchData()}
+              onAvatarUpdated={() => onRefresh()}
+              onAvatarDeleted={() => onRefresh()}
               size="lg"
             />
           </div>

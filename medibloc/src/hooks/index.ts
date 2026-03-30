@@ -12,3 +12,4 @@ export * from './usePharmacies/usePharmacies';
 export * from './usePrescriptions/usePrescriptions';
 export * from './useMedicalRecords/useMedicalRecords';
 export * from './useStats/useStats';
+export * from './useHeaderInfo/useHeaderInfo';

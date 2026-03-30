@@ -6,12 +6,17 @@ import {
   FiX,
   FiLogOut,
   FiChevronRight,
+  FiSun,
+  FiCloud,
+  FiCloudRain,
+  FiCloudLightning,
+  FiFileText,
 } from 'react-icons/fi';
-import { useAuth } from '../../../contexts/AuthContext/AuthContext';
+import { useAuth, useHeaderInfo } from '../../../hooks';
 import { navConfig } from './navConfig';
 import logo from '../../../assets/logo/logo.png';
 import { ROUTES } from '../../../utils/constants/routes.constants';
-import { API_BASE_URL } from '../../../utils/api/api';
+import { FILE_BASE_URL } from '../../../utils/api/api';
 
 type DashboardLayoutProps = Readonly<{
   children: ReactNode;
@@ -24,6 +29,7 @@ type DashboardLayoutProps = Readonly<{
  */
 export default function DashboardLayout({ children, pageTitle }: DashboardLayoutProps) {
   const { user, logout } = useAuth();
+  const { weather, currentNews, loading: headerLoading } = useHeaderInfo();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -103,16 +109,21 @@ export default function DashboardLayout({ children, pageTitle }: DashboardLayout
             to={user?.role === 'ADMIN' ? ROUTES.ADMIN.PROFILE : user?.role === 'DOCTOR' ? ROUTES.DOCTOR.PROFILE : ROUTES.PATIENT.PROFILE}
             className="flex items-center gap-3 px-2 py-2 rounded-xl transition-colors hover:bg-(--ui-surface-soft) group"
           >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#3a7bd5] to-[#27ae60] text-white text-sm font-bold overflow-hidden border border-(--ui-border-soft) group-hover:border-[#3a7bd5]/50 transition-colors">
-              {user?.avatarUrl ? (
-                <img
-                  src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${API_BASE_URL}${user.avatarUrl}`}
-                  alt="Avatar"
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                user?.firstName?.[0]?.toUpperCase() ?? 'U'
-              )}
+            <div className="relative">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-800 text-slate-400 text-sm font-bold overflow-hidden border border-slate-700 group-hover:border-blue-500/50 transition-colors">
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${FILE_BASE_URL}${user.avatarUrl}`}
+                    alt="Avatar"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="bg-slate-700 w-full h-full flex items-center justify-center text-slate-300">
+                    {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+                  </div>
+                )}
+              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-emerald-500 border-2 border-slate-900 rounded-full" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold text-(--ui-text) group-hover:text-[#3a7bd5] transition-colors">
@@ -145,21 +156,65 @@ export default function DashboardLayout({ children, pageTitle }: DashboardLayout
           </button>
 
           {pageTitle && (
-            <h1 className="truncate text-lg font-semibold text-(--ui-text)">{pageTitle}</h1>
+            <h1 className="truncate text-lg font-bold text-white tracking-tight">{pageTitle}</h1>
           )}
 
+          {/* Weather & News Hub - Hidden on Mobile */}
+          <div className="hidden md:flex items-center gap-6 ml-8 flex-1 max-w-2xl">
+            <div className="h-8 w-[1px] bg-slate-700/50" />
+            
+            {/* Weather Widget */}
+            <div className={`flex items-center gap-2 transition-opacity duration-300 ${headerLoading ? 'opacity-0' : 'opacity-100'}`}>
+              <div className="text-amber-400">
+                {weather.condition === 'sunny' && <FiSun size={18} />}
+                {weather.condition === 'cloudy' && <FiCloud size={18} />}
+                {weather.condition === 'rainy' && <FiCloudRain size={18} />}
+                {weather.condition === 'stormy' && <FiCloudLightning size={18} />}
+              </div>
+              <div className="flex flex-col -space-y-0.5">
+                <span className="text-sm font-bold text-white leading-tight">{weather.temp}°C <span className="text-slate-500 font-medium">| {weather.description}</span></span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-tighter font-bold">{weather.city}</span>
+              </div>
+            </div>
+
+            <div className="h-8 w-[1px] bg-slate-700/50" />
+
+            {/* News Journal Widget */}
+            <div className={`flex items-center gap-3 flex-1 min-w-0 transition-opacity duration-300 ${headerLoading ? 'opacity-0' : 'opacity-100'}`}>
+              <div className="p-1.5 bg-blue-500/10 rounded-lg text-blue-500">
+                <FiFileText size={16} />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold uppercase tracking-widest border border-slate-700">
+                    {currentNews?.category}
+                  </span>
+                  <span className="text-[9px] text-blue-400 font-bold uppercase tracking-widest animate-pulse">Flash</span>
+                </div>
+                <p className="text-[11px] text-slate-300 font-medium truncate italic">
+                  "{currentNews?.title}"
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="ml-auto flex items-center gap-3">
-            <div className="hidden items-center gap-2 sm:flex">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#3a7bd5] to-[#27ae60] text-white text-xs font-bold overflow-hidden border border-(--ui-border-soft)">
-                {user?.avatarUrl ? (
-                  <img
-                    src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${API_BASE_URL}${user.avatarUrl}`}
-                    alt="Avatar"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  user?.firstName?.[0]?.toUpperCase() ?? 'U'
-                )}
+            <div className="hidden items-center gap-3 sm:flex">
+              <div className="relative">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-800 text-slate-400 text-xs font-bold overflow-hidden border border-slate-700">
+                  {user?.avatarUrl ? (
+                    <img
+                      src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${FILE_BASE_URL}${user.avatarUrl}`}
+                      alt="Avatar"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="bg-slate-700 w-full h-full flex items-center justify-center text-slate-300">
+                      {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+                    </div>
+                  )}
+                </div>
+                <div className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 bg-emerald-500 border-2 border-slate-900 rounded-full" />
               </div>
               <span className="text-sm font-medium text-(--ui-text)">
                 {user?.firstName} {user?.lastName}

@@ -1,5 +1,8 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string ?? '';
 
+// URL de base pour les fichiers statiques (ex: retire /api/v1 du chemin de l'API)
+export const FILE_BASE_URL = API_BASE_URL.replace('/api/v1', '');
+
 // Les chemins sont relatifs à la baseURL de l'apiClient (/api/v1)
 // Chaque endpoint inclut le préfixe de ressource pour être utilisable directement
 

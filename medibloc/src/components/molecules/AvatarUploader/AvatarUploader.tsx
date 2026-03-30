@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { FiCamera, FiTrash2, FiLoader } from 'react-icons/fi';
-import { API_BASE_URL } from '../../../utils/api/api';
+import { createPortal } from 'react-dom';
+import { FiCamera, FiTrash2, FiLoader, FiUser, FiX, FiAlertCircle } from 'react-icons/fi';
+import { FILE_BASE_URL } from '../../../utils/api/api';
 import { useNotification } from '../../../hooks';
 import { useUsers } from '../../../hooks/useUsers/useUsers';
 
@@ -40,11 +41,12 @@ export function AvatarUploader({
   const { addNotification } = useNotification();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const getFullUrl = (url?: string) => {
     if (!url) return null;
     if (url.startsWith('http')) return url;
-    return `${API_BASE_URL}${url}`;
+    return `${FILE_BASE_URL}${url}`;
   };
 
   const displayUrl = previewUrl || getFullUrl(currentAvatarUrl);
@@ -84,19 +86,22 @@ export function AvatarUploader({
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
     if (!currentAvatarUrl && !previewUrl) return;
-    
-    if (confirm('Voulez-vous supprimer votre photo de profil ?')) {
-      try {
-        await deleteAvatar(userId);
-        setPreviewUrl(null);
-        onAvatarDeleted();
-        addNotification('success', 'Photo de profil supprimée');
-      } catch (err) {
-        console.error(err);
-        addNotification('error', 'Échec de la suppression');
-      }
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteAvatar(userId);
+      setPreviewUrl(null);
+      onAvatarDeleted();
+      addNotification('success', 'Photo de profil supprimée');
+    } catch (err) {
+      console.error(err);
+      addNotification('error', 'Échec de la suppression');
+    } finally {
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -112,7 +117,7 @@ export function AvatarUploader({
         {displayUrl ? (
           <img src={displayUrl} alt="Avatar" className="h-full w-full object-cover" />
         ) : (
-          <span className="font-bold text-slate-500 select-none">?</span>
+          <span className="font-bold text-slate-500 select-none"> <FiUser size={iconSizes[size]} /> </span>
         )}
 
         {loading && (
@@ -133,7 +138,7 @@ export function AvatarUploader({
         </button>
         {(currentAvatarUrl || previewUrl) && (
           <button
-            onClick={handleDelete}
+            onClick={handleDeleteClick}
             disabled={loading}
             className="p-1.5 bg-slate-700 hover:bg-red-600 text-white rounded-full shadow-lg transition-transform hover:scale-110 active:scale-95 disabled:opacity-50"
             title="Supprimer la photo"
@@ -142,6 +147,43 @@ export function AvatarUploader({
           </button>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="surface w-full max-w-xs p-6 space-y-6 shadow-2xl relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Accent Line */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-red-500 to-orange-500" />
+            
+            <div className="flex flex-col items-center text-center space-y-3 pt-2">
+              <div className="p-3 bg-red-500/10 rounded-full text-red-500">
+                <FiAlertCircle size={32} />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-white">Supprimer ?</h3>
+                <p className="text-xs text-slate-400">Voulez-vous vraiment retirer votre photo de profil ?</p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all flex items-center justify-center gap-2"
+              >
+                <FiX />
+                Annuler
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition-all shadow-lg shadow-red-900/20"
+              >
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
       <input
         type="file"

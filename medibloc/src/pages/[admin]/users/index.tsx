@@ -46,8 +46,21 @@ export default function AdminUsersPage() {
   const columns: ColumnDef<User>[] = [
     { header: "ID", accessorKey: "id", className: "w-16 font-medium text-slate-400" },
     { 
-      header: "Nom Complet", 
-      render: (u) => <span className="font-semibold text-white">{u.firstName} {u.lastName}</span> 
+      header: "Utilisateur", 
+      render: (u) => (
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-800 border border-slate-700 shrink-0">
+            {u.avatarUrl ? (
+              <img src={u.avatarUrl.startsWith('http') ? u.avatarUrl : `${API_BASE_URL}${u.avatarUrl}`} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase bg-slate-800">
+                {u.firstName?.[0]}
+              </div>
+            )}
+          </div>
+          <span className="font-semibold text-white">{u.firstName} {u.lastName}</span> 
+        </div>
+      )
     },
     { header: "Email", accessorKey: "email", className: "text-slate-300" },
     { 
@@ -191,6 +204,7 @@ export default function AdminUsersPage() {
           user={editingUser} 
           onClose={() => setFormIsOpen(false)} 
           onSubmit={handleFormSubmit}
+          onRefresh={fetchUsers}
           loading={loading}
         />
       )}
@@ -198,7 +212,7 @@ export default function AdminUsersPage() {
   );
 }
 
-function UserFormModal({ user, onClose, onSubmit, loading }: { user: User | null; onClose: () => void; onSubmit: (data: any) => void; loading: boolean }) {
+function UserFormModal({ user, onClose, onSubmit, onRefresh, loading }: { user: User | null; onClose: () => void; onSubmit: (data: any) => void; onRefresh: () => void; loading: boolean }) {
   const [formData, setFormData] = useState({
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
@@ -237,8 +251,8 @@ function UserFormModal({ user, onClose, onSubmit, loading }: { user: User | null
             <AvatarUploader
               userId={user?.id || 0}
               currentAvatarUrl={user?.avatarUrl}
-              onAvatarUpdated={() => fetchUsers()}
-              onAvatarDeleted={() => fetchUsers()}
+              onAvatarUpdated={() => onRefresh()}
+              onAvatarDeleted={() => onRefresh()}
               size="lg"
             />
           </div>

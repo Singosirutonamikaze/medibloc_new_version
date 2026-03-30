@@ -38,9 +38,20 @@ export default function AdminPatientsPage() {
     {
       header: "Identité",
       render: (p) => (
-        <span className="font-semibold text-white">
-          {p.user?.firstName ? `${p.user.firstName} ${p.user.lastName}` : `Patient #${p.id}`}
-        </span>
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-800 border border-slate-700 shrink-0">
+            {p.user?.avatarUrl ? (
+              <img src={p.user.avatarUrl.startsWith('http') ? p.user.avatarUrl : `${API_BASE_URL}${p.user.avatarUrl}`} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase bg-slate-800">
+                {p.user?.firstName?.[0] || 'P'}
+              </div>
+            )}
+          </div>
+          <span className="font-semibold text-white">
+            {p.user?.firstName ? `${p.user.firstName} ${p.user.lastName}` : `Patient #${p.id}`}
+          </span>
+        </div>
       )
     },
     {
@@ -194,6 +205,7 @@ export default function AdminPatientsPage() {
           patient={editingPatient}
           onClose={() => setFormIsOpen(false)}
           onSubmit={handleFormSubmit}
+          onRefresh={fetchData}
           loading={loading}
         />
       )}
@@ -201,7 +213,7 @@ export default function AdminPatientsPage() {
   );
 }
 
-function PatientFormModal({ patient, onClose, onSubmit, loading }: { patient: Patient | null; onClose: () => void; onSubmit: (data: any) => void; loading: boolean }) {
+function PatientFormModal({ patient, onClose, onSubmit, onRefresh, loading }: { patient: Patient | null; onClose: () => void; onSubmit: (data: any) => void; onRefresh: () => void; loading: boolean }) {
   const defaultDate = patient?.birthDate ? new Date(patient.birthDate).toISOString().split('T')[0] : '';
   const isEditing = !!patient;
 
@@ -255,8 +267,8 @@ function PatientFormModal({ patient, onClose, onSubmit, loading }: { patient: Pa
             <AvatarUploader
               userId={patient?.userId || 0}
               currentAvatarUrl={patient?.user?.avatarUrl}
-              onAvatarUpdated={() => {}} // No need for local state here as fetchData will handle it
-              onAvatarDeleted={() => {}}
+              onAvatarUpdated={() => onRefresh()}
+              onAvatarDeleted={() => onRefresh()}
               size="lg"
             />
           </div>
