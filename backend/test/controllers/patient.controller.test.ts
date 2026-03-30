@@ -96,6 +96,7 @@ describe("PatientController", () => {
 
       expect(mockPrismaClient.patient.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
+        include: { user: true },
       });
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
