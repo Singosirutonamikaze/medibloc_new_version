@@ -4,6 +4,8 @@ import type { ColumnDef } from "../../../components/organisms/DataTable/DataTabl
 import { useUsers, useNotification } from "../../../hooks";
 import type { User, CreateUserDto, UpdateUserDto } from "../../../types";
 import { FaUserPlus, FaEnvelope, FaFingerprint, FaCalendarAlt, FaTimes } from "react-icons/fa";
+import { AvatarUploader } from "../../../components/molecules/AvatarUploader/AvatarUploader";
+import { API_BASE_URL } from "../../../utils/api/api";
 
 export default function AdminUsersPage() {
   const { getAll, loading, remove, create, update } = useUsers();
@@ -109,9 +111,24 @@ export default function AdminUsersPage() {
 
   const renderUserDetails = (user: User) => (
     <div className="space-y-6">
-       <div className="pb-4 border-b border-slate-700/50 flex flex-col items-start">
-          <h2 className="text-xl font-bold text-white leading-tight">{user.firstName} {user.lastName}</h2>
-          <span className="text-slate-400 text-sm mt-1">{getRoleLabel(user.role)}</span>
+       <div className="pb-4 border-b border-slate-700/50 flex items-center gap-4">
+          <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 shrink-0">
+            {user.avatarUrl ? (
+              <img 
+                src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${API_BASE_URL}${user.avatarUrl}`} 
+                alt="Avatar" 
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full flex items-center justify-center text-xl font-bold text-slate-500 uppercase">
+                {user.firstName?.[0] || 'U'}
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col items-start">
+            <h2 className="text-xl font-bold text-white leading-tight">{user.firstName} {user.lastName}</h2>
+            <span className="text-slate-400 text-sm mt-1">{getRoleLabel(user.role)}</span>
+          </div>
        </div>
 
        <div className="space-y-4">
@@ -216,6 +233,15 @@ function UserFormModal({ user, onClose, onSubmit, loading }: { user: User | null
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div className="flex justify-center pb-4">
+            <AvatarUploader
+              userId={user?.id || 0}
+              currentAvatarUrl={user?.avatarUrl}
+              onAvatarUpdated={() => fetchUsers()}
+              onAvatarDeleted={() => fetchUsers()}
+              size="lg"
+            />
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Prénom</label>

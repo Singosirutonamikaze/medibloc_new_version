@@ -4,6 +4,8 @@ import type { ColumnDef } from "../../../components/organisms/DataTable/DataTabl
 import { useDoctors, useUsers, useNotification } from "../../../hooks";
 import type { Doctor, UpdateDoctorDto } from "../../../types";
 import { FaUserMd, FaStethoscope, FaPhoneAlt, FaEnvelope, FaTimes } from "react-icons/fa";
+import { AvatarUploader } from "../../../components/molecules/AvatarUploader/AvatarUploader";
+import { API_BASE_URL } from "../../../utils/api/api";
 
 export default function AdminDoctorsPage() {
   const { getAll, loading: doctorsLoading, remove, update } = useDoctors();
@@ -100,11 +102,26 @@ export default function AdminDoctorsPage() {
 
   const renderDoctorDetails = (d: Doctor) => (
     <div className="space-y-6">
-      <div className="pb-4 border-b border-slate-700/50 flex flex-col items-start">
-        <h2 className="text-xl font-bold text-white leading-tight">
-          {d.user?.firstName ? `Docteur ${d.user.firstName} ${d.user.lastName}` : `Médecin N°${d.id}`}
-        </h2>
-        <span className="text-slate-400 text-sm mt-1">{d.specialty || 'Généraliste'}</span>
+      <div className="pb-4 border-b border-slate-700/50 flex items-center gap-4">
+        <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 shrink-0">
+          {d.user?.avatarUrl ? (
+            <img 
+              src={d.user.avatarUrl.startsWith('http') ? d.user.avatarUrl : `${API_BASE_URL}${d.user.avatarUrl}`} 
+              alt="Avatar" 
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center text-xl font-bold text-slate-500 uppercase">
+              {d.user?.firstName?.[0] || 'D'}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col items-start">
+          <h2 className="text-xl font-bold text-white leading-tight">
+            {d.user?.firstName ? `Docteur ${d.user.firstName} ${d.user.lastName}` : `Médecin N°${d.id}`}
+          </h2>
+          <span className="text-slate-400 text-sm mt-1">{d.specialty || 'Généraliste'}</span>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -216,6 +233,15 @@ function DoctorFormModal({ doctor, onClose, onSubmit, loading }: { doctor: Docto
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div className="flex justify-center pb-4">
+            <AvatarUploader
+              userId={doctor?.userId || 0}
+              currentAvatarUrl={doctor?.user?.avatarUrl}
+              onAvatarUpdated={() => fetchData()}
+              onAvatarDeleted={() => fetchData()}
+              size="lg"
+            />
+          </div>
           {!isEditing ? (
             <>
               <div className="grid grid-cols-2 gap-4">

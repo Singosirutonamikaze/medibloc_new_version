@@ -22,6 +22,7 @@ import AdminPharmaciesPage from '../pages/[admin]/pharmacies';
 import AdminPrescriptionsPage from '../pages/[admin]/prescriptions';
 import AdminMedicalRecordsPage from '../pages/[admin]/medical-records';
 import AdminStatsPage from '../pages/[admin]/stats';
+import AdminProfilePage from '../pages/[admin]/profile';
 
 // Import des pages doctor
 import DoctorDashboard from '../pages/[docteur]/dashboard';
@@ -29,6 +30,7 @@ import DoctorPatientsPage from '../pages/[docteur]/patients';
 import DoctorAppointmentsPage from '../pages/[docteur]/appointments';
 import DoctorPrescriptionsPage from '../pages/[docteur]/prescriptions';
 import DoctorMedicalRecordsPage from '../pages/[docteur]/medical-records';
+import DoctorProfilePage from '../pages/[docteur]/profile';
 
 // Import des pages patient
 import PatientDashboard from '../pages/[patient]/dashboard';
@@ -116,6 +118,10 @@ export const adminRoutes: RouteObject[] = [
     path: '/admin/stats',
     element: <AdminStatsPage />,
   },
+  {
+    path: '/admin/profile',
+    element: <AdminProfilePage />,
+  },
 ];
 
 /**
@@ -141,6 +147,10 @@ export const doctorRoutes: RouteObject[] = [
   {
     path: '/doctor/medical-records',
     element: <DoctorMedicalRecordsPage />,
+  },
+  {
+    path: '/doctor/profile',
+    element: <DoctorProfilePage />,
   },
 ];
 

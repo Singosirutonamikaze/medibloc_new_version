@@ -11,6 +11,7 @@ import { useAuth } from '../../../contexts/AuthContext/AuthContext';
 import { navConfig } from './navConfig';
 import logo from '../../../assets/logo/logo.png';
 import { ROUTES } from '../../../utils/constants/routes.constants';
+import { API_BASE_URL } from '../../../utils/api/api';
 
 type DashboardLayoutProps = Readonly<{
   children: ReactNode;
@@ -79,11 +80,10 @@ export default function DashboardLayout({ children, pageTitle }: DashboardLayout
                 key={item.path}
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
-                className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-                  active
+                className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${active
                     ? 'bg-linear-to-r from-[#3a7bd5]/15 to-[#27ae60]/15 text-(--ui-text)'
                     : 'text-(--ui-text-muted) hover:bg-(--ui-surface-soft) hover:text-(--ui-text)'
-                }`}
+                  }`}
               >
                 <item.icon
                   size={18}
@@ -99,17 +99,28 @@ export default function DashboardLayout({ children, pageTitle }: DashboardLayout
         </nav>
 
         <div className="shrink-0 border-t border-(--ui-border-soft) p-4 space-y-3">
-          <div className="flex items-center gap-3 px-2">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#3a7bd5] to-[#27ae60] text-white text-sm font-bold">
-              {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+          <Link
+            to={user?.role === 'ADMIN' ? ROUTES.ADMIN.PROFILE : user?.role === 'DOCTOR' ? ROUTES.DOCTOR.PROFILE : ROUTES.PATIENT.PROFILE}
+            className="flex items-center gap-3 px-2 py-2 rounded-xl transition-colors hover:bg-(--ui-surface-soft) group"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#3a7bd5] to-[#27ae60] text-white text-sm font-bold overflow-hidden border border-(--ui-border-soft) group-hover:border-[#3a7bd5]/50 transition-colors">
+              {user?.avatarUrl ? (
+                <img
+                  src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${API_BASE_URL}${user.avatarUrl}`}
+                  alt="Avatar"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                user?.firstName?.[0]?.toUpperCase() ?? 'U'
+              )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-(--ui-text)">
+              <p className="truncate text-sm font-semibold text-(--ui-text) group-hover:text-[#3a7bd5] transition-colors">
                 {user?.firstName} {user?.lastName}
               </p>
               <p className="truncate text-xs text-(--ui-text-muted)">{user?.email}</p>
             </div>
-          </div>
+          </Link>
           <button
             type="button"
             onClick={handleLogout}
@@ -139,8 +150,16 @@ export default function DashboardLayout({ children, pageTitle }: DashboardLayout
 
           <div className="ml-auto flex items-center gap-3">
             <div className="hidden items-center gap-2 sm:flex">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#3a7bd5] to-[#27ae60] text-white text-xs font-bold">
-                {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#3a7bd5] to-[#27ae60] text-white text-xs font-bold overflow-hidden border border-(--ui-border-soft)">
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${API_BASE_URL}${user.avatarUrl}`}
+                    alt="Avatar"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  user?.firstName?.[0]?.toUpperCase() ?? 'U'
+                )}
               </div>
               <span className="text-sm font-medium text-(--ui-text)">
                 {user?.firstName} {user?.lastName}

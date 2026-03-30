@@ -64,6 +64,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     storageService.removeUser();
   }, []);
 
+  const updateUser = useCallback((data: Partial<AuthUser>) => {
+    setUser((prev) => {
+      if (!prev) return null;
+      const newUser = { ...prev, ...data };
+      storageService.setUser(newUser);
+      return newUser;
+    });
+  }, []);
+
   const value = useMemo<AuthContextType>(() => ({
     user,
     token,
@@ -72,7 +81,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     register,
     logout,
-  }), [user, token, isLoading, login, register, logout]);
+    updateUser,
+  }), [user, token, isLoading, login, register, logout, updateUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

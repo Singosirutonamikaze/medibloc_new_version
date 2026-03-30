@@ -46,6 +46,16 @@ export function useUsers() {
     [request]
   );
 
+  const uploadAvatar = useCallback(
+    (id: number, file: File) => request(() => usersService.uploadAvatar(id, file)),
+    [request]
+  );
+
+  const deleteAvatar = useCallback(
+    (id: number) => request(() => usersService.deleteAvatar(id)),
+    [request]
+  );
+
   const getProfile = useCallback(
     () => request(() => usersService.getProfile()),
     [request]
@@ -60,5 +70,7 @@ export function useUsers() {
     update,
     remove,
     getProfile,
+    uploadAvatar,
+    deleteAvatar,
   };
 }

@@ -19,6 +19,7 @@ export interface AuthUser {
   firstName: string;
   lastName: string;
   role: Role;
+  avatarUrl?: string;
 }
 
 export interface AuthResponse {
@@ -34,4 +35,5 @@ export interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<AuthResponse>;
   register: (data: RegisterData) => Promise<AuthResponse>;
   logout: () => void;
+  updateUser: (data: Partial<AuthUser>) => void;
 }

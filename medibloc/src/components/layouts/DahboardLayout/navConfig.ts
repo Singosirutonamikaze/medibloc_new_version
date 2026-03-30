@@ -40,6 +40,7 @@ export const navConfig: Record<Role, NavItem[]> = {
     { label: 'Ordonnances',       path: ADMIN_ROUTES.PRESCRIPTIONS,   icon: FiFileText },
     { label: 'Dossiers médicaux', path: ADMIN_ROUTES.MEDICAL_RECORDS, icon: FiFolder },
     { label: 'Statistiques',      path: ADMIN_ROUTES.STATS,           icon: FiBarChart2 },
+    { label: 'Mon profil',        path: ADMIN_ROUTES.PROFILE,         icon: FiUser },
   ],
   DOCTOR: [
     { label: 'Dashboard',         path: DOCTOR_ROUTES.DASHBOARD,       icon: FiGrid },
@@ -47,6 +48,7 @@ export const navConfig: Record<Role, NavItem[]> = {
     { label: 'Rendez-vous',       path: DOCTOR_ROUTES.APPOINTMENTS,    icon: FiCalendar },
     { label: 'Ordonnances',       path: DOCTOR_ROUTES.PRESCRIPTIONS,   icon: FiFileText },
     { label: 'Dossiers médicaux', path: DOCTOR_ROUTES.MEDICAL_RECORDS, icon: FiFolder },
+    { label: 'Mon profil',        path: DOCTOR_ROUTES.PROFILE,         icon: FiUser },
   ],
   PATIENT: [
     { label: 'Dashboard',         path: PATIENT_ROUTES.DASHBOARD,       icon: FiGrid },

@@ -12,6 +12,7 @@ interface UseAuthReturn {
   register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
   refreshToken: () => Promise<void>;
+  updateUser: (data: Partial<AuthUser>) => void;
 }
 
 export function useAuth(): UseAuthReturn {
@@ -74,5 +75,6 @@ export function useAuth(): UseAuthReturn {
     register,
     logout,
     refreshToken,
+    updateUser: context.updateUser,
   };
 }

@@ -4,6 +4,8 @@ import type { ColumnDef } from "../../../components/organisms/DataTable/DataTabl
 import { usePatients, useUsers, useNotification } from "../../../hooks";
 import type { Patient, UpdatePatientDto } from "../../../types";
 import { FaUserInjured, FaBirthdayCake, FaMapMarkerAlt, FaPhoneAlt, FaTimes } from "react-icons/fa";
+import { AvatarUploader } from "../../../components/molecules/AvatarUploader/AvatarUploader";
+import { API_BASE_URL } from "../../../utils/api/api";
 
 export default function AdminPatientsPage() {
   const { getAll, loading: patientsLoading, remove, update } = usePatients();
@@ -110,13 +112,28 @@ export default function AdminPatientsPage() {
 
   const renderPatientDetails = (p: Patient) => (
     <div className="space-y-6">
-      <div className="pb-4 border-b border-slate-700/50 flex flex-col items-start">
-        <h2 className="text-xl font-bold text-white leading-tight">
-          {p.user?.firstName ? `${p.user.firstName} ${p.user.lastName}` : `Dossier #${p.id}`}
-        </h2>
-        <span className="text-slate-400 text-sm mt-1">
-          Sexe: {p.gender === 'MALE' ? 'Masculin' : p.gender === 'FEMALE' ? 'Féminin' : 'Non précisé'}
-        </span>
+      <div className="pb-4 border-b border-slate-700/50 flex items-center gap-4">
+        <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 shrink-0">
+          {p.user?.avatarUrl ? (
+            <img 
+              src={p.user.avatarUrl.startsWith('http') ? p.user.avatarUrl : `${API_BASE_URL}${p.user.avatarUrl}`} 
+              alt="Avatar" 
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center text-xl font-bold text-slate-500 uppercase">
+              {p.user?.firstName?.[0] || 'P'}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col items-start">
+          <h2 className="text-xl font-bold text-white leading-tight">
+            {p.user?.firstName ? `${p.user.firstName} ${p.user.lastName}` : `Dossier #${p.id}`}
+          </h2>
+          <span className="text-slate-400 text-sm mt-1">
+            Sexe: {p.gender === 'MALE' ? 'Masculin' : p.gender === 'FEMALE' ? 'Féminin' : 'Non précisé'}
+          </span>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -234,6 +251,15 @@ function PatientFormModal({ patient, onClose, onSubmit, loading }: { patient: Pa
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div className="flex justify-center pb-4">
+            <AvatarUploader
+              userId={patient?.userId || 0}
+              currentAvatarUrl={patient?.user?.avatarUrl}
+              onAvatarUpdated={() => {}} // No need for local state here as fetchData will handle it
+              onAvatarDeleted={() => {}}
+              size="lg"
+            />
+          </div>
           {!isEditing ? (
             <>
               <div className="grid grid-cols-2 gap-4">

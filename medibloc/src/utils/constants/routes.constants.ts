@@ -24,6 +24,7 @@ export const ADMIN_ROUTES = {
   PRESCRIPTIONS: '/admin/prescriptions',
   MEDICAL_RECORDS: '/admin/medical-records',
   STATS: '/admin/stats',
+  PROFILE: '/admin/profile',
 } as const;
 
 // Routes Doctor
@@ -33,6 +34,7 @@ export const DOCTOR_ROUTES = {
   APPOINTMENTS: '/doctor/appointments',
   PRESCRIPTIONS: '/doctor/prescriptions',
   MEDICAL_RECORDS: '/doctor/medical-records',
+  PROFILE: '/doctor/profile',
 } as const;
 
 // Routes Patient
