@@ -12,3 +12,7 @@ export * from './pharmacy';
 export * from './prescription';
 export * from './medical-record';
 export * from './country';
+export * from './discussion';
+export * from './invoice';
+export * from './notification';
+export * from './review';

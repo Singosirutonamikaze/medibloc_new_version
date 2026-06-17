@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Role, Gender, AppointmentStatus, DiseaseStatus, DiseaseSeverity, MedicineType } from '@prisma/client';
+import { Role, Gender, AppointmentStatus, DiseaseStatus, DiseaseSeverity, MedicineType, InvoiceStatus, PaymentMethod, PaymentStatus, NotificationType, DayOfWeek } from '@prisma/client';
 
 // ============================================
 // TYPES DE BASE ET UTILITAIRES
@@ -516,3 +516,168 @@ export type SanitizedUser = Omit<User, 'password'>;
 // TYPES ÉPI-SURVEILLANCE (re-export)
 // ============================================
 export type { DiseaseHotspot, EpiSource, HotspotApiResponse, RawHotspot, HotspotsQueryParams } from './epidemio.types';
+
+// ============================================
+// TYPES DISCUSSION & MESSAGE (MESSAGING)
+// ============================================
+
+export interface CreateDiscussionDto {
+  patientId: number;
+  doctorId: number;
+}
+
+export interface DiscussionResponse {
+  id: number;
+  patientId: number;
+  doctorId: number;
+  createdAt: string;
+  doctor?: {
+    user: {
+      firstName: string;
+      lastName: string;
+    };
+    specialty?: string;
+  };
+  patient?: {
+    user: {
+      firstName: string;
+      lastName: string;
+    };
+  };
+  messages?: MessageResponse[];
+}
+
+export interface CreateMessageDto {
+  discussionId: number;
+  senderRole: Role;
+  content?: string;
+  fileUrl?: string;
+}
+
+export interface MessageResponse {
+  id: number;
+  discussionId: number;
+  senderRole: Role;
+  content?: string;
+  fileUrl?: string;
+  isRead: boolean;
+  readAt?: string;
+  sentAt: string;
+  deletedAt?: string;
+}
+
+// ============================================
+// TYPES INVOICE & PAYMENT (BILLING)
+// ============================================
+
+export interface CreateInvoiceDto {
+  appointmentId: number;
+  patientId: number;
+  amount: number;
+  currency?: string;
+}
+
+export interface UpdateInvoiceDto {
+  amount?: number;
+  currency?: string;
+  status?: InvoiceStatus;
+}
+
+export interface InvoiceResponse {
+  id: number;
+  appointmentId: number;
+  patientId: number;
+  amount: number;
+  currency: string;
+  status: InvoiceStatus;
+  createdAt: string;
+  updatedAt: string;
+  payments?: PaymentResponse[];
+  patient?: {
+    user: {
+      firstName: string;
+      lastName: string;
+    };
+  };
+}
+
+export interface CreatePaymentDto {
+  invoiceId: number;
+  amount: number;
+  method: PaymentMethod;
+  transactionRef?: string;
+}
+
+export interface UpdatePaymentDto {
+  status?: PaymentStatus;
+  paidAt?: string;
+}
+
+export interface PaymentResponse {
+  id: number;
+  invoiceId: number;
+  amount: number;
+  method: PaymentMethod;
+  status: PaymentStatus;
+  transactionRef?: string;
+  paidAt?: string;
+  createdAt: string;
+}
+
+// ============================================
+// TYPES NOTIFICATION
+// ============================================
+
+export interface CreateNotificationDto {
+  userId: number;
+  type: NotificationType;
+  title: string;
+  content?: string;
+  linkUrl?: string;
+}
+
+export interface NotificationResponse {
+  id: number;
+  userId: number;
+  type: NotificationType;
+  title: string;
+  content?: string;
+  linkUrl?: string;
+  isRead: boolean;
+  readAt?: string;
+  createdAt: string;
+}
+
+// ============================================
+// TYPES REVIEW
+// ============================================
+
+export interface CreateReviewDto {
+  appointmentId: number;
+  patientId: number;
+  doctorId: number;
+  rating: number;
+  comment?: string;
+}
+
+export interface ReviewResponse {
+  id: number;
+  appointmentId: number;
+  patientId: number;
+  doctorId: number;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+  doctor?: {
+    user: {
+      firstName: string;
+      lastName: string;
+    };
+  };
+  patient?: {
+    user: {
+      firstName: string;
+      lastName: string;
+    };
+  };
+}

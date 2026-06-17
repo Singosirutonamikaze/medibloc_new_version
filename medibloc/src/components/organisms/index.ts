@@ -10,3 +10,5 @@ export { PatientForm } from './PatientForm';
 export { PrescriptionCard } from './PrescriptionCard';
 export { Sidebar } from './Sidebar';
 export { UserForm } from './UserForm';
+export { MedicalRecordFormModal } from './MedicalRecordFormModal/MedicalRecordFormModal';
+export { MedicalRecordDetailsModal } from './MedicalRecordDetailsModal/MedicalRecordDetailsModal';

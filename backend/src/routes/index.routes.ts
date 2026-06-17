@@ -12,6 +12,10 @@ import pharmacyRoutes from './pharmacy.routes';
 import prescriptionRoutes from './prescription.routes';
 import medicalRecordRoutes from './medicalRecord.routes';
 import statsRoutes from './stats.routes';
+import discussionRoutes from './discussion.routes';
+import invoiceRoutes from './invoice.routes';
+import notificationRoutes from './notification.routes';
+import reviewRoutes from './review.routes';
 
 const router = Router();
 
@@ -33,6 +37,10 @@ router.use('/pharmacies', pharmacyRoutes);
 router.use('/prescriptions', prescriptionRoutes);
 router.use('/medical-records', medicalRecordRoutes);
 router.use('/stats', statsRoutes);
+router.use('/discussions', discussionRoutes);
+router.use('/invoices', invoiceRoutes);
+router.use('/notifications', notificationRoutes);
+router.use('/reviews', reviewRoutes);
 
 // Route de santé de l'API
 /**

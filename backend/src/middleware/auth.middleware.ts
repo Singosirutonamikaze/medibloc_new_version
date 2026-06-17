@@ -80,12 +80,9 @@
 import { Response, NextFunction } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { config } from "../config/config";
-import {
-  AuthRequest,
-  AuthenticatedUser,
-  ApiResponse,
-} from "../types";
+import { AuthRequest, AuthenticatedUser, ApiResponse } from "../types";
 import prisma from "../config/database";
+import { parseIdParam } from "../utils/parseIdParam";
 
 /**
  * Middleware d'authentification JWT
@@ -93,7 +90,7 @@ import prisma from "../config/database";
 export const authMiddleware = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   let isAuthenticated = false;
   let responseSent = false;
@@ -125,7 +122,7 @@ export const authMiddleware = async (
 
     const decoded = jwt.verify(token, config.jwt.secret) as JwtPayload;
 
-    if (!decoded || typeof decoded === 'string') {
+    if (!decoded || typeof decoded === "string") {
       const errorResponse: ApiResponse = {
         success: false,
         error: "Token invalide",
@@ -159,7 +156,7 @@ export const authMiddleware = async (
       id: user.id,
       email: user.email,
       role: user.role,
-    } as AuthenticatedUser;
+    };
 
     isAuthenticated = true;
   } catch (error) {
@@ -196,7 +193,7 @@ export const requireRole = (allowedRoles: string[]) => {
   const roleMiddleware = (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): void => {
     if (!req.user) {
       const errorResponse: ApiResponse = {
@@ -232,7 +229,7 @@ export const checkResourceOwnership = (resourceType: string) => {
   const verifyPatientOwnership = async (
     resourceId: number,
     userId: number,
-    userRole: string
+    userRole: string,
   ): Promise<boolean> => {
     const patient = await prisma.patient.findUnique({
       where: { id: resourceId },
@@ -251,7 +248,7 @@ export const checkResourceOwnership = (resourceType: string) => {
   const verifyDoctorOwnership = async (
     resourceId: number,
     userId: number,
-    userRole: string
+    userRole: string,
   ): Promise<boolean> => {
     const doctor = await prisma.doctor.findUnique({
       where: { id: resourceId },
@@ -270,7 +267,7 @@ export const checkResourceOwnership = (resourceType: string) => {
   const verifyAppointmentOwnership = async (
     resourceId: number,
     userId: number,
-    userRole: string
+    userRole: string,
   ): Promise<boolean> => {
     const appointment = await prisma.appointment.findUnique({
       where: { id: resourceId },
@@ -298,7 +295,11 @@ export const checkResourceOwnership = (resourceType: string) => {
     return isPatientOwner || isDoctorOwner || isAdmin;
   };
 
-  const sendError = (res: Response, statusCode: number, error: string): void => {
+  const sendError = (
+    res: Response,
+    statusCode: number,
+    error: string,
+  ): void => {
     const errorResponse: ApiResponse = {
       success: false,
       error,
@@ -309,7 +310,7 @@ export const checkResourceOwnership = (resourceType: string) => {
   const ownershipMiddleware = async (
     req: AuthRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> => {
     try {
       if (!req.user) {
@@ -317,7 +318,7 @@ export const checkResourceOwnership = (resourceType: string) => {
         return;
       }
 
-      const resourceId = Number.parseInt(req.params.id, 10);
+      const resourceId = parseIdParam(req.params.id);
 
       if (Number.isNaN(resourceId)) {
         sendError(res, 400, "ID de ressource invalide");
@@ -331,7 +332,7 @@ export const checkResourceOwnership = (resourceType: string) => {
           ownershipVerified = await verifyPatientOwnership(
             resourceId,
             req.user.id,
-            req.user.role
+            req.user.role,
           );
           if (!ownershipVerified) {
             sendError(res, 404, "Patient non trouvé");
@@ -343,7 +344,7 @@ export const checkResourceOwnership = (resourceType: string) => {
           ownershipVerified = await verifyDoctorOwnership(
             resourceId,
             req.user.id,
-            req.user.role
+            req.user.role,
           );
           if (!ownershipVerified) {
             sendError(res, 404, "Médecin non trouvé");
@@ -355,7 +356,7 @@ export const checkResourceOwnership = (resourceType: string) => {
           ownershipVerified = await verifyAppointmentOwnership(
             resourceId,
             req.user.id,
-            req.user.role
+            req.user.role,
           );
           if (!ownershipVerified) {
             sendError(res, 404, "Rendez-vous non trouvé");

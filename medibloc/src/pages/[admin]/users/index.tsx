@@ -5,7 +5,7 @@ import { useUsers, useNotification } from "../../../hooks";
 import type { User, CreateUserDto, UpdateUserDto } from "../../../types";
 import { FaUserPlus, FaEnvelope, FaFingerprint, FaCalendarAlt, FaTimes } from "react-icons/fa";
 import { AvatarUploader } from "../../../components/molecules/AvatarUploader/AvatarUploader";
-import { API_BASE_URL } from "../../../utils/api/api";
+import { FILE_BASE_URL } from "../../../utils/api/api";
 
 export default function AdminUsersPage() {
   const { getAll, loading, remove, create, update } = useUsers();
@@ -51,7 +51,7 @@ export default function AdminUsersPage() {
         <div className="flex items-center gap-3">
           <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-800 border border-slate-700 shrink-0">
             {u.avatarUrl ? (
-              <img src={u.avatarUrl.startsWith('http') ? u.avatarUrl : `${API_BASE_URL}${u.avatarUrl}`} alt="" className="h-full w-full object-cover" />
+              <img src={u.avatarUrl.startsWith('http') ? u.avatarUrl : `${FILE_BASE_URL}${u.avatarUrl}`} alt="" className="h-full w-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase bg-slate-800">
                 {u.firstName?.[0]}
@@ -128,7 +128,7 @@ export default function AdminUsersPage() {
           <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 shrink-0">
             {user.avatarUrl ? (
               <img 
-                src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${API_BASE_URL}${user.avatarUrl}`} 
+                src={user.avatarUrl.startsWith('http') ? user.avatarUrl : `${FILE_BASE_URL}${user.avatarUrl}`} 
                 alt="Avatar" 
                 className="h-full w-full object-cover"
               />

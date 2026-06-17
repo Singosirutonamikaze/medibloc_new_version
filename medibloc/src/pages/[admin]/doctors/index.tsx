@@ -5,7 +5,7 @@ import { useDoctors, useUsers, useNotification } from "../../../hooks";
 import type { Doctor, UpdateDoctorDto } from "../../../types";
 import { FaUserMd, FaStethoscope, FaPhoneAlt, FaEnvelope, FaTimes } from "react-icons/fa";
 import { AvatarUploader } from "../../../components/molecules/AvatarUploader/AvatarUploader";
-import { API_BASE_URL } from "../../../utils/api/api";
+import { FILE_BASE_URL } from "../../../utils/api/api";
 
 export default function AdminDoctorsPage() {
   const { getAll, loading: doctorsLoading, remove, update } = useDoctors();
@@ -41,7 +41,7 @@ export default function AdminDoctorsPage() {
         <div className="flex items-center gap-3">
           <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-800 border border-slate-700 shrink-0">
             {d.user?.avatarUrl ? (
-              <img src={d.user.avatarUrl.startsWith('http') ? d.user.avatarUrl : `${API_BASE_URL}${d.user.avatarUrl}`} alt="" className="h-full w-full object-cover" />
+              <img src={d.user.avatarUrl.startsWith('http') ? d.user.avatarUrl : `${FILE_BASE_URL}${d.user.avatarUrl}`} alt="" className="h-full w-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase bg-slate-800">
                 {d.user?.firstName?.[0] || 'D'}
@@ -117,7 +117,7 @@ export default function AdminDoctorsPage() {
         <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 shrink-0">
           {d.user?.avatarUrl ? (
             <img 
-              src={d.user.avatarUrl.startsWith('http') ? d.user.avatarUrl : `${API_BASE_URL}${d.user.avatarUrl}`} 
+              src={d.user.avatarUrl.startsWith('http') ? d.user.avatarUrl : `${FILE_BASE_URL}${d.user.avatarUrl}`} 
               alt="Avatar" 
               className="h-full w-full object-cover"
             />

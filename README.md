@@ -56,12 +56,16 @@ Le système couvre les ressources suivantes, chacune disposant de ses propres ro
 
 - **Utilisateurs et authentification** — inscription, connexion, gestion des rôles (Patient, Médecin, Admin)
 - **Patients** — profils, dossiers médicaux, suivi des maladies et symptômes
-- **Médecins** — profils, spécialités, liste d'appointments
+- **Médecins** — profils, spécialités, liste de rendez-vous
 - **Rendez-vous** — réservation, confirmation, annulation, statuts
 - **Maladies et symptômes** — catalogue, association maladie/symptôme/pays, diagnostic patient
 - **Médicaments et pharmacies** — catalogue pharmaceutique et plantes médicinales, gestion des stocks
-- **Prescriptions** — ordonnances médicaux avec détail des traitements
+- **Prescriptions** — ordonnances médicales avec détail des traitements
 - **Statistiques** — données agrégées pour les tableaux de bord
+- **Messagerie et Discussions** — conversations privées sécurisées entre patients et médecins
+- **Facturation et Paiements** — émission de factures liées aux rendez-vous et règlements associés
+- **Notifications** — alertes utilisateur en temps réel pour tous les événements du système
+- **Avis et Évaluations** — notation et commentaires rédigés par les patients sur les profils des médecins
 
 ## Prérequis
 
@@ -286,11 +290,12 @@ Ce projet est distribué sous licence MIT. Voir le fichier [LICENSE](LICENSE) po
 
 Chaque partie du projet dispose de sa propre documentation détaillée :
 
+- [Guide de développement Frontend](medibloc/README.md) — installation, commandes et tests de l'interface utilisateur
 - [Guide de déploiement Backend](backend/README-DEPLOYMENT.md) — mise en ligne sur Render, VPS, configuration GitHub Actions
 - [Guide des tests Backend](backend/README-TESTS.md) — automatisation avec cron, systemd et scripts shell
-- [Architecture Frontend](medibloc/src/docs/architectures/ARCHITECTURE.md) — organisation des dossiers et conventions
-- [Catalogue des composants](medibloc/src/docs/readme/COMPONENTS.md) — référence de tous les composants UI
-- [Journal des modifications](CHANGELOG.md) — historique des versions
+- [Architecture Frontend](medibloc/src/docs/architectures/ARCHITECTURE.md) — organisation des dossiers et conventions des développeurs
+- [Catalogue des composants](medibloc/src/docs/readme/COMPONENTS.md) — référence et description de tous les composants UI
+- [Journal des modifications](CHANGELOG.md) — historique complet des versions
 
 ---
 

@@ -1,6 +1,6 @@
 import { defineConfig } from 'prisma/config';
 
-const resolveDatabaseUrl = (): string => {
+const resolveDatabaseUrl = (): string => { 
   const dbUrl = process.env.DATABASE_URL || '';
   const password = process.env.PASSWORD || '';
 

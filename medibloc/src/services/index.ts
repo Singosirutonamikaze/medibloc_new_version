@@ -12,4 +12,8 @@ export * from './api/prescriptions';
 export * from './api/medical-records';
 export * from './api/stats/stats.service';
 export * from './api/hostpots/hotspots';
+export * from './api/discussions';
+export * from './api/invoices';
+export * from './api/notifications';
+export * from './api/reviews';
 export * from './storage/storage.service';

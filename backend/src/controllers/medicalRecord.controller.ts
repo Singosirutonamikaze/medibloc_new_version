@@ -19,13 +19,50 @@ export class MedicalRecordController {
   constructor() {
     const repo = {
       findMany: (params?: Prisma.MedicalRecordFindManyArgs) =>
-        prisma.medicalRecord.findMany(params),
+        prisma.medicalRecord.findMany({
+          ...params,
+          include: {
+            patient: {
+              include: {
+                user: true
+              }
+            }
+          }
+        }),
       findUnique: (params: Prisma.MedicalRecordFindUniqueArgs) =>
-        prisma.medicalRecord.findUnique(params),
+        prisma.medicalRecord.findUnique({
+          ...params,
+          include: {
+            patient: {
+              include: {
+                user: true
+              }
+            }
+          }
+        }),
       create: (params: { data: MedicalRecordCreateInput }) =>
-        prisma.medicalRecord.create({ data: params.data }),
+        prisma.medicalRecord.create({
+          data: params.data,
+          include: {
+            patient: {
+              include: {
+                user: true
+              }
+            }
+          }
+        }),
       update: (params: { where: { id: number }; data: MedicalRecordUpdateInput }) =>
-        prisma.medicalRecord.update({ where: params.where, data: params.data }),
+        prisma.medicalRecord.update({
+          where: params.where,
+          data: params.data,
+          include: {
+            patient: {
+              include: {
+                user: true
+              }
+            }
+          }
+        }),
       delete: (params: { where: { id: number } }) =>
         prisma.medicalRecord.delete({ where: params.where }),
       count: (params?: Prisma.MedicalRecordCountArgs) =>
@@ -50,7 +87,16 @@ export class MedicalRecordController {
         status = 400;
         response = { success: false, error: 'Identifiant de patient invalide' };
       } else {
-        const records = await prisma.medicalRecord.findMany({ where: { patientId } });
+        const records = await prisma.medicalRecord.findMany({
+          where: { patientId },
+          include: {
+            patient: {
+              include: {
+                user: true
+              }
+            }
+          }
+        });
         response = { success: true, data: records };
       }
     } catch (err: unknown) {

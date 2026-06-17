@@ -634,4 +634,62 @@ export const validationSchemas = {
     severity: { required: false, type: 'string' },
     notes: { required: false, type: 'string' },
   } as ValidationSchema,
+
+  // Discussions
+  createDiscussion: {
+    patientId: { required: true, type: 'number' },
+    doctorId: { required: true, type: 'number' },
+  } as ValidationSchema,
+
+  // Messages
+  createMessage: {
+    discussionId: { required: true, type: 'number' },
+    senderRole: { required: true, type: 'string', enum: ['PATIENT', 'DOCTOR', 'ADMIN'] },
+    content: { required: false, type: 'string' },
+    fileUrl: { required: false, type: 'string' },
+  } as ValidationSchema,
+
+  // Invoices
+  createInvoice: {
+    appointmentId: { required: true, type: 'number' },
+    patientId: { required: true, type: 'number' },
+    amount: { required: true, type: 'number' },
+    currency: { required: false, type: 'string' },
+  } as ValidationSchema,
+
+  updateInvoice: {
+    amount: { required: false, type: 'number' },
+    currency: { required: false, type: 'string' },
+    status: { required: false, type: 'string', enum: ['PENDING', 'PAID', 'PARTIALLY_PAID', 'CANCELLED', 'REFUNDED'] },
+  } as ValidationSchema,
+
+  // Payments
+  createPayment: {
+    invoiceId: { required: true, type: 'number' },
+    amount: { required: true, type: 'number' },
+    method: { required: true, type: 'string', enum: ['CARD', 'MOBILE_MONEY', 'CASH', 'BANK_TRANSFER'] },
+    transactionRef: { required: false, type: 'string' },
+  } as ValidationSchema,
+
+  updatePayment: {
+    status: { required: false, type: 'string', enum: ['PENDING', 'SUCCESS', 'FAILED'] },
+  } as ValidationSchema,
+
+  // Notifications
+  createNotification: {
+    userId: { required: true, type: 'number' },
+    type: { required: true, type: 'string', enum: ['APPOINTMENT', 'MESSAGE', 'PAYMENT', 'PRESCRIPTION', 'SYSTEM'] },
+    title: { required: true, type: 'string' },
+    content: { required: false, type: 'string' },
+    linkUrl: { required: false, type: 'string' },
+  } as ValidationSchema,
+
+  // Reviews
+  createReview: {
+    appointmentId: { required: true, type: 'number' },
+    patientId: { required: true, type: 'number' },
+    doctorId: { required: true, type: 'number' },
+    rating: { required: true, type: 'number', min: 1, max: 5 },
+    comment: { required: false, type: 'string' },
+  } as ValidationSchema,
 };

@@ -1,7 +1,7 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string ?? '';
 
-// URL de base pour les fichiers statiques (ex: retire /api/v1 du chemin de l'API)
-export const FILE_BASE_URL = API_BASE_URL.replace('/api/v1', '');
+const rawFileBaseUrl = API_BASE_URL.replace('/api/v1', '');
+export const FILE_BASE_URL = rawFileBaseUrl.endsWith('/') ? rawFileBaseUrl.slice(0, -1) : rawFileBaseUrl;
 
 // Les chemins sont relatifs à la baseURL de l'apiClient (/api/v1)
 // Chaque endpoint inclut le préfixe de ressource pour être utilisable directement
@@ -147,6 +147,49 @@ const STATS_ENDPOINTS = {
   PATIENTS: '/stats/patients',
 } as const;
 
+// Configuration des endpoints pour la messagerie
+const DISCUSSIONS_ENDPOINTS = {
+  GET_ALL: '/discussions',
+  GET_BY_ID: (id: number) => `/discussions/${id}`,
+  CREATE: '/discussions',
+  DELETE: (id: number) => `/discussions/${id}`,
+  GET_MESSAGES: (id: number) => `/discussions/${id}/messages`,
+  SEND_MESSAGE: (id: number) => `/discussions/${id}/messages`,
+  MARK_READ: (id: number) => `/discussions/${id}/read`,
+} as const;
+
+// Configuration des endpoints pour la facturation
+const INVOICES_ENDPOINTS = {
+  GET_ALL: '/invoices',
+  GET_BY_ID: (id: number) => `/invoices/${id}`,
+  CREATE: '/invoices',
+  UPDATE: (id: number) => `/invoices/${id}`,
+  DELETE: (id: number) => `/invoices/${id}`,
+  GET_BY_PATIENT: (patientId: number) => `/invoices/patient/${patientId}`,
+  PAY: (id: number) => `/invoices/${id}/pay`,
+} as const;
+
+// Configuration des endpoints pour les notifications
+const NOTIFICATIONS_ENDPOINTS = {
+  GET_ALL: '/notifications',
+  GET_BY_ID: (id: number) => `/notifications/${id}`,
+  CREATE: '/notifications',
+  DELETE: (id: number) => `/notifications/${id}`,
+  GET_BY_USER: (userId: number) => `/notifications/user/${userId}`,
+  MARK_READ: (id: number) => `/notifications/${id}/read`,
+  MARK_ALL_READ: (userId: number) => `/notifications/user/${userId}/read-all`,
+} as const;
+
+// Configuration des endpoints pour les avis
+const REVIEWS_ENDPOINTS = {
+  GET_ALL: '/reviews',
+  GET_BY_ID: (id: number) => `/reviews/${id}`,
+  CREATE: '/reviews',
+  DELETE: (id: number) => `/reviews/${id}`,
+  GET_BY_DOCTOR: (doctorId: number) => `/reviews/doctor/${doctorId}`,
+  GET_BY_PATIENT: (patientId: number) => `/reviews/patient/${patientId}`,
+} as const;
+
 // Export de tous les endpoints
 export const ENDPOINTS = {
   AUTH: AUTH_ENDPOINTS,
@@ -162,6 +205,10 @@ export const ENDPOINTS = {
   MEDICAL_RECORDS: MEDICAL_RECORDS_ENDPOINTS,
   HOTSPOTS: HOTSPOTS_ENDPOINTS,
   STATS: STATS_ENDPOINTS,
+  DISCUSSIONS: DISCUSSIONS_ENDPOINTS,
+  INVOICES: INVOICES_ENDPOINTS,
+  NOTIFICATIONS: NOTIFICATIONS_ENDPOINTS,
+  REVIEWS: REVIEWS_ENDPOINTS,
 } as const;
 
 // Types utilitaires pour l'utilisation des endpoints

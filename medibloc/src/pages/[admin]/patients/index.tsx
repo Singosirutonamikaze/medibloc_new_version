@@ -5,7 +5,7 @@ import { usePatients, useUsers, useNotification } from "../../../hooks";
 import type { Patient, UpdatePatientDto } from "../../../types";
 import { FaUserInjured, FaBirthdayCake, FaMapMarkerAlt, FaPhoneAlt, FaTimes } from "react-icons/fa";
 import { AvatarUploader } from "../../../components/molecules/AvatarUploader/AvatarUploader";
-import { API_BASE_URL } from "../../../utils/api/api";
+import { FILE_BASE_URL } from "../../../utils/api/api";
 
 export default function AdminPatientsPage() {
   const { getAll, loading: patientsLoading, remove, update } = usePatients();
@@ -41,7 +41,7 @@ export default function AdminPatientsPage() {
         <div className="flex items-center gap-3">
           <div className="h-8 w-8 rounded-full overflow-hidden bg-slate-800 border border-slate-700 shrink-0">
             {p.user?.avatarUrl ? (
-              <img src={p.user.avatarUrl.startsWith('http') ? p.user.avatarUrl : `${API_BASE_URL}${p.user.avatarUrl}`} alt="" className="h-full w-full object-cover" />
+              <img src={p.user.avatarUrl.startsWith('http') ? p.user.avatarUrl : `${FILE_BASE_URL}${p.user.avatarUrl}`} alt="" className="h-full w-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase bg-slate-800">
                 {p.user?.firstName?.[0] || 'P'}
@@ -127,7 +127,7 @@ export default function AdminPatientsPage() {
         <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800 shrink-0">
           {p.user?.avatarUrl ? (
             <img 
-              src={p.user.avatarUrl.startsWith('http') ? p.user.avatarUrl : `${API_BASE_URL}${p.user.avatarUrl}`} 
+              src={p.user.avatarUrl.startsWith('http') ? p.user.avatarUrl : `${FILE_BASE_URL}${p.user.avatarUrl}`} 
               alt="Avatar" 
               className="h-full w-full object-cover"
             />

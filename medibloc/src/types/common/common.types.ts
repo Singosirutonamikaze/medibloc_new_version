@@ -72,3 +72,52 @@ export interface PaginationParams {
   page?: number;
   limit?: number;
 }
+
+export const InvoiceStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED',
+} as const;
+
+export type InvoiceStatus = typeof InvoiceStatus[keyof typeof InvoiceStatus];
+
+export const PaymentMethod = {
+  CARD: 'CARD',
+  MOBILE_MONEY: 'MOBILE_MONEY',
+  CASH: 'CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+} as const;
+
+export type PaymentMethod = typeof PaymentMethod[keyof typeof PaymentMethod];
+
+export const PaymentStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+} as const;
+
+export type PaymentStatus = typeof PaymentStatus[keyof typeof PaymentStatus];
+
+export const NotificationType = {
+  APPOINTMENT: 'APPOINTMENT',
+  MESSAGE: 'MESSAGE',
+  PAYMENT: 'PAYMENT',
+  PRESCRIPTION: 'PRESCRIPTION',
+  SYSTEM: 'SYSTEM',
+} as const;
+
+export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
+
+export const DayOfWeek = {
+  MONDAY: 'MONDAY',
+  TUESDAY: 'TUESDAY',
+  WEDNESDAY: 'WEDNESDAY',
+  THURSDAY: 'THURSDAY',
+  FRIDAY: 'FRIDAY',
+  SATURDAY: 'SATURDAY',
+  SUNDAY: 'SUNDAY',
+} as const;
+
+export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];

@@ -77,6 +77,13 @@ describe("MedicalRecordController", () => {
 
       expect(mockPrismaClient.medicalRecord.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
+        include: {
+          patient: {
+            include: {
+              user: true,
+            },
+          },
+        },
       });
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -125,6 +132,13 @@ describe("MedicalRecordController", () => {
 
       expect(mockPrismaClient.medicalRecord.create).toHaveBeenCalledWith({
         data: newMedicalRecord,
+        include: {
+          patient: {
+            include: {
+              user: true,
+            },
+          },
+        },
       });
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
@@ -159,6 +173,13 @@ describe("MedicalRecordController", () => {
       expect(mockPrismaClient.medicalRecord.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: updatedData,
+        include: {
+          patient: {
+            include: {
+              user: true,
+            },
+          },
+        },
       });
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
