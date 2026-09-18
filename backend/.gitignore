@@ -1,16 +1,44 @@
+# Dependencies
 node_modules/
-.env
-.env.local
-.env.test
-.env.production
-.DS_Store
 npm-debug.log*
+yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-.vscode/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.test
+.env.production
+!.env.example
+
+# Build & Compilation
+dist/
+*.tsbuildinfo
+
+# Logs & Test outputs
+logs/
+*.log
+coverage/
+.nyc_output/
+test-results*.json
+
+# Uploads (preserve folder structure with .gitkeep)
+uploads/*
+!uploads/.gitkeep
+uploads/avatars/*
+!uploads/avatars/.gitkeep
+
+# IDE & Editor files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 *.iml
-coverage/
-.github/
-dist/
-logs/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db

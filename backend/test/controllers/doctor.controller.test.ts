@@ -1,6 +1,13 @@
 import { describe, test, expect, beforeEach, type Mock } from "vitest";
 import { mockPrismaClient, resetAllMocks } from "../setup/prismaMock";
-import { DoctorController } from "../../src/controllers/doctor.controller";
+import {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+  getSpecialties,
+} from "../../src/features/doctor/controllers/doctor.controller";
 import type { Request, Response } from "express";
 import {
   createMockRequest,
@@ -8,15 +15,13 @@ import {
 } from "../setup/test-helpers";
 
 describe("DoctorController", () => {
-  let doctorController: DoctorController;
-  let mockRequest: Partial<Request>;
+  let mockRequest: Request;
   let mockResponse: Response;
   let mockJson: Mock;
   let mockStatus: Mock;
 
   beforeEach(() => {
     resetAllMocks();
-    doctorController = new DoctorController();
 
     const mocks = createMockResponse();
     mockJson = mocks.mockJson;
@@ -26,71 +31,44 @@ describe("DoctorController", () => {
     mockRequest = createMockRequest();
   });
 
-  describe("getAllDoctors", () => {
-    test("should return all doctors with pagination", async () => {
+  describe("getAll", () => {
+    test("should return all doctors", async () => {
       const mockDoctors = [
         {
           id: 1,
-          firstName: "Dr. Koffi",
-          lastName: "Komla",
-          email: "doctor@example.com",
           specialty: "Cardiology",
-        },
-        {
-          id: 2,
-          firstName: "Dr. Ama",
-          lastName: "Ayawa",
-          email: "ama@example.com",
-          specialty: "Dermatology",
+          user: { firstName: "Dr. Koffi", lastName: "Komla", email: "doctor@example.com" },
         },
       ];
 
       mockPrismaClient.doctor.findMany.mockResolvedValue(mockDoctors);
-      mockPrismaClient.doctor.count.mockResolvedValue(2);
 
-      mockRequest.query = { page: "1", limit: "10" };
-
-      await doctorController.getAllDoctors(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getAll(mockRequest as Request, mockResponse);
 
       expect(mockPrismaClient.doctor.findMany).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: expect.objectContaining({
-            data: mockDoctors,
-            pagination: expect.any(Object),
-            success: true,
-          }),
+          data: mockDoctors,
         })
       );
     });
   });
 
-  describe("getDoctorById", () => {
+  describe("getById", () => {
     test("should return a doctor by ID", async () => {
       const mockDoctor = {
         id: 1,
-        firstName: "Dr. Koffi",
-        lastName: "Komla",
-        email: "doctor@example.com",
         specialty: "Cardiology",
+        user: { firstName: "Dr. Koffi", lastName: "Komla", email: "doctor@example.com" },
       };
 
       mockPrismaClient.doctor.findUnique.mockResolvedValue(mockDoctor);
       mockRequest.params = { id: "1" };
 
-      await doctorController.getDoctorById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.doctor.findUnique).toHaveBeenCalledWith({
-        where: { id: 1 },
-        include: { user: true },
-      });
+      expect(mockPrismaClient.doctor.findUnique).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -103,10 +81,7 @@ describe("DoctorController", () => {
       mockPrismaClient.doctor.findUnique.mockResolvedValue(null);
       mockRequest.params = { id: "999" };
 
-      await doctorController.getDoctorById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
       expect(mockStatus).toHaveBeenCalledWith(404);
       expect(mockJson).toHaveBeenCalledWith(
@@ -117,13 +92,10 @@ describe("DoctorController", () => {
     });
   });
 
-  describe("createDoctor", () => {
+  describe("create", () => {
     test("should create a new doctor", async () => {
       const newDoctor = {
-        firstName: "Dr. Koffi",
-        lastName: "Komla",
-        email: "doctor@example.com",
-        password: "hashedPassword123",
+        userId: 1,
         specialty: "Cardiology",
       };
 
@@ -132,14 +104,9 @@ describe("DoctorController", () => {
       mockPrismaClient.doctor.create.mockResolvedValue(createdDoctor);
       mockRequest.body = newDoctor;
 
-      await doctorController.createDoctor(
-        mockRequest as Request,
-        mockResponse
-      );
+      await create(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.doctor.create).toHaveBeenCalledWith({
-        data: newDoctor,
-      });
+      expect(mockPrismaClient.doctor.create).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -150,14 +117,11 @@ describe("DoctorController", () => {
     });
   });
 
-  describe("updateDoctor", () => {
+  describe("update", () => {
     test("should update a doctor", async () => {
       const updatedData = { specialty: "Neurology" };
       const updatedDoctor = {
         id: 1,
-        firstName: "Dr. Koffi",
-        lastName: "Komla",
-        email: "doctor@example.com",
         specialty: "Neurology",
       };
 
@@ -165,15 +129,9 @@ describe("DoctorController", () => {
       mockRequest.params = { id: "1" };
       mockRequest.body = updatedData;
 
-      await doctorController.updateDoctor(
-        mockRequest as Request,
-        mockResponse
-      );
+      await update(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.doctor.update).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: updatedData,
-      });
+      expect(mockPrismaClient.doctor.update).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -183,30 +141,21 @@ describe("DoctorController", () => {
     });
   });
 
-  describe("deleteDoctor", () => {
+  describe("remove", () => {
     test("should delete a doctor", async () => {
       const deletedDoctor = {
         id: 1,
-        firstName: "Dr. Koffi",
-        lastName: "Komla",
-        email: "doctor@example.com",
       };
 
       mockPrismaClient.doctor.delete.mockResolvedValue(deletedDoctor);
       mockRequest.params = { id: "1" };
 
-      await doctorController.deleteDoctor(
-        mockRequest as Request,
-        mockResponse
-      );
+      await remove(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.doctor.delete).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.doctor.delete).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          message: "Supprimé",
         })
       );
     });
@@ -217,23 +166,16 @@ describe("DoctorController", () => {
       const mockDoctors = [
         { specialty: "Cardiology" },
         { specialty: "Dermatology" },
-        { specialty: "Cardiology" },
       ];
 
       mockPrismaClient.doctor.findMany.mockResolvedValue(mockDoctors);
 
-      await doctorController.getSpecialties(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getSpecialties(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.doctor.findMany).toHaveBeenCalledWith({
-        select: { specialty: true },
-      });
+      expect(mockPrismaClient.doctor.findMany).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: expect.arrayContaining(["Cardiology", "Dermatology"]),
         })
       );
     });

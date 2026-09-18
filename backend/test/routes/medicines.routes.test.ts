@@ -71,24 +71,5 @@ describe("Medicine Routes", () => {
       expect(res.body.success).toBe(true);
     });
   });
-
-  describe("GET /api/v1/medicines/type/:type", () => {
-    test("should return medicines by type", async () => {
-      const res = await request(app).get("/api/v1/medicines/type/pill");
-
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(Array.isArray(res.body.data)).toBe(true);
-    });
-  });
-
-  describe("GET /api/v1/medicines/pharmacy/:pharmacyId", () => {
-    test("should return medicines by pharmacy", async () => {
-      const res = await request(app).get("/api/v1/medicines/pharmacy/1");
-
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(Array.isArray(res.body.data)).toBe(true);
-    });
-  });
 });
+

@@ -18,18 +18,15 @@ describe("Patient Routes", () => {
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(Array.isArray(res.body.data)).toBe(true);
-      expect(res.body.data[0]).toHaveProperty("firstName");
-      expect(res.body.data[0]).toHaveProperty("lastName");
+      expect(res.body.data[0]).toHaveProperty("id");
     });
   });
 
   describe("POST /api/v1/patients", () => {
     test("should create a new patient", async () => {
       const payload = {
-        firstName: "koffi",
-        lastName: "komla",
-        email: "koffi@example.com",
-        password: "secret123",
+        userId: 1,
+        phone: "+22890000000",
       };
 
       const res = await request(app)
@@ -38,8 +35,7 @@ describe("Patient Routes", () => {
 
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
-      expect(res.body.data.firstName).toBe("koffi");
-      expect(res.body.data.lastName).toBe("komla");
+      expect(res.body.data).toHaveProperty("id");
     });
   });
 
@@ -56,7 +52,7 @@ describe("Patient Routes", () => {
   describe("PUT /api/v1/patients/:id", () => {
     test("should update a patient", async () => {
       const payload = {
-        firstName: "Updated Name",
+        phone: "+22899999999",
       };
 
       const res = await request(app)

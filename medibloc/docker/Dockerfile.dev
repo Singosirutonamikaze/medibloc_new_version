@@ -1,0 +1,23 @@
+# ------------------------------------------------------------------------------
+# MediBloc Frontend - Dockerfile Developpement (Vite HMR)
+# Auteur : SINGO Yao Dieu Donne
+# Date   : 2026-09-17
+# ------------------------------------------------------------------------------
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+RUN chown -R node:node /app
+
+COPY --chown=node:node package.json package-lock.json ./
+
+USER node
+
+RUN npm install
+
+COPY --chown=node:node . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

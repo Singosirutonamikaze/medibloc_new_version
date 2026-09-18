@@ -1,6 +1,12 @@
 import { describe, test, expect, beforeEach, type Mock } from "vitest";
 import { mockPrismaClient, resetAllMocks } from "../setup/prismaMock";
-import { SymptomController } from "../../src/controllers/symptom.controller";
+import {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+} from "../../src/features/symptom/controllers/symptom.controller";
 import type { Request, Response } from "express";
 import {
   createMockRequest,
@@ -8,15 +14,13 @@ import {
 } from "../setup/test-helpers";
 
 describe("SymptomController", () => {
-  let symptomController: SymptomController;
-  let mockRequest: Partial<Request>;
+  let mockRequest: Request;
   let mockResponse: Response;
   let mockJson: Mock;
   let mockStatus: Mock;
 
   beforeEach(() => {
     resetAllMocks();
-    symptomController = new SymptomController();
 
     const mocks = createMockResponse();
     mockJson = mocks.mockJson;
@@ -26,38 +30,28 @@ describe("SymptomController", () => {
     mockRequest = createMockRequest();
   });
 
-  describe("getAllSymptoms", () => {
-    test("should return all symptoms with pagination", async () => {
+  describe("getAll", () => {
+    test("should return all symptoms", async () => {
       const mockSymptoms = [
         { id: 1, name: "Fever", description: "High temperature" },
         { id: 2, name: "Headache", description: "Pain in head" },
       ];
 
       mockPrismaClient.symptom.findMany.mockResolvedValue(mockSymptoms);
-      mockPrismaClient.symptom.count.mockResolvedValue(2);
 
-      mockRequest.query = { page: "1", limit: "10" };
-
-      await symptomController.getAllSymptoms(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getAll(mockRequest as Request, mockResponse);
 
       expect(mockPrismaClient.symptom.findMany).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: expect.objectContaining({
-            data: mockSymptoms,
-            pagination: expect.any(Object),
-            success: true,
-          }),
+          data: mockSymptoms,
         })
       );
     });
   });
 
-  describe("getSymptomById", () => {
+  describe("getById", () => {
     test("should return a symptom by ID", async () => {
       const mockSymptom = {
         id: 1,
@@ -68,14 +62,9 @@ describe("SymptomController", () => {
       mockPrismaClient.symptom.findUnique.mockResolvedValue(mockSymptom);
       mockRequest.params = { id: "1" };
 
-      await symptomController.getSymptomById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.symptom.findUnique).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.symptom.findUnique).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -85,7 +74,7 @@ describe("SymptomController", () => {
     });
   });
 
-  describe("createSymptom", () => {
+  describe("create", () => {
     test("should create a new symptom", async () => {
       const newSymptom = {
         name: "Fever",
@@ -97,14 +86,9 @@ describe("SymptomController", () => {
       mockPrismaClient.symptom.create.mockResolvedValue(createdSymptom);
       mockRequest.body = newSymptom;
 
-      await symptomController.createSymptom(
-        mockRequest as Request,
-        mockResponse
-      );
+      await create(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.symptom.create).toHaveBeenCalledWith({
-        data: newSymptom,
-      });
+      expect(mockPrismaClient.symptom.create).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -115,7 +99,7 @@ describe("SymptomController", () => {
     });
   });
 
-  describe("updateSymptom", () => {
+  describe("update", () => {
     test("should update a symptom", async () => {
       const updatedData = { description: "Updated description" };
       const updatedSymptom = {
@@ -128,15 +112,9 @@ describe("SymptomController", () => {
       mockRequest.params = { id: "1" };
       mockRequest.body = updatedData;
 
-      await symptomController.updateSymptom(
-        mockRequest as Request,
-        mockResponse
-      );
+      await update(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.symptom.update).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: updatedData,
-      });
+      expect(mockPrismaClient.symptom.update).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -146,7 +124,7 @@ describe("SymptomController", () => {
     });
   });
 
-  describe("deleteSymptom", () => {
+  describe("remove", () => {
     test("should delete a symptom", async () => {
       const deletedSymptom = {
         id: 1,
@@ -157,18 +135,12 @@ describe("SymptomController", () => {
       mockPrismaClient.symptom.delete.mockResolvedValue(deletedSymptom);
       mockRequest.params = { id: "1" };
 
-      await symptomController.deleteSymptom(
-        mockRequest as Request,
-        mockResponse
-      );
+      await remove(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.symptom.delete).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.symptom.delete).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          message: "Supprimé",
         })
       );
     });

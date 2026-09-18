@@ -6,6 +6,13 @@
     "rootDir": ".",
     "outDir": "dist",
     "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
     "esModuleInterop": true,
     "moduleResolution": "node16",
     "resolveJsonModule": true,
@@ -13,5 +20,6 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"]
   },
-  "include": ["src", "prisma"]
+  "include": ["src", "prisma"],
+  "exclude": ["node_modules", "dist", "logs", "coverage", "test"]
 }

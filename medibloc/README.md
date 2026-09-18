@@ -17,19 +17,21 @@ L'application client MediBloc offre une interface sécurisée, performante et ad
 
 Pour aller plus loin dans la compréhension technique du projet, vous devez consulter les documents internes suivants :
 
-### Guides de Conception et Composants UI
+### Guides de Conception et Architecture
 
-- [Architecture Frontend (Détaillée)](src/docs/architectures/ARCHITECTURE.md) — Explications approfondies sur les choix d'architecture, le flux de données, la pureté des composants React et la gestion d'état.
-- [Catalogue des composants](src/docs/readme/COMPONENTS.md) — Référence complète de tous les composants UI de l'application (Atoms, Molecules, Organisms).
-- [Architecture Générale Client](docs/architecture.md) — Vue d'ensemble conceptuelle de l'application client.
+- [Architecture Frontend Technique](docs/architecture/Architecture.md) — Explications approfondies sur les choix d'architecture, le flux de donnees et la gestion d'etat.
+- [Catalogue des composants](src/docs/readme/COMPONENTS.md) — Reference complete de tous les composants UI de l'application (Atoms, Molecules, Organisms).
+- [Architecture Detaillee du Code Source](src/docs/architectures/ARCHITECTURE.md) — Structure complete des fichiers et dependances React 19.
 
-### Normes de Développement et de Contribution
+### Normes, Securite et Contribution
 
-- [Conventions de Codage](docs/convention.md) — Guide complet des normes de style de code, de typage TypeScript et d'accessibilité (a11y).
-- [Guide des Messages de Commit](docs/commit.md) — Normes à suivre pour rédiger des commits sémantiques et structurés sans émojis.
-- [Processus de Revue de Code](docs/revue.md) — Checklist pour les relectures de code et la validation des contributions.
-- [Guide de Contribution](docs/conribution.md) — Étapes et règles pour soumettre des modifications sur le projet.
-- [Historique et Gestion des Versions](docs/historique.md) — Information sur le cycle de vie des versions de la plateforme.
+- [Guide de Securite Frontend](docs/security/Security.md) — Bonnes pratiques OWASP, en-tetes Nginx et protection des sessions JWT.
+- [Reference de l'API](docs/api/Api.md) — Contrat d'integration RESTful (`/api/v1`) et GraphQL (`/graphql`).
+- [Conventions de Codage](docs/conventions/Conventions.md) — Normes TypeScript strictes, regles React 19 et accessibilite (a11y).
+- [Guide de Contribution et Revue](docs/contributing/Contributing.md) — Flux Git, messages de commit sans emoji et checklist de revue.
+- [Guide des Tests](docs/testing/Testing.md) — Execution des tests Vitest et couverture de composants.
+- [Guide de Deploiement](docs/deployment/Deployment.md) — Conteneurisation Docker multi-stage et Nginx.
+- [Historique des Contributions](docs/historique.md) — Journal des evolutions et suivi de l'equipe.
 
 ## Installation et configuration locale
 

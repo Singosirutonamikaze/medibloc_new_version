@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+logs/*.log
+logs/*.json
+.nyc_output
+.git
+.gitignore
+.env
+.env.*
+.vscode
+.idea
+test
+*.md
+Makefile
+sonar-project.properties

@@ -94,13 +94,14 @@ describe("Doctor Routes", () => {
     });
   });
 
-  describe("GET /api/v1/doctors/specialties/list", () => {
+  describe("GET /api/v1/doctors/specialties", () => {
     test("should return list of specialties", async () => {
-      const res = await request(app).get("/api/v1/doctors/specialties/list");
+      const res = await request(app).get("/api/v1/doctors/specialties");
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(Array.isArray(res.body.data)).toBe(true);
     });
   });
+
 });

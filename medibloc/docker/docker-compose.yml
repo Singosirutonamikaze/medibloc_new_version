@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: medibloc_frontend_app
+    restart: unless-stopped
+    ports:
+      - "5173:80"

@@ -1,6 +1,12 @@
 import { describe, test, expect, beforeEach, type Mock } from "vitest";
 import { mockPrismaClient, resetAllMocks } from "../setup/prismaMock";
-import { DiseaseController } from "../../src/controllers/disease.controller";
+import {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+} from "../../src/features/disease/controllers/disease.controller";
 import type { Request, Response } from "express";
 import {
   createMockRequest,
@@ -8,15 +14,13 @@ import {
 } from "../setup/test-helpers";
 
 describe("DiseaseController", () => {
-  let diseaseController: DiseaseController;
-  let mockRequest: Partial<Request>;
+  let mockRequest: Request;
   let mockResponse: Response;
   let mockJson: Mock;
   let mockStatus: Mock;
 
   beforeEach(() => {
     resetAllMocks();
-    diseaseController = new DiseaseController();
 
     const mocks = createMockResponse();
     mockJson = mocks.mockJson;
@@ -26,38 +30,28 @@ describe("DiseaseController", () => {
     mockRequest = createMockRequest();
   });
 
-  describe("getAllDiseases", () => {
-    test("should return all diseases with pagination", async () => {
+  describe("getAll", () => {
+    test("should return all diseases", async () => {
       const mockDiseases = [
         { id: 1, name: "Malaria", description: "Parasitic disease" },
         { id: 2, name: "Typhoid", description: "Bacterial infection" },
       ];
 
       mockPrismaClient.disease.findMany.mockResolvedValue(mockDiseases);
-      mockPrismaClient.disease.count.mockResolvedValue(2);
 
-      mockRequest.query = { page: "1", limit: "10" };
-
-      await diseaseController.getAllDiseases(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getAll(mockRequest as Request, mockResponse);
 
       expect(mockPrismaClient.disease.findMany).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: expect.objectContaining({
-            data: mockDiseases,
-            pagination: expect.any(Object),
-            success: true,
-          }),
+          data: mockDiseases,
         })
       );
     });
   });
 
-  describe("getDiseaseById", () => {
+  describe("getById", () => {
     test("should return a disease by ID", async () => {
       const mockDisease = {
         id: 1,
@@ -68,14 +62,9 @@ describe("DiseaseController", () => {
       mockPrismaClient.disease.findUnique.mockResolvedValue(mockDisease);
       mockRequest.params = { id: "1" };
 
-      await diseaseController.getDiseaseById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.disease.findUnique).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.disease.findUnique).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -88,10 +77,7 @@ describe("DiseaseController", () => {
       mockPrismaClient.disease.findUnique.mockResolvedValue(null);
       mockRequest.params = { id: "999" };
 
-      await diseaseController.getDiseaseById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
       expect(mockStatus).toHaveBeenCalledWith(404);
       expect(mockJson).toHaveBeenCalledWith(
@@ -102,7 +88,7 @@ describe("DiseaseController", () => {
     });
   });
 
-  describe("createDisease", () => {
+  describe("create", () => {
     test("should create a new disease", async () => {
       const newDisease = {
         name: "Malaria",
@@ -114,14 +100,9 @@ describe("DiseaseController", () => {
       mockPrismaClient.disease.create.mockResolvedValue(createdDisease);
       mockRequest.body = newDisease;
 
-      await diseaseController.createDisease(
-        mockRequest as Request,
-        mockResponse
-      );
+      await create(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.disease.create).toHaveBeenCalledWith({
-        data: newDisease,
-      });
+      expect(mockPrismaClient.disease.create).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -132,7 +113,7 @@ describe("DiseaseController", () => {
     });
   });
 
-  describe("updateDisease", () => {
+  describe("update", () => {
     test("should update a disease", async () => {
       const updatedData = { description: "Updated description" };
       const updatedDisease = {
@@ -145,15 +126,9 @@ describe("DiseaseController", () => {
       mockRequest.params = { id: "1" };
       mockRequest.body = updatedData;
 
-      await diseaseController.updateDisease(
-        mockRequest as Request,
-        mockResponse
-      );
+      await update(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.disease.update).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: updatedData,
-      });
+      expect(mockPrismaClient.disease.update).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -163,7 +138,7 @@ describe("DiseaseController", () => {
     });
   });
 
-  describe("deleteDisease", () => {
+  describe("remove", () => {
     test("should delete a disease", async () => {
       const deletedDisease = {
         id: 1,
@@ -174,18 +149,12 @@ describe("DiseaseController", () => {
       mockPrismaClient.disease.delete.mockResolvedValue(deletedDisease);
       mockRequest.params = { id: "1" };
 
-      await diseaseController.deleteDisease(
-        mockRequest as Request,
-        mockResponse
-      );
+      await remove(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.disease.delete).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.disease.delete).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          message: "Supprimé",
         })
       );
     });

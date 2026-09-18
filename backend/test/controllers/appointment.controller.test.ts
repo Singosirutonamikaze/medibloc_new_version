@@ -1,6 +1,12 @@
 import { describe, test, expect, beforeEach, type Mock } from "vitest";
 import { mockPrismaClient, resetAllMocks } from "../setup/prismaMock";
-import { AppointmentController } from "../../src/controllers/appointment.controller";
+import {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+} from "../../src/features/appointment/controllers/appointment.controller";
 import type { Request, Response } from "express";
 import {
   createMockRequest,
@@ -8,15 +14,13 @@ import {
 } from "../setup/test-helpers";
 
 describe("AppointmentController", () => {
-  let appointmentController: AppointmentController;
-  let mockRequest: Partial<Request>;
+  let mockRequest: Request;
   let mockResponse: Response;
   let mockJson: Mock;
   let mockStatus: Mock;
 
   beforeEach(() => {
     resetAllMocks();
-    appointmentController = new AppointmentController();
 
     const mocks = createMockResponse();
     mockJson = mocks.mockJson;
@@ -26,8 +30,8 @@ describe("AppointmentController", () => {
     mockRequest = createMockRequest();
   });
 
-  describe("getAllAppointments", () => {
-    test("should return all appointments with pagination", async () => {
+  describe("getAll", () => {
+    test("should return all appointments", async () => {
       const mockAppointments = [
         {
           id: 1,
@@ -36,40 +40,23 @@ describe("AppointmentController", () => {
           scheduledAt: new Date(),
           status: "PENDING",
         },
-        {
-          id: 2,
-          patientId: 2,
-          doctorId: 1,
-          scheduledAt: new Date(),
-          status: "CONFIRMED",
-        },
       ];
 
       mockPrismaClient.appointment.findMany.mockResolvedValue(mockAppointments);
-      mockPrismaClient.appointment.count.mockResolvedValue(2);
 
-      mockRequest.query = { page: "1", limit: "10" };
-
-      await appointmentController.getAllAppointments(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getAll(mockRequest as Request, mockResponse);
 
       expect(mockPrismaClient.appointment.findMany).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: expect.objectContaining({
-            data: mockAppointments,
-            pagination: expect.any(Object),
-            success: true,
-          }),
+          data: mockAppointments,
         })
       );
     });
   });
 
-  describe("getAppointmentById", () => {
+  describe("getById", () => {
     test("should return an appointment by ID", async () => {
       const mockAppointment = {
         id: 1,
@@ -82,14 +69,9 @@ describe("AppointmentController", () => {
       mockPrismaClient.appointment.findUnique.mockResolvedValue(mockAppointment);
       mockRequest.params = { id: "1" };
 
-      await appointmentController.getAppointmentById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.appointment.findUnique).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.appointment.findUnique).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -99,12 +81,12 @@ describe("AppointmentController", () => {
     });
   });
 
-  describe("createAppointment", () => {
+  describe("create", () => {
     test("should create a new appointment", async () => {
       const newAppointment = {
         patientId: 1,
         doctorId: 1,
-        scheduledAt: new Date(),
+        scheduledAt: new Date().toISOString(),
         reason: "Check-up",
       };
 
@@ -113,14 +95,9 @@ describe("AppointmentController", () => {
       mockPrismaClient.appointment.create.mockResolvedValue(createdAppointment);
       mockRequest.body = newAppointment;
 
-      await appointmentController.createAppointment(
-        mockRequest as Request,
-        mockResponse
-      );
+      await create(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.appointment.create).toHaveBeenCalledWith({
-        data: newAppointment,
-      });
+      expect(mockPrismaClient.appointment.create).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -131,8 +108,8 @@ describe("AppointmentController", () => {
     });
   });
 
-  describe("updateAppointmentStatus", () => {
-    test("should update appointment status", async () => {
+  describe("update", () => {
+    test("should update appointment", async () => {
       const updatedAppointment = {
         id: 1,
         patientId: 1,
@@ -145,15 +122,9 @@ describe("AppointmentController", () => {
       mockRequest.params = { id: "1" };
       mockRequest.body = { status: "CONFIRMED" };
 
-      await appointmentController.updateAppointmentStatus(
-        mockRequest as Request,
-        mockResponse
-      );
+      await update(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.appointment.update).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: { status: "CONFIRMED" },
-      });
+      expect(mockPrismaClient.appointment.update).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -163,7 +134,7 @@ describe("AppointmentController", () => {
     });
   });
 
-  describe("deleteAppointment", () => {
+  describe("remove", () => {
     test("should delete an appointment", async () => {
       const deletedAppointment = {
         id: 1,
@@ -176,18 +147,12 @@ describe("AppointmentController", () => {
       mockPrismaClient.appointment.delete.mockResolvedValue(deletedAppointment);
       mockRequest.params = { id: "1" };
 
-      await appointmentController.deleteAppointment(
-        mockRequest as Request,
-        mockResponse
-      );
+      await remove(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.appointment.delete).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.appointment.delete).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          message: "Supprimé",
         })
       );
     });

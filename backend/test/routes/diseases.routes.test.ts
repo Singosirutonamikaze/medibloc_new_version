@@ -95,10 +95,11 @@ describe("Disease Routes", () => {
     test("should add symptom to disease", async () => {
       const res = await request(app).post("/api/v1/diseases/1/symptoms/1");
 
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
     });
   });
+
 
   describe("DELETE /api/v1/diseases/:id/symptoms/:symptomId", () => {
     test("should remove symptom from disease", async () => {

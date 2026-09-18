@@ -1,0 +1,29 @@
+# ------------------------------------------------------------------------------
+# MediBloc Backend - Dockerfile Developpement (Hot-Reload)
+# Auteur : SINGO Yao Dieu Donne
+# Date   : 2026-09-17
+# ------------------------------------------------------------------------------
+
+FROM node:20-alpine
+
+RUN apk add --no-cache openssl libc6-compat
+
+WORKDIR /app
+
+RUN chown -R node:node /app
+
+COPY --chown=node:node package.json package-lock.json ./
+COPY --chown=node:node prisma ./prisma/
+
+USER node
+
+RUN npm install
+
+COPY --chown=node:node tsconfig.json ./
+COPY --chown=node:node src ./src/
+
+RUN npx prisma generate
+
+EXPOSE 3001
+
+CMD ["npm", "run", "dev"]

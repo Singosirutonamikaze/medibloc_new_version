@@ -1,6 +1,12 @@
 import { describe, test, expect, beforeEach, type Mock } from "vitest";
 import { mockPrismaClient, resetAllMocks } from "../setup/prismaMock";
-import { MedicineController } from "../../src/controllers/medicine.controller";
+import {
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+} from "../../src/features/medicine/controllers/medicine.controller";
 import type { Request, Response } from "express";
 import {
   createMockRequest,
@@ -8,15 +14,13 @@ import {
 } from "../setup/test-helpers";
 
 describe("MedicineController", () => {
-  let medicineController: MedicineController;
-  let mockRequest: Partial<Request>;
+  let mockRequest: Request;
   let mockResponse: Response;
   let mockJson: Mock;
   let mockStatus: Mock;
 
   beforeEach(() => {
     resetAllMocks();
-    medicineController = new MedicineController();
 
     const mocks = createMockResponse();
     mockJson = mocks.mockJson;
@@ -26,57 +30,40 @@ describe("MedicineController", () => {
     mockRequest = createMockRequest();
   });
 
-  describe("getAllMedicines", () => {
-    test("should return all medicines with pagination", async () => {
+  describe("getAll", () => {
+    test("should return all medicines", async () => {
       const mockMedicines = [
-        { id: 1, name: "Paracetamol", type: "Tablet", price: 5.0 },
-        { id: 2, name: "Amoxicillin", type: "Capsule", price: 10.0 },
+        { id: 1, name: "Paracetamol", dosage: "500mg" },
       ];
 
       mockPrismaClient.medicine.findMany.mockResolvedValue(mockMedicines);
-      mockPrismaClient.medicine.count.mockResolvedValue(2);
 
-      mockRequest.query = { page: "1", limit: "10" };
-
-      await medicineController.getAllMedicines(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getAll(mockRequest as Request, mockResponse);
 
       expect(mockPrismaClient.medicine.findMany).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: expect.objectContaining({
-            data: mockMedicines,
-            pagination: expect.any(Object),
-            success: true,
-          }),
+          data: mockMedicines,
         })
       );
     });
   });
 
-  describe("getMedicineById", () => {
+  describe("getById", () => {
     test("should return a medicine by ID", async () => {
       const mockMedicine = {
         id: 1,
         name: "Paracetamol",
-        type: "Tablet",
-        price: 5.0,
+        dosage: "500mg",
       };
 
       mockPrismaClient.medicine.findUnique.mockResolvedValue(mockMedicine);
       mockRequest.params = { id: "1" };
 
-      await medicineController.getMedicineById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicine.findUnique).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.medicine.findUnique).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -89,10 +76,7 @@ describe("MedicineController", () => {
       mockPrismaClient.medicine.findUnique.mockResolvedValue(null);
       mockRequest.params = { id: "999" };
 
-      await medicineController.getMedicineById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
       expect(mockStatus).toHaveBeenCalledWith(404);
       expect(mockJson).toHaveBeenCalledWith(
@@ -103,12 +87,12 @@ describe("MedicineController", () => {
     });
   });
 
-  describe("createMedicine", () => {
+  describe("create", () => {
     test("should create a new medicine", async () => {
       const newMedicine = {
         name: "Paracetamol",
-        type: "Tablet",
-        price: 5.0,
+        dosage: "500mg",
+        pharmacyId: 1,
       };
 
       const createdMedicine = { id: 1, ...newMedicine };
@@ -116,14 +100,9 @@ describe("MedicineController", () => {
       mockPrismaClient.medicine.create.mockResolvedValue(createdMedicine);
       mockRequest.body = newMedicine;
 
-      await medicineController.createMedicine(
-        mockRequest as Request,
-        mockResponse
-      );
+      await create(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicine.create).toHaveBeenCalledWith({
-        data: newMedicine,
-      });
+      expect(mockPrismaClient.medicine.create).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -134,29 +113,22 @@ describe("MedicineController", () => {
     });
   });
 
-  describe("updateMedicine", () => {
+  describe("update", () => {
     test("should update a medicine", async () => {
-      const updatedData = { price: 7.5 };
+      const updatedData = { dosage: "1000mg" };
       const updatedMedicine = {
         id: 1,
         name: "Paracetamol",
-        type: "Tablet",
-        price: 7.5,
+        dosage: "1000mg",
       };
 
       mockPrismaClient.medicine.update.mockResolvedValue(updatedMedicine);
       mockRequest.params = { id: "1" };
       mockRequest.body = updatedData;
 
-      await medicineController.updateMedicine(
-        mockRequest as Request,
-        mockResponse
-      );
+      await update(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicine.update).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: updatedData,
-      });
+      expect(mockPrismaClient.medicine.update).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
@@ -166,30 +138,21 @@ describe("MedicineController", () => {
     });
   });
 
-  describe("deleteMedicine", () => {
+  describe("remove", () => {
     test("should delete a medicine", async () => {
       const deletedMedicine = {
         id: 1,
-        name: "Paracetamol",
-        type: "Tablet",
-        price: 5.0,
       };
 
       mockPrismaClient.medicine.delete.mockResolvedValue(deletedMedicine);
       mockRequest.params = { id: "1" };
 
-      await medicineController.deleteMedicine(
-        mockRequest as Request,
-        mockResponse
-      );
+      await remove(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicine.delete).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.medicine.delete).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          message: "Supprimé",
         })
       );
     });

@@ -1,0 +1,106 @@
+name: MediBloc - Continuous Integration (CI)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-ci:
+    name: Backend CI (Audit, Types, Tests, Build)
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Installation des dependances Backend
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Audit de securite des dependances Backend
+        working-directory: ./backend
+        run: npm audit --audit-level=critical
+
+      - name: Generation du client Prisma
+        working-directory: ./backend
+        run: npx prisma generate
+
+      - name: Verification du typage TypeScript
+        working-directory: ./backend
+        run: npx tsc --noEmit
+
+      - name: Execution de la suite de tests Vitest
+        working-directory: ./backend
+        run: npm run test:run
+        env:
+          NODE_ENV: test
+          JWT_SECRET: medibloc-test-secret-key-for-ci-only-do-not-use-in-production
+          JWT_EXPIRES_IN: 1d
+          DATABASE_URL: postgresql://test:test@localhost:5432/medibloc_test
+          PORT: '3001'
+          CORS_ORIGIN: 'http://localhost:5173'
+
+      - name: Compilation du Backend (Build)
+        working-directory: ./backend
+        run: npm run build
+
+      - name: Archivage des rapports de tests et logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-logs-node-${{ matrix.node-version }}
+          path: backend/logs/
+          retention-days: 14
+
+  frontend-ci:
+    name: Frontend CI (Audit, Tests, Build)
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: medibloc/package-lock.json
+
+      - name: Installation des dependances Frontend
+        working-directory: ./medibloc
+        run: npm ci
+
+      - name: Audit de securite des dependances Frontend
+        working-directory: ./medibloc
+        run: npm audit --audit-level=critical
+
+      - name: Verification du typage et Compilation Frontend
+        working-directory: ./medibloc
+        run: npm run build

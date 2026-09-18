@@ -1,168 +1,301 @@
 /**
- * Test Runner pour environnements cloud (Render, Railway, etc.)
- * Alternative à cron/systemd pour les plateformes PaaS
- * 
- * Installation: npm install node-cron
- * 
- * Pour l'utiliser sur Render:
- * 1. Ajoutez "node-cron" aux dependencies dans package.json
- * 2. Créez un nouveau "Background Worker" sur Render
- * 3. Commande de démarrage: node dist/scheduler/test-runner.js
+ * @file test-runner.ts
+ * @description Planificateur automatique d'execution des tests de non-regression pour environnements cloud (Render, Railway).
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
  */
 
-import cron from 'node-cron';
-import { exec } from 'node:child_process';
-import { promisify } from 'node:util';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+import cron from "node-cron";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 const execAsync = promisify(exec);
 
-class TestScheduler {
-  private readonly logDir: string;
+/**
+ * @interface ExecResult
+ * @description Resultat standard d'une execution de commande processus fils.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ *
+ * @property stdout Sortie standard du processus.
+ * @property stderr Sortie d'erreur standard du processus.
+ */
+interface ExecResult {
+  readonly stdout: string;
+  readonly stderr: string;
+}
 
-  constructor() {
-    this.logDir = path.join(process.cwd(), 'logs');
-    this.ensureLogDirectory();
-  }
+/**
+ * @interface ExecError
+ * @description Structure d'exception d'un processus fils en echec.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ *
+ * @property message Message d'erreur detaille.
+ * @property stdout Flux standard eventuel avant interruption.
+ * @property stderr Flux d'erreur genere par la commande.
+ */
+interface ExecError {
+  readonly message: string;
+  readonly stdout: string;
+  readonly stderr: string;
+}
 
-  private ensureLogDirectory(): void {
-    if (!fs.existsSync(this.logDir)) {
-      fs.mkdirSync(this.logDir, { recursive: true });
-    }
-  }
+const logDir = path.join(process.cwd(), "logs");
 
-  private async runTests(): Promise<void> {
-    const timestamp = new Date().toISOString().replaceAll(/[:.]/g, '-');
-    const logFile = path.join(this.logDir, `test-${timestamp}.log`);
+/**
+ * @description S'assure de la presence du repertoire de stockage des journaux.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ */
+const ensureLogDirectory = (): void => {
+  const exists = fs.existsSync(logDir);
+  const dirHandlers: Record<string, () => void> = {
+    true: () => undefined,
+    false: () => fs.mkdirSync(logDir, { recursive: true }),
+  };
+  dirHandlers[String(exists)]();
+};
 
-    console.log(`[${new Date().toISOString()}] Démarrage des tests...`);
+/**
+ * @description Construit le contenu formatte du rapport de test en cas de succes.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ *
+ * @param stdout Sortie standard des tests.
+ * @param stderr Sortie d'erreur standard.
+ * @param timestamp Horodatage ISO d'execution.
+ * @returns Rapport formatte.
+ */
+const formatSuccessReport = (
+  stdout: string,
+  stderr: string,
+  timestamp: string
+): string => {
+  return [
+    "===========================================",
+    `Tests automatiques - ${timestamp}`,
+    "===========================================",
+    "",
+    "STDOUT:",
+    stdout,
+    "",
+    "STDERR:",
+    stderr,
+    "",
+    "===========================================",
+    "Tests termines avec succes",
+    "===========================================",
+  ].join("\n");
+};
 
-    try {
-      const { stdout, stderr } = await execAsync('npm run test:run', {
-        cwd: process.cwd(),
-        env: process.env,
-      });
+/**
+ * @description Construit le contenu formatte du rapport de test en cas d'echec.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ *
+ * @param error Objet d'erreur capture.
+ * @param timestamp Horodatage ISO d'execution.
+ * @returns Rapport d'erreur formatte.
+ */
+const formatErrorReport = (error: ExecError, timestamp: string): string => {
+  return [
+    "===========================================",
+    `Tests automatiques - ${timestamp}`,
+    "===========================================",
+    "",
+    "ERREUR:",
+    error.message,
+    "",
+    "STDOUT:",
+    error.stdout,
+    "",
+    "STDERR:",
+    error.stderr,
+    "",
+    "===========================================",
+    "Tests termines avec des erreurs",
+    "===========================================",
+  ].join("\n");
+};
 
-      const logContent = [
-        '===========================================',
-        `Tests automatiques - ${new Date().toISOString()}`,
-        '===========================================',
-        '',
-        'STDOUT:',
-        stdout,
-        '',
-        'STDERR:',
-        stderr,
-        '',
-        '===========================================',
-        'Tests terminés avec succès',
-        '===========================================',
-      ].join('\n');
+/**
+ * @description Met a jour le lien symbolique vers le dernier rapport de test genere.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ *
+ * @param logFile Chemin absolu du fichier journal cree.
+ */
+const updateLatestSymlink = (logFile: string): void => {
+  const latestLink = path.join(logDir, "latest-test.log");
+  const exists = fs.existsSync(latestLink);
+  const linkHandlers: Record<string, () => void> = {
+    true: () => fs.unlinkSync(latestLink),
+    false: () => undefined,
+  };
+  linkHandlers[String(exists)]();
+  fs.symlinkSync(path.basename(logFile), latestLink);
+};
 
-      fs.writeFileSync(logFile, logContent);
-      console.log(`[${new Date().toISOString()}] Tests terminés avec succès`);
-      console.log(`Logs sauvegardés dans: ${logFile}`);
+/**
+ * @description Supprime les fichiers journaux anterieurs au seuil de conservation (30 jours).
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ */
+const cleanOldLogs = (): void => {
+  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const files = fs.readdirSync(logDir);
 
-      // Créer un lien symbolique vers le dernier log
-      const latestLink = path.join(this.logDir, 'latest-test.log');
-      if (fs.existsSync(latestLink)) {
-        fs.unlinkSync(latestLink);
-      }
-      fs.symlinkSync(path.basename(logFile), latestLink);
+  files
+    .filter((file) => file.startsWith("test-") && file.endsWith(".log"))
+    .forEach((file) => {
+      const filePath = path.join(logDir, file);
+      const stats = fs.statSync(filePath);
+      const isOutdated = stats.mtimeMs < thirtyDaysAgo;
 
-    } catch (error: any) {
-      const errorContent = [
-        '===========================================',
-        `Tests automatiques - ${new Date().toISOString()}`,
-        '===========================================',
-        '',
-        'ERREUR:',
-        error.message,
-        '',
-        'STDOUT:',
-        error.stdout || '',
-        '',
-        'STDERR:',
-        error.stderr || '',
-        '',
-        '===========================================',
-        'Tests terminés avec des erreurs',
-        '===========================================',
-      ].join('\n');
-
-      fs.writeFileSync(logFile, errorContent);
-      console.error(`[${new Date().toISOString()}] Les tests ont échoué`);
-      console.error(error.message);
-    }
-
-    // Nettoyer les anciens logs (garder les 30 derniers jours)
-    this.cleanOldLogs();
-  }
-
-  private cleanOldLogs(): void {
-    const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
-
-    fs.readdirSync(this.logDir).forEach((file) => {
-      if (file.startsWith('test-') && file.endsWith('.log')) {
-        const filePath = path.join(this.logDir, file);
-        const stats = fs.statSync(filePath);
-
-        if (stats.mtimeMs < thirtyDaysAgo) {
+      const deleteHandlers: Record<string, () => void> = {
+        true: () => {
           fs.unlinkSync(filePath);
-          console.log(`Ancien log supprimé: ${file}`);
-        }
-      }
+          console.log(`Ancien log supprime : ${file}`);
+        },
+        false: () => undefined,
+      };
+
+      deleteHandlers[String(isOutdated)]();
     });
+};
+
+/**
+ * @description Execute la suite de tests unitaires et persiste le rapport dans les journaux.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ */
+export const runTests = async (): Promise<void> => {
+  ensureLogDirectory();
+  const rawTimestamp = new Date().toISOString();
+  const fileTimestamp = rawTimestamp.replaceAll(/[:.]/g, "-");
+  const logFile = path.join(logDir, `test-${fileTimestamp}.log`);
+
+  console.log(`[${rawTimestamp}] Demarrage de la suite de tests...`);
+
+  try {
+    const result = (await execAsync("npm run test:run", {
+      cwd: process.cwd(),
+      env: process.env,
+    })) as ExecResult;
+
+    const report = formatSuccessReport(
+      result.stdout,
+      result.stderr,
+      rawTimestamp
+    );
+    fs.writeFileSync(logFile, report);
+    console.log(`[${rawTimestamp}] Tests termines avec succes`);
+    console.log(`Logs sauvegardes dans : ${logFile}`);
+
+    updateLatestSymlink(logFile);
+  } catch (err) {
+    const rawError = err as {
+      message?: string;
+      stdout?: string;
+      stderr?: string;
+    };
+    const execError: ExecError = {
+      message: rawError.message || "Echec d'execution des tests",
+      stdout: rawError.stdout || "",
+      stderr: rawError.stderr || "",
+    };
+
+    const report = formatErrorReport(execError, rawTimestamp);
+    fs.writeFileSync(logFile, report);
+    console.error(`[${rawTimestamp}] Echec de la suite de tests :`);
+    console.error(execError.message);
   }
 
-  public start(): void {
-    console.log('===========================================');
-    console.log('Test Scheduler démarré');
-    console.log('Schedule: Toutes les 2 heures');
-    console.log(`Logs: ${this.logDir}`);
-    console.log('===========================================');
+  cleanOldLogs();
+};
 
-    // Exécuter les tests toutes les 2 heures
-    cron.schedule('0 */2 * * *', async () => {
-      await this.runTests();
-    });
+/**
+ * @description Calcule l'horodatage previsible de la prochaine iteration du planificateur.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ *
+ * @returns Chaine formattee ISO 8601.
+ */
+export const getNextRunTime = (): string => {
+  const now = new Date();
+  const nextRun = new Date(now);
+  nextRun.setHours(Math.ceil(now.getHours() / 2) * 2, 0, 0, 0);
 
-    // Exécuter les tests immédiatement au démarrage
-    this.runTests();
-
-    console.log('Scheduler en cours d\'exécution...');
-    console.log('Prochain run: ', this.getNextRunTime());
-  }
-
-  private getNextRunTime(): string {
-    const now = new Date();
-    const nextRun = new Date(now);
-    nextRun.setHours(Math.ceil(now.getHours() / 2) * 2, 0, 0, 0);
-
-    if (nextRun <= now) {
+  const isPastOrPresent = nextRun.getTime() <= now.getTime();
+  const timeAdjusters: Record<string, () => void> = {
+    true: () => {
       nextRun.setHours(nextRun.getHours() + 2);
-    }
+    },
+    false: () => undefined,
+  };
+  timeAdjusters[String(isPastOrPresent)]();
 
-    return nextRun.toISOString();
-  }
-}
+  return nextRun.toISOString();
+};
 
-// Démarrer le scheduler si ce fichier est exécuté directement
-if (require.main === module) {
-  const scheduler = new TestScheduler();
-  scheduler.start();
+/**
+ * @description Demarre la planification periodique de la suite de tests (toutes les 2 heures).
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ */
+export const startScheduler = (): void => {
+  console.log("===========================================");
+  console.log("Test Scheduler demarre");
+  console.log("Planification : Toutes les 2 heures");
+  console.log(`Dossier de logs : ${logDir}`);
+  console.log("===========================================");
 
-  // Gérer les signaux pour un arrêt propre
-  process.on('SIGTERM', () => {
-    console.log('SIGTERM reçu, arrêt du scheduler...');
-    process.exit(0);
+  cron.schedule("0 */2 * * *", async () => {
+    await runTests();
   });
 
-  process.on('SIGINT', () => {
-    console.log('SIGINT reçu, arrêt du scheduler...');
-    process.exit(0);
-  });
-}
+  runTests();
 
-export default TestScheduler;
+  console.log("Planificateur en cours d'execution...");
+  console.log("Prochaine execution : ", getNextRunTime());
+};
+
+const isDirectExecution = require.main === module;
+const launchHandlers: Record<string, () => void> = {
+  true: () => {
+    startScheduler();
+
+    process.on("SIGTERM", () => {
+      console.log("SIGTERM recu, arret propre du planificateur...");
+      process.exit(0);
+    });
+
+    process.on("SIGINT", () => {
+      console.log("SIGINT recu, arret propre du planificateur...");
+      process.exit(0);
+    });
+  },
+  false: () => undefined,
+};
+
+launchHandlers[String(isDirectExecution)]();
+
+export default {
+  start: startScheduler,
+  runTests,
+  getNextRunTime,
+};

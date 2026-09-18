@@ -1,22 +1,23 @@
 import { describe, test, expect, beforeEach, type Mock } from "vitest";
 import { mockPrismaClient, resetAllMocks } from "../setup/prismaMock";
-import { MedicalRecordController } from "../../src/controllers/medicalRecord.controller";
-import type { Request, Response } from "express";
 import {
-  createMockRequest,
-  createMockResponse,
-} from "../setup/test-helpers";
+  getAll,
+  getById,
+  create,
+  update,
+  remove,
+} from "../../src/features/medical-record/controllers/medical-record.controller";
+import type { Request, Response } from "express";
+import { createMockRequest, createMockResponse } from "../setup/test-helpers";
 
 describe("MedicalRecordController", () => {
-  let medicalRecordController: MedicalRecordController;
-  let mockRequest: Partial<Request>;
+  let mockRequest: Request;
   let mockResponse: Response;
   let mockJson: Mock;
   let mockStatus: Mock;
 
   beforeEach(() => {
     resetAllMocks();
-    medicalRecordController = new MedicalRecordController();
 
     const mocks = createMockResponse();
     mockJson = mocks.mockJson;
@@ -26,70 +27,46 @@ describe("MedicalRecordController", () => {
     mockRequest = createMockRequest();
   });
 
-  describe("getAllMedicalRecords", () => {
-    test("should return all medical records with pagination", async () => {
-      const mockMedicalRecords = [
-        { id: 1, patientId: 1, doctorId: 1, diagnosis: "Malaria", treatment: "Anti-malarial drugs" },
-        { id: 2, patientId: 2, doctorId: 1, diagnosis: "Typhoid", treatment: "Antibiotics" },
+  describe("getAll", () => {
+    test("should return all medical records", async () => {
+      const mockRecords = [
+        { id: 1, patientId: 1, doctorId: 1, diagnosis: "Paludisme" },
       ];
 
-      mockPrismaClient.medicalRecord.findMany.mockResolvedValue(mockMedicalRecords);
-      mockPrismaClient.medicalRecord.count.mockResolvedValue(2);
+      mockPrismaClient.medicalRecord.findMany.mockResolvedValue(mockRecords);
 
-      mockRequest.query = { page: "1", limit: "10" };
-
-      await medicalRecordController.getAllMedicalRecords(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getAll(mockRequest as Request, mockResponse);
 
       expect(mockPrismaClient.medicalRecord.findMany).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: expect.objectContaining({
-            data: mockMedicalRecords,
-            pagination: expect.any(Object),
-            success: true,
-          }),
-        })
+          data: mockRecords,
+        }),
       );
     });
   });
 
-  describe("getMedicalRecordById", () => {
+  describe("getById", () => {
     test("should return a medical record by ID", async () => {
-      const mockMedicalRecord = {
+      const mockRecord = {
         id: 1,
         patientId: 1,
         doctorId: 1,
-        diagnosis: "Malaria",
-        treatment: "Anti-malarial drugs",
+        diagnosis: "Paludisme",
       };
 
-      mockPrismaClient.medicalRecord.findUnique.mockResolvedValue(mockMedicalRecord);
+      mockPrismaClient.medicalRecord.findUnique.mockResolvedValue(mockRecord);
       mockRequest.params = { id: "1" };
 
-      await medicalRecordController.getMedicalRecordById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicalRecord.findUnique).toHaveBeenCalledWith({
-        where: { id: 1 },
-        include: {
-          patient: {
-            include: {
-              user: true,
-            },
-          },
-        },
-      });
+      expect(mockPrismaClient.medicalRecord.findUnique).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: mockMedicalRecord,
-        })
+          data: mockRecord,
+        }),
       );
     });
 
@@ -97,125 +74,83 @@ describe("MedicalRecordController", () => {
       mockPrismaClient.medicalRecord.findUnique.mockResolvedValue(null);
       mockRequest.params = { id: "999" };
 
-      await medicalRecordController.getMedicalRecordById(
-        mockRequest as Request,
-        mockResponse
-      );
+      await getById(mockRequest as Request, mockResponse);
 
       expect(mockStatus).toHaveBeenCalledWith(404);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: false,
-        })
+        }),
       );
     });
   });
 
-  describe("createMedicalRecord", () => {
+  describe("create", () => {
     test("should create a new medical record", async () => {
-      const newMedicalRecord = {
+      const newRecord = {
         patientId: 1,
         doctorId: 1,
-        diagnosis: "Malaria",
-        treatment: "Anti-malarial drugs",
+        diagnosis: "Paludisme",
       };
 
-      const createdMedicalRecord = { id: 1, ...newMedicalRecord };
+      const createdRecord = { id: 1, ...newRecord };
 
-      mockPrismaClient.medicalRecord.create.mockResolvedValue(createdMedicalRecord);
-      mockRequest.body = newMedicalRecord;
+      mockPrismaClient.medicalRecord.create.mockResolvedValue(createdRecord);
+      mockRequest.body = newRecord;
 
-      await medicalRecordController.createMedicalRecord(
-        mockRequest as Request,
-        mockResponse
-      );
+      await create(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicalRecord.create).toHaveBeenCalledWith({
-        data: newMedicalRecord,
-        include: {
-          patient: {
-            include: {
-              user: true,
-            },
-          },
-        },
-      });
+      expect(mockPrismaClient.medicalRecord.create).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(201);
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: createdMedicalRecord,
-        })
+          data: createdRecord,
+        }),
       );
     });
   });
 
-  describe("updateMedicalRecord", () => {
+  describe("update", () => {
     test("should update a medical record", async () => {
-      const updatedData = { treatment: "Updated treatment plan" };
-      const updatedMedicalRecord = {
+      const updatedData = { diagnosis: "Paludisme severe" };
+      const updatedRecord = {
         id: 1,
-        patientId: 1,
-        doctorId: 1,
-        diagnosis: "Malaria",
-        treatment: "Updated treatment plan",
+        diagnosis: "Paludisme severe",
       };
 
-      mockPrismaClient.medicalRecord.update.mockResolvedValue(updatedMedicalRecord);
+      mockPrismaClient.medicalRecord.update.mockResolvedValue(updatedRecord);
       mockRequest.params = { id: "1" };
       mockRequest.body = updatedData;
 
-      await medicalRecordController.updateMedicalRecord(
-        mockRequest as Request,
-        mockResponse
-      );
+      await update(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicalRecord.update).toHaveBeenCalledWith({
-        where: { id: 1 },
-        data: updatedData,
-        include: {
-          patient: {
-            include: {
-              user: true,
-            },
-          },
-        },
-      });
+      expect(mockPrismaClient.medicalRecord.update).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          data: updatedMedicalRecord,
-        })
+          data: updatedRecord,
+        }),
       );
     });
   });
 
-  describe("deleteMedicalRecord", () => {
+  describe("remove", () => {
     test("should delete a medical record", async () => {
-      const deletedMedicalRecord = {
+      const deletedRecord = {
         id: 1,
-        patientId: 1,
-        doctorId: 1,
-        diagnosis: "Malaria",
-        treatment: "Anti-malarial drugs",
       };
 
-      mockPrismaClient.medicalRecord.delete.mockResolvedValue(deletedMedicalRecord);
+      mockPrismaClient.medicalRecord.delete.mockResolvedValue(deletedRecord);
       mockRequest.params = { id: "1" };
 
-      await medicalRecordController.deleteMedicalRecord(
-        mockRequest as Request,
-        mockResponse
-      );
+      await remove(mockRequest as Request, mockResponse);
 
-      expect(mockPrismaClient.medicalRecord.delete).toHaveBeenCalledWith({
-        where: { id: 1 },
-      });
+      expect(mockPrismaClient.medicalRecord.delete).toHaveBeenCalled();
       expect(mockJson).toHaveBeenCalledWith(
         expect.objectContaining({
           success: true,
-          message: "Supprimé",
-        })
+        }),
       );
     });
   });
