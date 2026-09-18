@@ -66,7 +66,7 @@ jobs:
 
       - name: Archivage des rapports de tests et logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: backend-test-logs-node-${{ matrix.node-version }}
           path: backend/logs/
