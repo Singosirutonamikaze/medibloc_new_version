@@ -69,7 +69,7 @@
     "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.70.0",
-    "@vitest/ui": "^4.1.9",
+    "@vitest/ui": "^5.0.1",
     "eslint": "^10.10.0",
     "i": "^0.3.7",
     "npm": "^11.17.0",
