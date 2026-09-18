@@ -3,12 +3,10 @@ name: MediBloc - Continuous Integration (CI)
 on:
   push:
     branches:
-      - main
-      - develop
+      - '**'
   pull_request:
     branches:
-      - main
-      - develop
+      - '**'
   workflow_dispatch:
 
 concurrency:
@@ -100,6 +98,10 @@ jobs:
       - name: Audit de securite des dependances Frontend
         working-directory: ./medibloc
         run: npm audit --audit-level=critical
+
+      - name: Execution des tests unitaires Frontend
+        working-directory: ./medibloc
+        run: npm run test -- --run
 
       - name: Verification du typage et Compilation Frontend
         working-directory: ./medibloc
