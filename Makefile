@@ -131,8 +131,19 @@ docker-frontend-down: ## cette commande [make docker-frontend-down] permet d'arr
 	@printf "$(YELLOW)Arret du conteneur frontend...$(RESET)\n"
 	cd medibloc/docker && docker compose down
 
+# --- Qualite et Typage Frontend ---
+
+typecheck-frontend: ## cette commande [make typecheck-frontend] permet de verifier les types TypeScript du frontend
+	@printf "$(BLUE)Verification des types TypeScript du frontend...$(RESET)\n"
+	cd medibloc && npx tsc -b --noEmit
+
+lint-frontend: ## cette commande [make lint-frontend] permet d'analyser le code source frontend avec ESLint
+	@printf "$(BLUE)Verification du code frontend avec ESLint...$(RESET)\n"
+	cd medibloc && npm run lint
+
 # --- Nettoyage et Maintenance ---
 
 clean: ## cette commande [make clean] permet de supprimer l'ensemble des fichiers compiles, logs et rapports de couverture
 	@printf "$(YELLOW)Nettoyage global des artefacts...$(RESET)\n"
 	rm -rf backend/dist backend/coverage backend/logs/*.log backend/logs/*.json medibloc/dist medibloc/coverage
+
