@@ -1,16 +1,14 @@
 import './App.css'
 import { AppRouter } from './routes'
-import { AuthProvider, ThemeProvider, NotificationProvider } from './contexts'
+import { AuthProvider, NotificationProvider } from './contexts'
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <NotificationProvider>
-          <AppRouter />
-        </NotificationProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <NotificationProvider>
+        <AppRouter />
+      </NotificationProvider>
+    </AuthProvider>
   )
 }
 

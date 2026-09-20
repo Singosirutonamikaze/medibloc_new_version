@@ -1,47 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  FiMenu,
-} from 'react-icons/fi';
-import { Button } from '../../atoms';
+import { FiArrowUpRight, FiChevronDown } from 'react-icons/fi';
 import { ROUTES } from '../../../utils/constants/routes.constants';
+import { HOSPITAL_DEPARTMENTS } from '../../../utils/constants/header.constants';
 import logo from '../../../assets/logo/logo.png';
-const iconClass = 'shrink-0 transition-transform duration-200 group-hover:scale-110';
-
-const formatFullDateTime = (value: Date) => {
-  const datePart = new Intl.DateTimeFormat('fr-FR', {
-    weekday: 'long',
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  }).format(value);
-
-  const timePart = new Intl.DateTimeFormat('fr-FR', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  }).format(value);
-
-  return `${datePart.charAt(0).toUpperCase()}${datePart.slice(1)} • ${timePart}`;
-};
 
 export const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [now, setNow] = useState(() => new Date());
+  const [isDepartmentsOpen, setIsDepartmentsOpen] = useState(false);
 
-  const menuRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
-      if (!menuRef.current?.contains(event.target as Node)) {
-        setIsMenuOpen(false);
+      if (!dropdownRef.current?.contains(event.target as Node)) {
+        setIsDepartmentsOpen(false);
       }
     };
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsMenuOpen(false);
+        setIsDepartmentsOpen(false);
       }
     };
 
@@ -54,83 +33,144 @@ export const Header = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const intervalId = globalThis.setInterval(() => {
-      setNow(new Date());
-    }, 1000);
-
-    return () => {
-      globalThis.clearInterval(intervalId);
-    };
-  }, []);
-
-  const handleMenuToggle = () => {
-    setIsMenuOpen((previous) => !previous);
-  };
-
   const handleNavigate = (path: string) => {
-    setIsMenuOpen(false);
+    setIsDepartmentsOpen(false);
     navigate(path);
   };
 
   return (
-    <header className="w-full bg-transparent px-3 py-3 sm:px-4">
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-2 rounded-xl border border-(--ui-border-soft) bg-linear-to-r from-(--ui-surface) via-(--ui-surface) to-(--ui-surface-soft) px-3 py-2 shadow-sm sm:gap-3 sm:px-4">
-        <div className="flex items-center gap-3 bg-white rounded-2xl">
+    <header className="relative z-50 w-full bg-transparent">
+      <div className="mx-auto flex h-20 w-full max-w-360 items-center justify-between px-4 sm:px-6 lg:px-10">
+        <button
+          type="button"
+          onClick={() => handleNavigate(ROUTES.PUBLIC.HOME)}
+          className="flex items-center gap-2.5 cursor-pointer select-none bg-transparent border-none p-0 text-left focus:outline-hidden"
+        >
           <img
             src={logo}
-            alt="Medibloc"
-            className="h-9 w-auto object-contain"
+            alt="MediBloc"
+            className="h-8 w-auto object-contain"
           />
-        </div>
-
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <span className="hidden h-10 items-center rounded-xl border border-(--ui-border-soft) bg-linear-to-r from-(--ui-info-dim) to-(--ui-surface-soft) px-3 text-xs font-semibold tracking-wide text-(--ui-text) sm:inline-flex">
-            {formatFullDateTime(now)}
+          <span className="text-xl font-black tracking-tight text-[#0B2545]">
+            Medi<span className="text-[#0B2545]">Bloc</span>
           </span>
+        </button>
 
-          <div ref={menuRef} className="relative">
-            <Button
+        <nav className="hidden items-center gap-2 text-sm font-semibold text-[#6B7280] md:flex">
+          <button
+            type="button"
+            onClick={() => handleNavigate(ROUTES.PUBLIC.HOME)}
+            className="rounded-full px-4 py-2 font-bold text-[#0B2545] transition-colors hover:bg-white/60"
+          >
+            Home
+          </button>
+          <a
+            href="#about"
+            className="rounded-full px-4 py-2 transition-colors hover:bg-white/60 hover:text-[#0B2545]"
+          >
+            About
+          </a>
+
+          <div ref={dropdownRef} className="relative">
+            <button
               type="button"
-              variant="primary"
-              className="group size-10 rounded-xl border border-(--ui-border-soft)! bg-(--ui-info-dim)! p-0 text-(--ui-text-muted)! shadow-none! hover:bg-(--ui-info-dim)! hover:text-(--ui-info)!"
-              aria-label="Menu"
-              aria-expanded={isMenuOpen}
-              aria-haspopup="true"
-              onClick={handleMenuToggle}
+              onClick={() => setIsDepartmentsOpen((prev) => !prev)}
+              className={`flex items-center gap-1.5 rounded-full px-4 py-2 transition-all ${
+                isDepartmentsOpen
+                  ? 'bg-white text-[#0B2545] shadow-sm'
+                  : 'hover:bg-white/60 hover:text-[#0B2545]'
+              }`}
             >
-              <FiMenu size={20} strokeWidth={2.2} className={`${iconClass} ${isMenuOpen ? 'rotate-90' : ''}`} />
-            </Button>
+              <span>Departments</span>
+              <FiChevronDown
+                className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                  isDepartmentsOpen ? 'rotate-180 text-[#0B2545]' : 'text-[#6B7280]'
+                }`}
+              />
+            </button>
 
-            {isMenuOpen && (
-              <div
-                className="absolute right-0 top-12 z-50 w-56 rounded-xl border border-(--ui-info) bg-linear-to-b from-(--ui-surface) to-(--ui-surface-soft) p-2 shadow-md"
-                aria-label="Menu utilisateur"
-              >
-                <div className="flex flex-col gap-2">
-                  <Button
-                    type="button"
-                    variant="primary"
-                    className="w-full justify-center border-0! bg-(--ui-surface-soft)! text-(--ui-text)! hover:bg-(--ui-info-dim)! hover:text-(--ui-info)!"
-                    onClick={() => handleNavigate(ROUTES.PUBLIC.LOGIN)}
+            {isDepartmentsOpen && (
+              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[min(92vw,780px)] rounded-3xl border border-white/90 bg-white/95 p-6 shadow-[0_25px_60px_rgba(11,37,69,0.18)] backdrop-blur-2xl transition-all duration-300 animate-in fade-in zoom-in-95">
+                <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div>
+                    <h3 className="text-sm font-black text-[#0B2545]">
+                      Specialized Medical Departments
+                    </h3>
+                    <p className="text-xs text-[#6B7280]">
+                      MediBloc offers a full range of specialized medical services and clinical excellence
+                    </p>
+                  </div>
+                  <a
+                    href="#services"
+                    onClick={() => setIsDepartmentsOpen(false)}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#0B2545] hover:text-[#12315C]"
                   >
-                    Se connecter
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="primary"
-                    className="w-full justify-center border-0! bg-(--ui-surface-soft)! text-(--ui-text)! hover:bg-(--ui-info-dim)! hover:text-(--ui-info)!"
-                    onClick={() => handleNavigate(ROUTES.PUBLIC.REGISTER)}
-                  >
-                    Créer un compte
-                  </Button>
+                    <span>All Departments</span>
+                    <FiArrowUpRight className="h-3.5 w-3.5 text-[#7ED957]" />
+                  </a>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {HOSPITAL_DEPARTMENTS.map((dept) => {
+                    const IconComponent = dept.icon;
+                    return (
+                      <a
+                        key={dept.id}
+                        href="#services"
+                        onClick={() => setIsDepartmentsOpen(false)}
+                        className="group flex items-start gap-3 rounded-2xl p-3 transition-all duration-200 hover:bg-[#EAF3FB]/80"
+                      >
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EAF3FB] text-[#0B2545] transition-transform duration-200 group-hover:scale-110 group-hover:bg-white">
+                          <IconComponent className="h-5 w-5 text-[#0B2545]" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-xs font-black text-[#0B2545] group-hover:text-[#12315C]">
+                              {dept.title}
+                            </h4>
+                            <span className="opacity-0 transition-opacity duration-200 group-hover:opacity-100 text-[#7ED957]">
+                              <FiArrowUpRight className="h-3.5 w-3.5" />
+                            </span>
+                          </div>
+                          <p className="mt-0.5 line-clamp-2 text-[11px] leading-relaxed text-[#6B7280]">
+                            {dept.desc}
+                          </p>
+                        </div>
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             )}
           </div>
+
+          <a
+            href="#doctors"
+            className="rounded-full px-4 py-2 transition-colors hover:bg-white/60 hover:text-[#0B2545]"
+          >
+            Doctors
+          </a>
+          <a
+            href="#experience"
+            className="rounded-full px-4 py-2 transition-colors hover:bg-white/60 hover:text-[#0B2545]"
+          >
+            Career
+          </a>
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => handleNavigate(ROUTES.PUBLIC.REGISTER)}
+            className="group inline-flex items-center gap-3 rounded-full bg-[#0B2545] pl-6 pr-2 py-2 text-xs font-bold text-white shadow-[0_8px_20px_rgba(11,37,69,0.2)] transition-all duration-300 hover:bg-[#12315C] hover:shadow-[0_12px_28px_rgba(11,37,69,0.3)]"
+          >
+            <span>Contact Us</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#7ED957] text-xs font-black text-[#0B2545] transition-transform duration-300 group-hover:scale-110">
+              <FiArrowUpRight className="h-4 w-4" />
+            </span>
+          </button>
         </div>
       </div>
-
     </header>
   );
 };

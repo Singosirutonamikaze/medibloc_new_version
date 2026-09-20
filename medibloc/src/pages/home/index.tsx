@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { FiX } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 import { Footer, Header, Tooltip } from "../../components"
+import { DnaCanvas } from "../../components/atoms"
 import { HeroSection } from "../../components/molecules/HeroSection"
 import logo from "../../assets/logo/logo.png"
 import { ROUTES } from "../../utils/constants/routes.constants"
@@ -41,75 +42,88 @@ function HomePage() {
   }, [isSocialOpen])
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-(--ui-bg)">
-      <div className="pointer-events-none absolute -left-24 -top-12 h-72 w-72 rounded-full bg-(--ui-info-dim) blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 top-10 h-80 w-80 rounded-full bg-(--ui-info-dim) blur-3xl" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-linear-to-b from-(--ui-surface-soft) via-(--ui-surface) to-transparent" />
+    <div className="flex min-h-screen w-full flex-col overflow-x-hidden bg-[#F8FAFC] text-[#0B2545]">
+      <div
+        className="relative w-full overflow-hidden bg-white"
+      >
+        <div className="pointer-events-none absolute -top-10 -left-16 h-[420px] w-[420px] rounded-full bg-[#C8DFF5]/25 blur-[100px]" />
+        <div className="pointer-events-none absolute top-8 right-0 h-[380px] w-[380px] rounded-full bg-[#B8D6F0]/20 blur-[90px]" />
+        <div className="pointer-events-none absolute top-[55%] -left-8 h-[300px] w-[300px] rounded-full bg-[#CADEEF]/18 blur-[80px]" />
+        <div className="pointer-events-none absolute bottom-4 right-1/4 h-[350px] w-[350px] rounded-full bg-[#C0D9F0]/22 blur-[95px]" />
+        <div className="pointer-events-none absolute top-1/4 left-[40%] h-[280px] w-[280px] rounded-full bg-[#D0E4F4]/15 blur-[85px]" />
+        <div className="pointer-events-none absolute top-0 left-1/2 h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-[#BDD8EE]/12 blur-[90px]" />
+        <div className="pointer-events-none absolute bottom-1/3 left-[15%] h-[250px] w-[250px] rounded-full bg-[#C5DDF2]/20 blur-[75px]" />
+        <div className="pointer-events-none absolute top-[70%] right-[10%] h-[300px] w-[300px] rounded-full bg-[#B5D4ED]/15 blur-[85px]" />
 
-      <div className="relative px-2 sm:px-0">
+        <div className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-45">
+          <DnaCanvas />
+        </div>
+
         <Header />
 
-        <main className="mx-auto mt-8 w-full max-w-7xl px-3 pb-28 sm:px-4">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 pb-14 sm:px-6 sm:pb-20 lg:px-10 lg:pb-24">
           <HeroSection
-            title="Medibloc simplifie votre travail au quotidien"
-            subtitle="Vous gérez les patients, les rendez-vous, les prescriptions et les dossiers médicaux dans un seul outil. Vous gagnez du temps et vous améliorez la qualité du suivi."
+            title="Modern Medical Management"
+            subtitle="Secure electronic patient records, precision consultations and intelligent hospital workflow."
             cta={{
-              primary: { label: 'Accéder à la plateforme', onClick: () => { globalThis.location.href = '/login'; } },
-              secondary: { label: 'Créer un compte', onClick: () => { globalThis.location.href = '/register'; } },
+              primary: { label: 'Book An Appointment', onClick: () => { navigate(ROUTES.PUBLIC.REGISTER); } },
+              secondary: { label: 'Doctor Portal', onClick: () => { navigate(ROUTES.PUBLIC.LOGIN); } },
             }}
           />
-          <ServiceSection />
-          <ActiviteSection />
-          <ExperienceSection />
-        </main>
+        </div>
+      </div>
 
-        <footer className="border-t border-(--ui-border-soft) bg-(--ui-surface)">
-          <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-4 py-8 sm:grid-cols-3 sm:py-10">
-            <div>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center rounded-xl bg-white p-1.5 shadow-sm">
-                  <img src={logo} alt="Medibloc" className="h-7 w-auto object-contain" />
-                </div>
-                <span className="text-base font-bold bg-linear-to-r from-[#4A90E2] to-[#2ECC71] bg-clip-text text-transparent">
-                  Medi<span className="text-[#2ECC71]">Bloc</span>
-                </span>
-              </div>
-              <p className="mt-3 text-sm leading-relaxed text-(--ui-text-muted)">
-                Une plateforme conçue pour simplifier la gestion médicale au quotidien.
-              </p>
+      <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 py-8 sm:px-6 sm:py-12 lg:px-10">
+        <div id="services" className="mt-8 sm:mt-12">
+          <ServiceSection />
+        </div>
+        <div id="experience" className="mt-16 sm:mt-24">
+          <ExperienceSection />
+        </div>
+      </main>
+
+      <footer className="w-full bg-[#0B2545] text-white">
+        <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-10 px-4 py-14 sm:grid-cols-4 sm:px-6 lg:px-10">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <img src={logo} alt="MediBloc" className="h-8 w-auto object-contain brightness-0 invert" />
+              <span className="text-xl font-extrabold text-white">
+                Medi<span className="text-[#7ED957]">Bloc</span>
+              </span>
             </div>
-            <div>
-              <h4 className="text-sm font-semibold text-(--ui-text)">Accès rapide</h4>
-              <ul className="mt-3 space-y-2">
-                <li>
-                  <button type="button" onClick={() => navigate(ROUTES.PUBLIC.LOGIN)} className="text-sm text-(--ui-text-muted) transition-colors hover:text-(--ui-text)">
-                    Connexion
-                  </button>
-                </li>
-                <li>
-                  <button type="button" onClick={() => navigate(ROUTES.PUBLIC.REGISTER)} className="text-sm text-(--ui-text-muted) transition-colors hover:text-(--ui-text)">
-                    Créer un compte
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-sm font-semibold text-(--ui-text)">À propos</h4>
-              <p className="mt-3 text-sm leading-relaxed text-(--ui-text-muted)">
-                Medibloc est une solution médicale pensée pour les professionnels de santé et leurs patients.
-                Sécurisée, simple et disponible en tout lieu.
-              </p>
-              <div className="mt-3">
-                <button type="button" onClick={() => navigate(ROUTES.PUBLIC.REGISTER)} className="text-sm font-medium text-(--ui-info) transition-opacity hover:opacity-75">
-                  Commencer gratuitement →
-                </button>
-              </div>
-            </div>
+            <p className="mt-4 text-xs leading-relaxed text-[#9CA3AF]">
+              MediBloc is your destination for world-class treatments, compassionate doctors, and precise diagnostics.
+            </p>
           </div>
-          <div className="border-t border-(--ui-border-soft) py-4 text-center text-xs text-(--ui-text-muted)">
-            © {new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })} Medibloc — L'amour de la santé est unique pour ton bonheur.
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Company</h4>
+            <ul className="mt-3 space-y-2 text-xs text-[#9CA3AF]">
+              <li><a href="#about" className="hover:text-white transition-colors">About Us</a></li>
+              <li><a href="#career" className="hover:text-white transition-colors">Careers</a></li>
+              <li><a href="#blog" className="hover:text-white transition-colors">Blog</a></li>
+            </ul>
           </div>
-        </footer>
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Departments</h4>
+            <ul className="mt-3 space-y-2 text-xs text-[#9CA3AF]">
+              <li><a href="#cardiology" className="hover:text-white transition-colors">Cardiology</a></li>
+              <li><a href="#neurology" className="hover:text-white transition-colors">Neurology</a></li>
+              <li><a href="#pediatrics" className="hover:text-white transition-colors">Pediatrics</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">Quick Links</h4>
+            <ul className="mt-3 space-y-2 text-xs text-[#9CA3AF]">
+              <li><a href="#appointments" className="hover:text-white transition-colors">Book Appointment</a></li>
+              <li><a href="#portal" className="hover:text-white transition-colors">Patient Portal</a></li>
+              <li><a href="#contact" className="hover:text-white transition-colors">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-white/10 py-5 text-center text-xs text-[#6B7280]">
+          © {new Date().getFullYear()} MediBloc International Hospital Ltd. All rights reserved.
+        </div>
+      </footer>
 
         {isSocialOpen && (
           <div className="fixed inset-0 z-40 flex items-center justify-center backdrop-blur-sm bg-black/30">
@@ -143,7 +157,6 @@ function HomePage() {
                 </button>
               </div>
 
-              {/* Corps */}
               <div className="px-5 py-6">
                 <p className="mb-5 text-center text-xs text-(--ui-text-muted)">
                   Retrouvez Medibloc sur vos plateformes préférées
@@ -155,7 +168,6 @@ function HomePage() {
         )}
 
         <Footer onOpen={() => setIsSocialOpen((previous) => !previous)} />
-      </div>
     </div>
   )
 }

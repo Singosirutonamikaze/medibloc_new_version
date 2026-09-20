@@ -15,3 +15,4 @@ export { Select } from './Select';
 export { Spinner } from './Spinner';
 export { TextArea } from './TextArea';
 export { Tooltip } from './Tooltip';
+export { DnaCanvas } from './DnaCanvas';

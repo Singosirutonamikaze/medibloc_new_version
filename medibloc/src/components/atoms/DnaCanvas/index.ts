@@ -1,0 +1,1 @@
+export { DnaCanvas } from './DnaCanvas';

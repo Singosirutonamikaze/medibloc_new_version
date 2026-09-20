@@ -1,150 +1,212 @@
-import type { ReactNode } from 'react';
-import { LogoFull } from '../../atoms/Logo';
-import heartHero from '../../../assets/images/heart-Hero.png';
-
-interface HeroFeature {
-  icon: ReactNode;
-  title: string;
-  description: string;
-}
+import { useEffect, useRef } from 'react';
+import {
+  FiArrowUpRight,
+  FiAward,
+} from 'react-icons/fi';
+import {
+  RiBrainLine,
+  RiHeartPulseLine,
+  RiLungsLine,
+  RiStethoscopeLine,
+} from 'react-icons/ri';
+import { FaBriefcaseMedical } from 'react-icons/fa';
+import gsap from 'gsap';
+import corpsHumainImg from '../../../assets/glass/humman-corps.png';
+import poumonsImg from '../../../assets/glass/poumons.png';
 
 interface HeroSectionProps {
   title: string;
   subtitle: string;
-  features?: HeroFeature[];
   cta?: {
     primary: { label: string; onClick: () => void };
     secondary?: { label: string; onClick: () => void };
   };
-  showLogo?: boolean;
 }
 
-export const HeroSection = ({
-  title,
-  subtitle,
-  cta,
-  features,
-  showLogo = true,
-}: HeroSectionProps) => (
-  <section className="relative min-h-[80vh] overflow-hidden bg-(--ui-bg) rounded-xl">
-    <div className="pointer-events-none absolute -left-24 -top-16 h-80 w-80 rounded-full bg-(--ui-info-dim) blur-3xl" />
-    <div className="pointer-events-none absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-(--ui-info-dim) blur-3xl" />
+const HEALTH_CARDS = [
+  {
+    icon: RiBrainLine,
+    title: 'Brain Health',
+    sub: 'Check',
+    variant: 'light' as const,
+  },
+  {
+    icon: RiHeartPulseLine,
+    title: 'Liver Function',
+    sub: 'Test',
+    variant: 'light' as const,
+  },
+  {
+    icon: RiLungsLine,
+    title: 'Kidney Health',
+    sub: 'Scan',
+    variant: 'dark' as const,
+  },
+];
 
-    <div className="relative z-10 mx-auto flex min-h-[84vh] w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-      <div className="grid flex-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <div className="flex flex-col">
-          {showLogo && (
-            <div className="mb-4">
-              <LogoFull size={36} />
+export const HeroSection = ({ cta }: HeroSectionProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
+  const cardsRowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        leftColRef.current,
+        { opacity: 0, x: -40 },
+        { opacity: 1, x: 0, duration: 1, ease: 'power3.out' }
+      );
+
+      gsap.fromTo(
+        rightColRef.current,
+        { opacity: 0, scale: 0.92, y: 25 },
+        { opacity: 1, scale: 1, y: 0, duration: 1.1, ease: 'power3.out', delay: 0.15 }
+      );
+
+      gsap.fromTo(
+        '.hero-float-badge',
+        { opacity: 0, y: 15, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.12, delay: 0.5, ease: 'back.out(1.4)' }
+      );
+
+      gsap.fromTo(
+        cardsRowRef.current,
+        { opacity: 0, y: 35 },
+        { opacity: 1, y: 0, duration: 0.9, delay: 0.4, ease: 'power3.out' }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      ref={containerRef}
+      className="relative w-full overflow-visible pt-2 pb-4 sm:pt-4 lg:pt-6"
+    >
+      <div className="relative z-10 mx-auto flex w-full flex-col">
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
+          <div ref={leftColRef} className="flex flex-col lg:col-span-5">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#D6E4F0]/60 bg-white/80 px-4 py-1.5 text-xs font-bold text-[#0B2545] shadow-[0_2px_10px_rgba(11,37,69,0.05)] backdrop-blur-md">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#7ED957]/15 text-[#7ED957]">
+                <RiStethoscopeLine className="h-3 w-3 text-[#12315C]" />
+              </span>
+              <span>Fast Treatment</span>
             </div>
-          )}
 
-          <div className="inline-flex w-fit items-center rounded-full border border-(--ui-border-soft) bg-(--ui-surface) px-3 py-1 text-xs font-semibold tracking-wide text-(--ui-info)">
-            Un suivi de santé plus simple
-          </div>
+            <h1 className="mt-6 text-5xl font-black tracking-tight text-[#0B2545] sm:text-6xl lg:text-7xl uppercase leading-[0.95]">
+              QUICK <br />
+              <span className="inline-flex items-center gap-3">
+                SMART
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#D6E4F0]/50 bg-white/80 text-[#0B2545] shadow-[0_4px_12px_rgba(11,37,69,0.08)] backdrop-blur-md">
+                  <RiStethoscopeLine className="h-6 w-6" />
+                </span>
+              </span> <br />
+              MEDIC
+            </h1>
 
-          <h1 className="mt-4 text-3xl leading-tight font-bold text-(--ui-text) sm:text-4xl">
-            {title}
-          </h1>
+            <p className="mt-5 max-w-md text-sm font-medium leading-relaxed text-[#4A5568] sm:text-base">
+              <strong className="font-bold text-[#0B2545]">MediBloc</strong> is your destination for world-class treatments, <strong className="font-bold text-[#0B2545]">compassionate doctors</strong>, and precise diagnostics all under one roof.
+            </p>
 
-          <p className="mt-4 max-w-xl text-base leading-7 text-(--ui-text-muted) sm:text-lg">
-            {subtitle}
-          </p>
-
-          <div className="mt-6 grid max-w-xl grid-cols-2 gap-3">
-            <div className="rounded-xl border border-(--ui-border-soft) bg-(--ui-surface) p-3">
-              <div className="text-xs font-medium text-(--ui-text-muted)">Suivi clinique</div>
-              <div className="mt-1 text-sm font-semibold text-(--ui-text)">Nous mettons à jour vos indicateurs en continu.</div>
-            </div>
-            <div className="rounded-xl border border-(--ui-border-soft) bg-(--ui-surface) p-3">
-              <div className="text-xs font-medium text-(--ui-text-muted)">Aide au diagnostic</div>
-              <div className="mt-1 text-sm font-semibold text-(--ui-text)">Nous facilitons l’analyse avec une aide médicale intelligente.</div>
-            </div>
-            <div className="rounded-xl border border-(--ui-border-soft) bg-(--ui-surface) p-3">
-              <div className="text-xs font-medium text-(--ui-text-muted)">Conformité</div>
-              <div className="mt-1 text-sm font-semibold text-(--ui-text)">Nous protégeons chaque dossier avec une traçabilité complète.</div>
-            </div>
-            <div className="rounded-xl border border-(--ui-border-soft) bg-(--ui-surface) p-3">
-              <div className="text-xs font-medium text-(--ui-text-muted)">Décision</div>
-              <div className="mt-1 text-sm font-semibold text-(--ui-text)">Vous choisissez plus vite grâce à des plans de prise en charge clairs.</div>
-            </div>
-          </div>
-
-          {cta && (
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex items-center gap-3">
               <button
-                onClick={cta.primary.onClick}
-                className="rounded-xl bg-(--ui-info) px-7 py-3 font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                type="button"
+                onClick={cta?.primary.onClick}
+                className="group inline-flex items-center gap-3 rounded-full bg-[#0B2545] pl-7 pr-2.5 py-2.5 text-xs font-bold text-white shadow-[0_8px_20px_rgba(11,37,69,0.2)] transition-all duration-300 hover:bg-[#12315C] hover:shadow-[0_12px_28px_rgba(11,37,69,0.3)]"
               >
-                {cta.primary.label}
+                <span>Explore More</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#7ED957] text-[#0B2545] transition-transform duration-300 group-hover:scale-110">
+                  <FiArrowUpRight className="h-4 w-4" />
+                </span>
               </button>
-              {cta.secondary && (
-                <button
-                  onClick={cta.secondary.onClick}
-                  className="rounded-xl border border-(--ui-border) bg-(--ui-surface) px-7 py-3 font-semibold text-(--ui-text) transition-all duration-300 hover:bg-(--ui-surface-soft)"
-                >
-                  {cta.secondary.label}
-                </button>
-              )}
             </div>
-          )}
-        </div>
+          </div>
 
-        <div className="relative flex min-h-[38vh] items-center justify-center lg:min-h-[56vh]">
-          <div className="absolute inset-0 m-auto h-72 w-72 rounded-full bg-(--ui-info-dim) blur-2xl sm:h-96 sm:w-96" />
-          <div className="relative perspective-[1400px]">
-            <div className="relative h-72 w-72 animate-[spin_16s_linear_infinite] transform-3d sm:h-96 sm:w-96">
-              <div className="absolute inset-0 rounded-full border border-(--ui-border) transform-[rotateX(70deg)]" />
-              <div className="absolute inset-3 rounded-full border border-(--ui-border-soft) transform-[rotateY(65deg)]" />
-              <div className="absolute inset-6 rounded-full border border-(--ui-info) transform-[rotateX(25deg)_rotateY(35deg)]" />
-              <div className="absolute inset-0 flex items-center justify-center transform-[translateZ(54px)]">
-                <div className="flex h-40 w-40 items-center justify-center rounded-full border border-(--ui-border-soft) bg-(--ui-surface) shadow-lg sm:h-52 sm:w-52">
-                  <img
-                    src={heartHero}
-                    alt="Cœur médical"
-                    className="h-24 w-24 animate-[spin_8s_linear_infinite] object-contain sm:h-32 sm:w-32"
-                  />
+          <div ref={rightColRef} className="relative lg:col-span-7 flex justify-center items-end min-h-[520px]">
+            <div className="relative flex items-end justify-center gap-5 w-full">
+              <div className="relative flex flex-col items-center justify-end overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-linear-to-b from-[#F2F7FC] via-[#EAF1F9]/60 to-white/90 border border-[#E0EAF3]/50 shadow-[0_16px_48px_rgba(11,37,69,0.08)] w-[280px] sm:w-[300px] h-[460px]">
+                <div className="absolute inset-0 bg-radial from-transparent to-[#E0EDF8]/15" />
+                <img
+                  src={corpsHumainImg}
+                  alt="Human Body 3D Scan"
+                  className="relative z-10 h-full w-auto scale-105 object-contain object-bottom drop-shadow-[0_10px_25px_rgba(0,100,200,0.15)] transition-transform duration-500 hover:scale-108"
+                />
+              </div>
+
+              <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-linear-to-b from-[#EDF4FC] via-[#E5EFF9]/50 to-white/90 border border-[#E0EAF3]/50 shadow-[0_16px_48px_rgba(11,37,69,0.08)] w-[280px] sm:w-[300px] h-[460px]">
+                <div className="absolute inset-0 bg-radial from-[#D4E6F8]/20 to-transparent" />
+                <img
+                  src={poumonsImg}
+                  alt="Lungs 3D Scan"
+                  className="relative z-10 h-[85%] w-auto scale-100 object-contain drop-shadow-[0_10px_25px_rgba(0,100,200,0.15)] transition-transform duration-500 hover:scale-105"
+                />
+              </div>
+
+              <div className="hero-float-badge absolute top-6 right-8 z-20 flex items-center gap-2.5 rounded-2xl border border-[#E0EAF3]/60 bg-white/90 px-4 py-2.5 shadow-[0_8px_24px_rgba(11,37,69,0.08)] backdrop-blur-lg transition-transform duration-300 hover:-translate-y-0.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EDF3FB]">
+                  <FiAward className="h-4 w-4 text-[#0B2545]" />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-black text-[#0B2545] leading-none">490</div>
+                  <div className="text-[10px] font-semibold text-[#6B7280] uppercase mt-0.5 tracking-wider">Awards</div>
+                </div>
+              </div>
+
+              <div className="hero-float-badge absolute top-1/2 -right-2 z-20 flex items-center gap-2.5 rounded-2xl border border-[#E0EAF3]/60 bg-white/90 px-4 py-2.5 shadow-[0_8px_24px_rgba(11,37,69,0.08)] backdrop-blur-lg transition-transform duration-300 hover:-translate-y-0.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EDF3FB]">
+                  <RiLungsLine className="h-4 w-4 text-[#0B2545]" />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-black text-[#0B2545] leading-none">6700</div>
+                  <div className="text-[10px] font-semibold text-[#6B7280] mt-0.5">Medical Lungs</div>
+                </div>
+              </div>
+
+              <div className="hero-float-badge absolute -bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 rounded-2xl border border-[#E0EAF3]/60 bg-white/90 px-5 py-3 shadow-[0_8px_24px_rgba(11,37,69,0.08)] backdrop-blur-lg transition-transform duration-300 hover:-translate-y-0.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0B2545]">
+                  <FaBriefcaseMedical className="h-4 w-4 text-white" />
+                </div>
+                <div className="text-left">
+                  <div className="text-lg font-black text-[#0B2545] leading-none">22 Years</div>
+                  <div className="text-[10px] font-semibold text-[#6B7280] mt-0.5 tracking-wide">Medical Excellence</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {features && (
-        <div className="mt-6 grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="rounded-2xl border border-(--ui-border-soft) bg-(--ui-surface) p-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-(--ui-border) hover:bg-(--ui-surface-soft)"
-            >
-              <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-(--ui-info-dim) text-(--ui-info)">
-                {feature.icon}
+        <div ref={cardsRowRef} className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-3">
+          {HEALTH_CARDS.map((card) => {
+            const IconComp = card.icon;
+            const isDark = card.variant === 'dark';
+            return (
+              <div
+                key={card.title}
+                className={`group relative flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1 min-h-[155px] ${
+                  isDark
+                    ? 'border border-[#0B2545] bg-[#0B2545] text-white shadow-[0_12px_30px_rgba(11,37,69,0.2)] hover:bg-[#12315C] hover:shadow-[0_20px_40px_rgba(11,37,69,0.3)]'
+                    : 'border border-[#E0EAF3]/60 bg-white/85 shadow-[0_8px_24px_rgba(11,37,69,0.06)] backdrop-blur-lg hover:bg-white hover:shadow-[0_16px_36px_rgba(11,37,69,0.1)]'
+                }`}
+              >
+                <div className="flex justify-between items-start">
+                  <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${isDark ? 'bg-[#1A3D68]' : 'bg-[#EDF3FB]'}`}>
+                    <IconComp className={`h-7 w-7 ${isDark ? 'text-[#7ED957]' : 'text-[#0B2545]'}`} />
+                  </div>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7ED957] text-[#0B2545] shadow-xs transition-transform group-hover:scale-110">
+                    <FiArrowUpRight className="h-4 w-4" />
+                  </span>
+                </div>
+                <div className="mt-3">
+                  <h4 className={`text-base font-black leading-tight ${isDark ? 'text-white' : 'text-[#0B2545]'}`}>{card.title}</h4>
+                  <p className={`text-xs font-semibold ${isDark ? 'text-[#9CA3AF]' : 'text-[#6B7280]'}`}>{card.sub}</p>
+                </div>
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-(--ui-text)">{feature.title}</h3>
-              <p className="text-sm text-(--ui-text-muted)">{feature.description}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
-      )}
-    </div>
-
-    <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
-      <div className="group inline-flex items-center gap-2 rounded-full border border-(--ui-border-soft) bg-(--ui-surface)/90 px-4 py-2 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-(--ui-info) hover:bg-(--ui-surface)">
-        <span className="relative inline-flex h-2.5 w-2.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-(--ui-info) opacity-60" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-(--ui-info)" />
-        </span>
-        <span className="text-xs font-semibold tracking-wide text-(--ui-text-muted) group-hover:text-(--ui-text)">Découvrir plus</span>
-        <svg
-          className="h-4 w-4 animate-bounce text-(--ui-info)"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M12 5v14m0 0l6-6m-6 6l-6-6" />
-        </svg>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
