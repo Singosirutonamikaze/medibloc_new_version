@@ -50,7 +50,7 @@
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
     "node-cache": "^5.1.2",
-    "node-cron": "^4.2.1",
+    "node-cron": "^4.6.0",
     "pg": "^8.21.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1"
