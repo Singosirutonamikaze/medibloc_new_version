@@ -1,18 +1,15 @@
-import { useEffect, useRef } from 'react';
-import {
-  FiArrowUpRight,
-  FiAward,
-} from 'react-icons/fi';
+import { useEffect, useRef } from "react";
+import { FiArrowUpRight, FiAward } from "react-icons/fi";
 import {
   RiBrainLine,
   RiHeartPulseLine,
   RiLungsLine,
   RiStethoscopeLine,
-} from 'react-icons/ri';
-import { FaBriefcaseMedical } from 'react-icons/fa';
-import gsap from 'gsap';
-import corpsHumainImg from '../../../assets/glass/humman-corps.png';
-import poumonsImg from '../../../assets/glass/poumons.png';
+} from "react-icons/ri";
+import { FaBriefcaseMedical } from "react-icons/fa";
+import gsap from "gsap";
+import corpsHumainImg from "../../../assets/glass/humman-corps.png";
+import poumonsImg from "../../../assets/glass/poumons.png";
 
 interface HeroSectionProps {
   title: string;
@@ -26,21 +23,21 @@ interface HeroSectionProps {
 const HEALTH_CARDS = [
   {
     icon: RiBrainLine,
-    title: 'Brain Health',
-    sub: 'Check',
-    variant: 'light' as const,
+    title: "Brain Health",
+    sub: "Check",
+    variant: "light" as const,
   },
   {
     icon: RiHeartPulseLine,
-    title: 'Liver Function',
-    sub: 'Test',
-    variant: 'light' as const,
+    title: "Liver Function",
+    sub: "Test",
+    variant: "light" as const,
   },
   {
     icon: RiLungsLine,
-    title: 'Kidney Health',
-    sub: 'Scan',
-    variant: 'dark' as const,
+    title: "Kidney Health",
+    sub: "Scan",
+    variant: "dark" as const,
   },
 ];
 
@@ -55,25 +52,40 @@ export const HeroSection = ({ cta }: HeroSectionProps) => {
       gsap.fromTo(
         leftColRef.current,
         { opacity: 0, x: -40 },
-        { opacity: 1, x: 0, duration: 1, ease: 'power3.out' }
+        { opacity: 1, x: 0, duration: 1, ease: "power3.out" },
       );
 
       gsap.fromTo(
         rightColRef.current,
         { opacity: 0, scale: 0.92, y: 25 },
-        { opacity: 1, scale: 1, y: 0, duration: 1.1, ease: 'power3.out', delay: 0.15 }
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.1,
+          ease: "power3.out",
+          delay: 0.15,
+        },
       );
 
       gsap.fromTo(
-        '.hero-float-badge',
+        ".hero-float-badge",
         { opacity: 0, y: 15, scale: 0.9 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.12, delay: 0.5, ease: 'back.out(1.4)' }
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.7,
+          stagger: 0.12,
+          delay: 0.5,
+          ease: "back.out(1.4)",
+        },
       );
 
       gsap.fromTo(
         cardsRowRef.current,
         { opacity: 0, y: 35 },
-        { opacity: 1, y: 0, duration: 0.9, delay: 0.4, ease: 'power3.out' }
+        { opacity: 1, y: 0, duration: 0.9, delay: 0.4, ease: "power3.out" },
       );
     }, containerRef);
 
@@ -98,16 +110,20 @@ export const HeroSection = ({ cta }: HeroSectionProps) => {
             <h1 className="mt-6 text-5xl font-black tracking-tight text-[#0B2545] sm:text-6xl lg:text-7xl uppercase leading-[0.95]">
               QUICK <br />
               <span className="inline-flex items-center gap-3">
-                SMART
+                <span>SMART</span>
                 <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#D6E4F0]/50 bg-white/80 text-[#0B2545] shadow-[0_4px_12px_rgba(11,37,69,0.08)] backdrop-blur-md">
                   <RiStethoscopeLine className="h-6 w-6" />
                 </span>
-              </span> <br />
+              </span>
+              <br />
               MEDIC
             </h1>
 
             <p className="mt-5 max-w-md text-sm font-medium leading-relaxed text-[#4A5568] sm:text-base">
-              <strong className="font-bold text-[#0B2545]">MediBloc</strong> is your destination for world-class treatments, <strong className="font-bold text-[#0B2545]">compassionate doctors</strong>, and precise diagnostics all under one roof.
+              <strong className="font-bold text-[#0B2545]">MediBloc</strong>{' '}
+              is your destination for world-class treatments,{' '}
+              <strong className="font-bold text-[#0B2545]">compassionate doctors</strong>,{' '}
+              and precise diagnostics all under one roof.
             </p>
 
             <div className="mt-8 flex items-center gap-3">
@@ -124,9 +140,12 @@ export const HeroSection = ({ cta }: HeroSectionProps) => {
             </div>
           </div>
 
-          <div ref={rightColRef} className="relative lg:col-span-7 flex justify-center items-end min-h-[520px]">
+          <div
+            ref={rightColRef}
+            className="relative lg:col-span-7 flex justify-center items-end min-h-130"
+          >
             <div className="relative flex items-end justify-center gap-5 w-full">
-              <div className="relative flex flex-col items-center justify-end overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-linear-to-b from-[#F2F7FC] via-[#EAF1F9]/60 to-white/90 border border-[#E0EAF3]/50 shadow-[0_16px_48px_rgba(11,37,69,0.08)] w-[280px] sm:w-[300px] h-[460px]">
+              <div className="relative flex flex-col items-center justify-end overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-linear-to-b from-[#F2F7FC] via-[#EAF1F9]/60 to-white/90 border border-[#E0EAF3]/50 shadow-[0_16px_48px_rgba(11,37,69,0.08)] w-70 sm:w-75 h-115">
                 <div className="absolute inset-0 bg-radial from-transparent to-[#E0EDF8]/15" />
                 <img
                   src={corpsHumainImg}
@@ -135,7 +154,7 @@ export const HeroSection = ({ cta }: HeroSectionProps) => {
                 />
               </div>
 
-              <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-linear-to-b from-[#EDF4FC] via-[#E5EFF9]/50 to-white/90 border border-[#E0EAF3]/50 shadow-[0_16px_48px_rgba(11,37,69,0.08)] w-[280px] sm:w-[300px] h-[460px]">
+              <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-linear-to-b from-[#EDF4FC] via-[#E5EFF9]/50 to-white/90 border border-[#E0EAF3]/50 shadow-[0_16px_48px_rgba(11,37,69,0.08)] w-70 sm:w-75 h-115">
                 <div className="absolute inset-0 bg-radial from-[#D4E6F8]/20 to-transparent" />
                 <img
                   src={poumonsImg}
@@ -149,8 +168,12 @@ export const HeroSection = ({ cta }: HeroSectionProps) => {
                   <FiAward className="h-4 w-4 text-[#0B2545]" />
                 </div>
                 <div className="text-left">
-                  <div className="text-sm font-black text-[#0B2545] leading-none">490</div>
-                  <div className="text-[10px] font-semibold text-[#6B7280] uppercase mt-0.5 tracking-wider">Awards</div>
+                  <div className="text-sm font-black text-[#0B2545] leading-none">
+                    490
+                  </div>
+                  <div className="text-[10px] font-semibold text-[#6B7280] uppercase mt-0.5 tracking-wider">
+                    Awards
+                  </div>
                 </div>
               </div>
 
@@ -159,8 +182,12 @@ export const HeroSection = ({ cta }: HeroSectionProps) => {
                   <RiLungsLine className="h-4 w-4 text-[#0B2545]" />
                 </div>
                 <div className="text-left">
-                  <div className="text-sm font-black text-[#0B2545] leading-none">6700</div>
-                  <div className="text-[10px] font-semibold text-[#6B7280] mt-0.5">Medical Lungs</div>
+                  <div className="text-sm font-black text-[#0B2545] leading-none">
+                    6700
+                  </div>
+                  <div className="text-[10px] font-semibold text-[#6B7280] mt-0.5">
+                    Medical Lungs
+                  </div>
                 </div>
               </div>
 
@@ -169,38 +196,57 @@ export const HeroSection = ({ cta }: HeroSectionProps) => {
                   <FaBriefcaseMedical className="h-4 w-4 text-white" />
                 </div>
                 <div className="text-left">
-                  <div className="text-lg font-black text-[#0B2545] leading-none">22 Years</div>
-                  <div className="text-[10px] font-semibold text-[#6B7280] mt-0.5 tracking-wide">Medical Excellence</div>
+                  <div className="text-lg font-black text-[#0B2545] leading-none">
+                    22 Years
+                  </div>
+                  <div className="text-[10px] font-semibold text-[#6B7280] mt-0.5 tracking-wide">
+                    Medical Excellence
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div ref={cardsRowRef} className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <div
+          ref={cardsRowRef}
+          className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-3"
+        >
           {HEALTH_CARDS.map((card) => {
             const IconComp = card.icon;
-            const isDark = card.variant === 'dark';
+            const isDark = card.variant === "dark";
             return (
               <div
                 key={card.title}
-                className={`group relative flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1 min-h-[155px] ${
+                className={`group relative flex flex-col justify-between rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1 min-h-38.75 ${
                   isDark
-                    ? 'border border-[#0B2545] bg-[#0B2545] text-white shadow-[0_12px_30px_rgba(11,37,69,0.2)] hover:bg-[#12315C] hover:shadow-[0_20px_40px_rgba(11,37,69,0.3)]'
-                    : 'border border-[#E0EAF3]/60 bg-white/85 shadow-[0_8px_24px_rgba(11,37,69,0.06)] backdrop-blur-lg hover:bg-white hover:shadow-[0_16px_36px_rgba(11,37,69,0.1)]'
+                    ? "border border-[#0B2545] bg-[#0B2545] text-white shadow-[0_12px_30px_rgba(11,37,69,0.2)] hover:bg-[#12315C] hover:shadow-[0_20px_40px_rgba(11,37,69,0.3)]"
+                    : "border border-[#E0EAF3]/60 bg-white/85 shadow-[0_8px_24px_rgba(11,37,69,0.06)] backdrop-blur-lg hover:bg-white hover:shadow-[0_16px_36px_rgba(11,37,69,0.1)]"
                 }`}
               >
                 <div className="flex justify-between items-start">
-                  <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${isDark ? 'bg-[#1A3D68]' : 'bg-[#EDF3FB]'}`}>
-                    <IconComp className={`h-7 w-7 ${isDark ? 'text-[#7ED957]' : 'text-[#0B2545]'}`} />
+                  <div
+                    className={`flex h-14 w-14 items-center justify-center rounded-2xl ${isDark ? "bg-[#1A3D68]" : "bg-[#EDF3FB]"}`}
+                  >
+                    <IconComp
+                      className={`h-7 w-7 ${isDark ? "text-[#7ED957]" : "text-[#0B2545]"}`}
+                    />
                   </div>
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#7ED957] text-[#0B2545] shadow-xs transition-transform group-hover:scale-110">
                     <FiArrowUpRight className="h-4 w-4" />
                   </span>
                 </div>
                 <div className="mt-3">
-                  <h4 className={`text-base font-black leading-tight ${isDark ? 'text-white' : 'text-[#0B2545]'}`}>{card.title}</h4>
-                  <p className={`text-xs font-semibold ${isDark ? 'text-[#9CA3AF]' : 'text-[#6B7280]'}`}>{card.sub}</p>
+                  <h4
+                    className={`text-base font-black leading-tight ${isDark ? "text-white" : "text-[#0B2545]"}`}
+                  >
+                    {card.title}
+                  </h4>
+                  <p
+                    className={`text-xs font-semibold ${isDark ? "text-[#9CA3AF]" : "text-[#6B7280]"}`}
+                  >
+                    {card.sub}
+                  </p>
                 </div>
               </div>
             );

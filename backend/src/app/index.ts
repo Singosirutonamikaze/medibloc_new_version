@@ -6,8 +6,9 @@
  * @since 2026-09-17
  */
 
-import express, { Application } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
+import helmet from "helmet";
 import morgan from "morgan";
 import fs from "node:fs";
 import path from "node:path";
@@ -41,10 +42,29 @@ const morganFormat =
   ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms';
 const accessLogStream = fs.createWriteStream(
   path.join(logsDir, `access-${new Date().toISOString().split("T")[0]}.log`),
-  { flags: "a" }
+  { flags: "a" },
 );
 
 const app: Application = express();
+
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
+
+/**
+ * @description Retire la CSP uniquement pour Swagger et GraphQL, dont les interfaces
+ * utilisent des scripts inline. Le reste de l'application garde la CSP stricte de Helmet.
+ *
+ * @author SINGO Yao Dieu Donne
+ * @since 2026-09-17
+ */
+const docsPathPattern = /^\/(api-docs|graphql)/;
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const cspHandlers: Record<string, () => void> = {
+    true: () => res.removeHeader("Content-Security-Policy"),
+    false: () => undefined,
+  };
+  cspHandlers[String(docsPathPattern.test(req.path))]();
+  next();
+});
 
 // Journalisation HTTP
 app.use(morgan(morganFormat, { stream: accessLogStream }));
@@ -71,9 +91,10 @@ const buildCorsOptions = () => {
   const whitelistOptions = {
     origin: (
       reqOrigin: string | undefined,
-      callback: (err: Error | null, allow?: boolean) => void
+      callback: (err: Error | null, allow?: boolean) => void,
     ) => {
-      const isAllowed = !reqOrigin || whitelist.includes(reqOrigin) || whitelist.includes("*");
+      const isAllowed =
+        !reqOrigin || whitelist.includes(reqOrigin) || whitelist.includes("*");
       const corsHandlers: Record<string, () => void> = {
         true: () => callback(null, true),
         false: () => callback(null, false),
@@ -155,7 +176,7 @@ const startServer = async () => {
 const setupGracefulShutdown = (): void => {
   const shutdown = async (signal: string) => {
     console.log(
-      `Reception du signal ${signal}, fermeture propre des ressources...`
+      `Reception du signal ${signal}, fermeture propre des ressources...`,
     );
     await disconnectDatabase();
     process.exit(0);

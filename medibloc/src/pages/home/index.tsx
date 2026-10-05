@@ -7,7 +7,6 @@ import { HeroSection } from "../../components/molecules/HeroSection"
 import logo from "../../assets/logo/logo.png"
 import { ROUTES } from "../../utils/constants/routes.constants"
 import { ServiceSection } from "../../components/molecules/ServiceSection"
-import { ActiviteSection } from "../../components/molecules/ActiviteSection"
 import { ExperienceSection } from "../../components/molecules/ExperienceSection"
 
 function HomePage() {
@@ -61,7 +60,7 @@ function HomePage() {
 
         <Header />
 
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 pb-14 sm:px-6 sm:pb-20 lg:px-10 lg:pb-24">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-4 pb-16 sm:px-6 sm:pb-24 lg:px-10 lg:pb-28">
           <HeroSection
             title="Modern Medical Management"
             subtitle="Secure electronic patient records, precision consultations and intelligent hospital workflow."
@@ -70,14 +69,15 @@ function HomePage() {
               secondary: { label: 'Doctor Portal', onClick: () => { navigate(ROUTES.PUBLIC.LOGIN); } },
             }}
           />
+
+          <div id="services" className="mt-20 sm:mt-28">
+            <ServiceSection />
+          </div>
         </div>
       </div>
 
-      <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 py-8 sm:px-6 sm:py-12 lg:px-10">
-        <div id="services" className="mt-8 sm:mt-12">
-          <ServiceSection />
-        </div>
-        <div id="experience" className="mt-16 sm:mt-24">
+      <main className="relative mx-auto w-full max-w-[1440px] flex-1 overflow-hidden px-4 py-8 sm:px-6 sm:py-12 lg:px-10">
+        <div id="experience" className="relative z-10 mt-8 sm:mt-12">
           <ExperienceSection />
         </div>
       </main>
